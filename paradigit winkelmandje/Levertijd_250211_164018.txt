@@ -1,0 +1,12 @@
+OK - tabel testtabel uitbreiden met veld Levertijd met als default waarde 1, verder waarden 1, 3, 5, 7 alterneren
+OK - winkelmandje functie met vue setters uitbreiden met each loop
+OK - binnen de loop de tabelnaam nemen en vastleggen
+OK - binnen de loop een array push met de waarde Pid
+OK - dan functie aanroepen die eerst een query bouwt, met de parameters tabelnaam en array
+OK - de query luidt: select MAX(Levertijd) from tabelnaam where Id IN array.join(",");
+OK - deze query middels AJAX meegeven aan webmethode getLevertijd()
+OK - resultaatwaarde van de query in een integer zetten en retourneren
+zie https://stackoverflow.com/questions/25023235/getting-max-value-returned-sql-command-c-sharp
+OK - retourwaarde van de webmethode gebruiken als variabele levertijd
+OK - via moment() de huidige datum nemen
+OK - parameters levertijd en vandaag meegeven aan de functie die de bezorgdag uitrekent

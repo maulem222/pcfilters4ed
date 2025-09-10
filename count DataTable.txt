@@ -1,0 +1,65 @@
+        [WebMethod]
+        public void InsORUpdBreadcrumb(string Cat, string Breadcrumb)
+        {
+            produktenlijst.Clear();
+            string query = "SELECT * FROM Breadcrumbs WHERE Cat=@cat";
+            SqlCommand cmd = new SqlCommand(query);
+            cmd.Parameters.AddWithValue("@cat", Cat);
+            DataSet ds = GetData(cmd);
+            DataTable dt = ds.Tables[0];
+	    if (dt.Rows.Count > 0) {
+		// update
+            }
+	    else {
+		// insert
+	    }
+        }
+
+
+
+                string con_str = ConfigurationManager.ConnectionStrings["pcfilters"].ConnectionString;
+                string insertquery = "INSERT INTO Breadcrumbs (Breadcrumb, Cat) VALUES (@bc, @cat)";
+                SqlConnection con = new SqlConnection(con_str);
+                SqlCommand command = new SqlCommand(insertquery, con);
+                command.Parameters.AddWithValue("@bc", Breadcrumb);
+		command.Parameters.AddWithValue("@cat", Cat);
+
+                try
+                {
+                    con.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }
+
+
+
+
+
+            string con_str = ConfigurationManager.ConnectionStrings["pcfilters"].ConnectionString;
+            string updatequery = "UPDATE Breadcrumb SET Breadcrumb=@bc WHERE Cat=@cat";
+            SqlConnection con = new SqlConnection(con_str);
+            SqlCommand command = new SqlCommand(updatequery, con);
+            command.Parameters.AddWithValue("@bc", Breadcrumb);
+            command.Parameters.AddWithValue("@cat", Cat);
+            try
+            {
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }

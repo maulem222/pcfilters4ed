@@ -1,0 +1,17 @@
+
+//var slideSize = 5;
+
+
+                       //totalSlidepPage = Math.floor(Math.ceil(pageCount) / slideSize);
+            //if (totalSlidepPage == 0) {
+            //    totalSlidepPage = 1;
+            //}
+
+//slide();
+
+//} else if ((startPage >= 0) && (numberPage == totalSlidepPage)) {
+            //    next.hide();
+            //    prev.show();
+            //} else if (slideSize * totalSlidepPage >= Math.ceil(pageCount)) {
+            //    next.hide();
+            //    prev.show();

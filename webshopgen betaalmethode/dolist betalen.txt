@@ -1,0 +1,9 @@
+OK - op klantregistratie alvast het totaalbedrag ophalen a.d.h.v. de bestelguid
+OK - daarna redirecten naar betaalmethode.html met als urlparams bestelguid, klantid, totaalbedrag en inlog e-mailadres
+OK - (ai) op betaalmethode.html ideal en card lijstje maken met radiobuttons
+OK - na keuze en klik op Doorgaan naar betalen de gekozen betaalmethode wegschrijven naar de tabel Bezorging_en_betaling a.d.h.v. klantid en bestelguid
+OZ - nieuwe Stripe configuratie aanmaken voor webshop.aspworld.nl -> Goossens meubels
+pk_test_51O80HeCj2LNHE2SjAvluJodSvRMijM0oLvG7eNVJnyaBxJa7rqFgtKzppdU3aBYKxN0ToGVeOLC19VDRce2FV6vn00ytxK89qF
+sk_test_51O80HeCj2LNHE2SjFEe0ytNYFS9ey3v1slTvIJwYG4gEGt2XYbhCtRpx3tgy1vKsHFT6oJCrOwXCCM2qkbsVGOTT00g85J4aw1
+OK - vervolgens AJAX Checkout activeren met de juiste betaalmethode als parameter, verder parameters totaalbedrag, bestelguid, klantid, en e-mailadres
+OK - methode CreateSession aanpassen voor betaalmethode, bedrag, omschrijving, PaymentIntent en de METADATA bestelguid, klantid en e-mailadres

@@ -1,0 +1,468 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BestellingenManager - Bestellingen</title>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Load Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- Axios library -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        #app {
+            width: 80%;
+            display: inline-block;
+        }
+
+        #header {
+            height: 80px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        #upper {
+            display: flex;
+            border: 0px solid red;
+            margin-bottom: 20px;
+        }
+
+        #bestnr {
+            margin-left: 15px;
+            border: 0px solid red;
+            margin-bottom: 20px;
+        }
+
+        #klant {
+            flex: 1; /* 50% width */
+            padding: 15px;
+            box-sizing: border-box;
+            border: 0px solid green;
+        }
+
+        #status {
+            flex: 1; /* 50% width */
+            padding: 15px;
+            box-sizing: border-box;
+            height: 130px;
+            border-left: 1px solid gray;
+        }
+
+        #block1, #block2 {
+            width: 450px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .txt {
+            width: 40px;
+            border: 0px solid blue;
+        }
+
+        .largetxt {
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        label {
+            border: 0px solid blue;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #fff;
+            color: black;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #eef;
+            cursor: pointer;
+        }
+
+        .even-row {
+            background-color: #f9f9f9;
+        }
+
+        .odd-row {
+            background-color: #ffffff;
+        }
+
+        .picture {
+            height: 80px;
+        }
+
+        /* message notifications */
+
+        .notif {
+            width: 200px;
+        }
+
+        .horspacer {
+            width: 180px;
+        }
+
+        .notification {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 0px 15px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+            .notification button {
+                background: none;
+                border: none;
+                font-weight: bold;
+                margin-left: 10px;
+                cursor: pointer;
+                color: #155724;
+                display: inline-block;
+            }
+
+        /* Fade transition */
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.5s ease;
+        }
+
+        .fade-enter-from, .fade-leave-to {
+            opacity: 0;
+        }
+    </style>
+    <script>
+
+        $(document).ready(function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bestelGuid = urlParams.get('bestelGuid');
+            const klantId = urlParams.get('klantId');
+            const bestNr = urlParams.get('bestNr');
+            //console.log("bestelGuid: " + bestelGuid);
+            vue_bestellingenmanager.seturlParams(bestelGuid, klantId, bestNr);
+            //vue_bestellingenmanager.getVerzonden();
+        });
+    </script>
+</head>
+<body>
+    <div id="app">
+        <div id="header">
+            <h2>Bestellingen en klant</h2>
+            <hr />
+        </div>
+        <div class="largetxt"><h5>(Het is mogelijk om een pakbon en een interne factuur te versturen naar uw e-mailadres. U kunt voor de pakbon en de interne factuur afzonderlijk een e-mailadres instellen in de GegevensManager.)</h5></div>
+        <div id="bestnr">Bestelnummer #{{ this.bestelNummer }}</div>
+        <div id="upper">
+            <div id="klant">
+                Klantnaam: {{ klant.naam }}<br />
+                Adres: {{ klant.adres }}<br />
+                Postcode: {{ klant.postcode }}<br />
+                Woonplaats: {{ klant.woonplaats }}<br />
+                E-mailadres: <a :href="`mailto:${klant.email}`">{{ klant.email }}</a><br />
+                Telefoon: {{ klant.telefoon }}
+            </div>
+            <div id="status">
+                <div id="block1">
+                    <div class="txt">Pakbon:</div>
+                    <div id="pakbonvalue">{{ this.pakbon }}</div>
+                    <button id="verstuurpakbon" @click="verstuurPakbon">Verstuur pakbon</button>
+                    <div class="notif">
+                        <transition name="fade">
+                            <div class="notification" v-if="showMessage1">
+                                pakbon verstuurd <button @click="dismiss1">x</button>
+                            </div>
+                        </transition>
+                    </div>
+                </div>
+                <div id="block1">
+                    <div class="txt">Factuur:</div>
+                    <div id="intfactuurvalue">{{ this.factuur }}</div>
+                    <button id="verstuurintfactuur" @click="verstuurInterneFactuur">Verstuur factuur</button>
+                    <div class="notif">
+                        <transition name="fade">
+                            <div class="notification" v-if="showMessage2">
+                                factuur verstuurd <button @click="dismiss2">x</button>
+                            </div>
+                        </transition>
+                    </div>
+                </div>
+                <div id="block2">
+                    <div class="txt">Verzonden:</div>     <label>
+                        <input type="radio" value="Ja" v-model="verzonden" @change="updateVerzonden" />
+                        Ja
+                    </label>
+
+                    <label>
+                        <input type="radio" value="Nee" v-model="verzonden" @change="updateVerzonden" />
+                        Nee
+                    </label>
+                    <div class="horspacer">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Prod Id</th>
+                    <th>Categorie</th>
+                    <th>Produktnaam</th>
+                    <th>Prijs</th>
+                    <th>Produktafbeelding</th>
+                    <th>Aantal</th>
+                    <th>Gewicht</th>
+                    <th>Produktlink</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(best, index) in bestellingen"
+                    :key="best.Id"
+                    :class="index % 2 === 0 ? 'even-row' : 'odd-row'">
+                    <td>{{ best.Pid }}</td>
+                    <td>{{ best.Tabelnaam }}</td>
+                    <td>{{ best.Produktnaam }}</td>
+                    <td>€ {{ best.Prijs.toFixed(2) }}</td>
+                    <td><img class='picture' :src="`${best.Produktafbeelding}`" /></td>
+                    <td>{{ best.Aantal }}</td>
+                    <td>{{ best.Gewicht }} kg.</td>
+                    <td><a :href="prefix(best.Produktlink)">ProduktLink</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        var vue_bestellingenmanager = new Vue({
+            el: '#app', //Attach to element id app
+            data() {
+                return {
+                    bestellingen: [],
+                    bestelGuid: '',
+                    klantId: '',
+                    bestelNummer: '',
+                    Urlprefix: '',
+                    klant: {
+                        naam: '',
+                        adres: '',
+                        postcode: '',
+                        woonplaats: '',
+                        email: '',
+                        wachtwoord: '',
+                        telefoon: ''
+                    },
+                    verzonden: 'Nee',
+                    pakbonemail: 'maurice.lemmens5678@gmail.com',
+                    intfactuuremail: 'maurice.lemmens5678@gmail.com',
+                    pakbon: '',
+                    factuur: '',
+                    showMessage1: false,
+                    showMessage2: false
+                }
+            },
+            mounted() {
+                this.getUrlprefix()
+            },
+            methods: {
+                dismiss1() {
+                    this.showMessage1 = false;
+                },
+                dismiss2() {
+                    this.showMessage2 = false;
+                },
+                prefix(Produktlink) {
+                    return this.Urlprefix + Produktlink
+                },
+                seturlParams(bestelguid, klantid, bestNr) {
+                    this.bestelGuid = bestelguid
+                    this.klantId = klantid
+                    this.bestelNummer = bestNr
+                    this.getKlantById()
+                    this.getBestellingen()
+                    this.getVerzonden()
+                    this.fetchEmailGegevens()
+                    this.GetPakbonFactuur()
+                },
+                async getBestellingen() {
+                    try {
+                        const response = await axios.post('/BestellingenService.asmx/getBestellingen', {
+                            sql: "SELECT * FROM Bestellingen WHERE Bestelguid='" + this.bestelGuid + "'"
+                        });
+                        if (response.data.d) {
+                            this.bestellingen = JSON.parse(response.data.d)
+                        }
+                        console.log('Response:', response.data);
+                    } catch (error) {
+                        console.error('Error calling API:', error);
+                    }
+                },
+                async getKlantById() {
+                    axios.post("/KlantenService.asmx/GetKlantById", { Id: this.klantId })
+                        .then(response => {
+                            let data = JSON.parse(response.data.d) // Deze regel is belangrijk! Anders zul je geen individuele velden kunnen nemen!
+                            console.log(data)
+
+                            if (data) {
+                                // Data toewijzen aan losse v-model variabelen
+                                this.klant.naam = data.Naam
+                                this.klant.adres = data.Adres
+                                this.klant.postcode = data.Postcode
+                                this.klant.woonplaats = data.Woonplaats
+                                this.klant.email = data.Email
+                                this.klant.telefoon = data.Telefoon
+                            } else {
+                                alert("Klant niet gevonden!");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Fout bij ophalen klantgegevens:", error);
+                        });
+                },
+                async verstuurPakbon() {
+                    try {
+                        const response = await axios.post('https://api-japie.top/webhookapi/pakbon', {
+                            Bestelguid: this.bestelGuid,
+                            KlantId: this.klantId,
+                            Email: this.pakbonemail
+                        }, {
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                        });
+                        console.log('Response:', response.data);
+
+                        this.UpdatePakbon();
+                        this.showMessage1 = true;
+                    } catch (error) {
+                        console.error('Error calling API:', error);
+                    }
+                },
+                async verstuurInterneFactuur() {
+                    try {
+                        const response = await axios.post('https://api-japie.top/webhookapi/internefactuur', {
+                            Bestelguid: this.bestelGuid,
+                            KlantId: this.klantId,
+                            Email: this.intfactuuremail
+                        }, {
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                        });
+                        console.log('Response:', response.data);
+
+                        this.UpdateFactuur();
+                        this.showMessage2 = true;
+                    } catch (error) {
+                        console.error('Error calling API:', error);
+                    }
+                },
+                async getUrlprefix() {
+                    const response = await axios.post('/GegevensService.asmx/getDomein', {
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    this.Urlprefix = response.data.d;
+                },
+                async updateVerzonden() {
+                    try {
+                        const response = await axios.post('/VerzendService.asmx/UpdateVerzonden', {
+                            Verzonden: this.verzonden,
+                            Bestelguid: this.bestelGuid
+                        });
+
+                        console.log('Update response:', response.data);
+                    } catch (error) {
+                        console.error('Error updating verzonden:', error);
+                    }
+                },
+                async getVerzonden() {
+                    try {
+                        const response = await axios.post('/VerzendService.asmx/GetVerzonden', {
+                            Bestelguid: this.bestelGuid
+                        }, {
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+
+                        this.verzonden = response.data.d;
+
+                        console.log('Waarde van Verzonden:', this.verzonden);
+
+                    } catch (error) {
+                        console.error('Fout bij ophalen van Verzonden:', error);
+                    }
+                },
+                async fetchEmailGegevens() {
+                    try {
+                        const response = await axios.post('/GegevensService.asmx/GetEmailGegevens', {
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        const data = JSON.parse(response.data.d);
+
+                        this.pakbonemail = data.Pakbonemail;
+                        this.intfactuuremail = data.Intfactuuremail;
+                        console.log("E-mailadressen: ", this.pakbonemail, this.intfactuuremail)
+                    } catch (error) {
+                        console.error('Error fetching emails:', error);
+                    }
+                },
+                async GetPakbonFactuur() {
+                    try {
+                        const response = await axios.post('/VerzendService.asmx/GetPakbonFactuur', {
+                            Bestelguid: this.bestelGuid
+                        }, {
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        const data = JSON.parse(response.data.d);
+
+                        this.pakbon = data.pakbon;
+                        this.factuur = data.factuur;
+                        console.log("Pakbon en factuur: ", this.pakbon, this.factuur)
+                    } catch (error) {
+                        console.error('Error fetching pakbon/factuur:', error);
+                    }
+                },
+                async UpdatePakbon() {
+                    try {
+                        await axios.post('/VerzendService.asmx/UpdatePakbon', {
+                            Bestelguid: this.bestelGuid
+                        }, {
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+
+                        this.GetPakbonFactuur()
+                    } catch (error) {
+                        console.error('Error updating Pakbon', error);
+                    }
+                },
+                async UpdateFactuur() {
+                    try {
+                        await axios.post('/VerzendService.asmx/UpdateFactuur', {
+                            Bestelguid: this.bestelGuid
+                        }, {
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+
+                        this.GetPakbonFactuur()
+                    } catch (error) {
+                        console.error('Error updating Factuur', error);
+                    }
+                }
+            } // end methods/
+        }); // end vue
+    </script>
+</body>
+</html>

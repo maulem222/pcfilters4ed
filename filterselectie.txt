@@ -1,0 +1,42 @@
+als een filter (eigenschap) als selectorveld de waarde checkbox heeft
+dan worden er checkboxes gegenereerd
+heeft een filter als selectorveld de waarde slider
+dan worden de waarden min max en step opgehaald
+uit het record waar eigenschap=eigenschap en categorie=categorie-id en waarde=leeg
+en dan wordt er een slider gegenereerd met als min en max deze waarden
+en als classwaarde de eigenschap
+
+prijs moet hier ontbreken dus in de buitenste loop voor eigenschap moet dan de waarde
+prijsveld worden aangetroffen, en dan wordt er geen slider gegenereerd
+
+een filter bestaat uit een clickclass, het filter-id, en de waarde van het veld selector (checkbox of slider)
+de clickclass is een class, het filter-id en de selectorwaarde zijn beide data- atrributes
+wordt er geklikt op een filter checkbox
+dan wordt het filter-id toegevoegd aan de filter-array
+
+D) wordt er geschoven op een filter slider
+dan worden deze min en max waarden samen met het categorie-id en de eigenschap meegegeven aan een aparte webmethod
+deze webmethod selecteert de eigenschaps id's als volgt:
+select id from eigenschappen where eigenschap=eigenschap and categorie-id=categorie-id 
+and eigenschapswaarde between min and max
+deze id's worden teruggegeven door de webmethod en toegevoegd aan de filter-array
+
+met een query worden dan de verschillende produktid's geselecteerd
+die over deze filter-id's beschikken
+dus select distinct produktid, eigenschap-id from produkteigenschappen p where eigenschap-id IN (id1, id2, etc.)
+join table eigenschappen e on p.eigenschap-id = e.id where e.eigenschap = 'prijs' order by e.waarde ASC
+en de produktid's worden in een object gezet
+dit worden geretourneerd en er wordt een each gestart
+voor elk van deze produktid's worden de statische produkteigenschappen opgehaald
+met een eerste ajax call
+en tevens de eigenschap prijs en de waarde met een tweede ajax call
+en tevens de dynamische eigenschappen+waarden die beschikken over het kenmerk static
+met een derde ajax call
+het kenmerk static kan worden toegevoegd bij het invoeren van een nieuwe eigenschap
+deze objecten worden getoond, in een div met een statisch gedeelte en een dynamisch gedeelte
+het dynamisch gedeelte is flexibel in de lengte en bevat static eigenschappen
+
+de prijs is een apart geval, hiervoor wordt in het statisch gedeelte van het front-end
+een slider gegenereerd met min max en step
+min max en step zijn vastgelegd in de eigenschappentabel
+deze kunnen verkregen worden a.d.h.v. het categorie-id en de eigenschap prijsveld

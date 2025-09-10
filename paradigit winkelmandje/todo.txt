@@ -1,0 +1,7 @@
+                <img src="/images/Doorgaan_met_bestellen.jpg" />
+                <img src="/images/idealvisapaypaldhl.jpg" width="335" />
+
+OK - knopjes zippen in images
+OK - database naar Checkboxesii etc incl. nieuwe tabel Bezorgkosten
+OK - webservices zippen
+OK - code van Winkelmandje.html in mail zetten

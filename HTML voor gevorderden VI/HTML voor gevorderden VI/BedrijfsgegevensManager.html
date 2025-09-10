@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>BedrijfsgegevensManager</title>
+    <!-- Load Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="bedrijfsgegevens">
+        <div class="form-container">
+            <form @submit.prevent="opslaan">
+                <div v-for="(label, field) in formLabels" :key="field" class="form-group">
+                    <label :for="field">{{ label }}</label>
+                    <input :id="field"
+                           v-model="gegevens[field]"
+                           :placeholder="label"
+                           required />
+                </div>
+                <button type="submit">Opslaan</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        var vue_bedrijfsgegevens = new Vue({
+            el: '#bedrijfsgegevens', //Attach to element id container
+            data() {
+                return {
+                    gegevens: {
+                        Bedrijfsnaam: "",
+                        Adres: "",
+                        Postcode: "",
+                        Plaats: "",
+                        Email: "",
+                        Telefoon: "",
+                        KvKNummer: "",
+                        BTWNummer: "",
+                    },
+                    formLabels: {
+                        Bedrijfsnaam: "Bedrijfsnaam",
+                        Adres: "Adres",
+                        Postcode: "Postcode",
+                        Plaats: "Plaats",
+                        Email: "E-mailadres",
+                        Telefoon: "Telefoon",
+                        KvKNummer: "KvK-nummer",
+                        BTWNummer: "BTW-nummer",
+                    }
+                }
+            },
+            mounted() {
+                this.laadGegevens();
+            },
+            methods: {
+                async laadGegevens() {
+                    try {
+                        const response = await fetch("/GegevensService.asmx/GetBedrijfsgegevens", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" }
+                        });
+                        const result = await response.json();
+                        const data = result.d;
+                        if (data) {
+                            this.gegevens = data;
+                        }
+                    } catch (error) {
+                        console.error("Fout bij laden:", error);
+                    }
+                },
+                async opslaan() {
+                    try {
+                        const response = await fetch("/GegevensService.asmx/UpdateBedrijfsgegevens", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ gegevens: this.gegevens }),
+                        });
+                        const result = await response.json();
+                        console.log("Gegevens succesvol opgeslagen!");
+                    } catch (error) {
+                        console.error("Fout bij opslaan:", error);
+                        console.log("Er is een fout opgetreden tijdens het opslaan.");
+                    }
+                }
+            } // end methods
+        }); // end vue
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+Prijs 20-200
+Breedte 35-90
+Hoogte 90,100,110
+Inhoud 0-2000, 2000-3000, 3000-4000
+Kleur Rood, Grijs, Geel, Oranje
+Vulling Piepschuim, Schuimrubber
+
+Standaard eigenschappen:
+
+Id
+Produktnaam
+Produktomschrijving
+Produktafbeelding
+
+testtabel

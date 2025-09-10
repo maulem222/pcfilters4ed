@@ -1,0 +1,31 @@
+            MailMessage mm = new MailMessage();
+            mm.From = new MailAddress(Emailadrbedr);
+            mm.To.Add(Emailadrescont);
+            {
+                HaalBedrijfsnaam();
+                mm.Subject = "Mail van contactformulier op " + Bedrijfsnaam;
+                mm.Body = "Van:  " + Naam + "\r\n";
+                mm.Body += "E-mail:  " + From + "\r\n";
+                mm.Body += "Onderwerp:  " + Subject + "\r\n";
+                mm.Body += "----------------------------------------------------" + "\r\n";
+                mm.Body += "Bericht:" + "\r\n" + "\r\n";
+                mm.Body += Body;
+
+                mm.BodyEncoding = System.Text.Encoding.UTF8;
+                mm.IsBodyHtml = false;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "mail.aspworld.nl";
+                //smtp.Host = "az1-wts2.my-hosting-panel.com";
+                //smtp.EnableSsl = true;
+                smtp.EnableSsl = false;
+                smtp.UseDefaultCredentials = false;
+                System.Net.NetworkCredential credentials = new System.Net.NetworkCredential();
+                credentials.UserName = "pizzeria.icolori@aspworld.nl";
+                credentials.Password = "st2$U3x46"; //was: i68colori18
+                //smtp.UseDefaultCredentials = true;
+                smtp.Credentials = credentials;
+                smtp.Port = 25;
+                smtp.Send(mm);
+            }
+            return "sent";
+   

@@ -1,0 +1,22 @@
+function splitFullName(fullName) {
+    let nameParts = fullName.trim().split(/\s+/); // Split by spaces
+    let givenName = nameParts[0] || "";
+    let familyName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
+    let additionalName = nameParts.slice(1, -1).join(" ") || ""; // Middle names
+
+    return {
+        givenName: givenName,
+        additionalName: additionalName,
+        familyName: familyName
+    };
+}
+
+// Example usage
+console.log(splitFullName("John Michael Doe"));
+// Output: { givenName: "John", additionalName: "Michael", familyName: "Doe" }
+
+console.log(splitFullName("Alice Jane Margaret Smith"));
+// Output: { givenName: "Alice", additionalName: "Jane Margaret", familyName: "Smith" }
+
+console.log(splitFullName("Emily"));
+// Output: { givenName: "Emily", additionalName: "", familyName: "" }

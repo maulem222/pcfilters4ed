@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Overzichts- en einddocumentengenerator</title>
+    <script>
+
+        async function createStructure() {
+
+            const flatJson = [
+                { "Id": 1, "Catnaam": "wonen", "ParentId": 0 },
+
+                { "Id": 2, "Catnaam": "banken", "ParentId": 1 },
+                { "Id": 3, "Catnaam": "zitbanken", "ParentId": 2 },
+                { "Id": 4, "Catnaam": "2-zits banken", "ParentId": 3 },
+                { "Id": 5, "Catnaam": "3-zits banken", "ParentId": 3 },
+                { "Id": 6, "Catnaam": "4-zits banken", "ParentId": 3 },
+                { "Id": 7, "Catnaam": "stoffen banken", "ParentId": 3 },
+                { "Id": 8, "Catnaam": "leren banken", "ParentId": 3 },
+                { "Id": 9, "Catnaam": "velvet banken", "ParentId": 3 },
+                { "Id": 10, "Catnaam": "slaapbanken", "ParentId": 3 },
+
+                { "Id": 11, "Catnaam": "hoekbanken", "ParentId": 2 },
+                { "Id": 12, "Catnaam": "stoffen hoekbanken", "ParentId": 11 },
+                { "Id": 13, "Catnaam": "leren hoekbanken", "ParentId": 11 },
+                { "Id": 14, "Catnaam": "kleine hoekbanken", "ParentId": 11 },
+                { "Id": 15, "Catnaam": "grote hoekbanken", "ParentId": 11 },
+                { "Id": 16, "Catnaam": "loungebanken", "ParentId": 11 },
+                { "Id": 17, "Catnaam": "u-banken", "ParentId": 11 },
+                { "Id": 18, "Catnaam": "modulaire banken", "ParentId": 11 },
+
+                { "Id": 19, "Catnaam": "stoelen", "ParentId": 1 },
+                { "Id": 20, "Catnaam": "eetkamerstoelen", "ParentId": 19 },
+                { "Id": 21, "Catnaam": "stoelen met arm", "ParentId": 20 },
+                { "Id": 22, "Catnaam": "stoelen zonder arm", "ParentId": 20 },
+                { "Id": 23, "Catnaam": "leren eetkamerstoelen", "ParentId": 20 },
+                { "Id": 24, "Catnaam": "velvet eetkamerstoelen", "ParentId": 20 },
+                { "Id": 25, "Catnaam": "stoelen met wieltjes", "ParentId": 20 },
+                { "Id": 26, "Catnaam": "kuipstoelen", "ParentId": 20 },
+                { "Id": 27, "Catnaam": "buisframe stoelen", "ParentId": 20 },
+                { "Id": 28, "Catnaam": "design stoelen", "ParentId": 20 },
+
+                { "Id": 29, "Catnaam": "eetkamerbanken", "ParentId": 19 },
+                { "Id": 30, "Catnaam": "barstoelen", "ParentId": 19 },
+                { "Id": 31, "Catnaam": "fauteuils", "ParentId": 19 },
+                { "Id": 32, "Catnaam": "relaxfauteuils", "ParentId": 19 },
+                { "Id": 33, "Catnaam": "krukjes", "ParentId": 19 },
+                { "Id": 34, "Catnaam": "poefs", "ParentId": 19 },
+                { "Id": 35, "Catnaam": "stoelwielen", "ParentId": 19 },
+
+                { "Id": 36, "Catnaam": "tafels", "ParentId": 1 },
+                { "Id": 37, "Catnaam": "eettafels", "ParentId": 36 },
+                { "Id": 38, "Catnaam": "rechthoekige eettafels", "ParentId": 37 },
+                { "Id": 39, "Catnaam": "vierkante eettafels", "ParentId": 37 },
+                { "Id": 40, "Catnaam": "ronde eettafels", "ParentId": 37 },
+                { "Id": 41, "Catnaam": "eiken eettafels", "ParentId": 37 },
+                { "Id": 42, "Catnaam": "boomstamtafels", "ParentId": 37 },
+                { "Id": 43, "Catnaam": "kloostertafels", "ParentId": 37 },
+
+                { "Id": 44, "Catnaam": "salontafels", "ParentId": 36 },
+                { "Id": 45, "Catnaam": "ronde salontafels", "ParentId": 44 },
+                { "Id": 46, "Catnaam": "houten salontafels", "ParentId": 44 },
+                { "Id": 47, "Catnaam": "witte salontafels", "ParentId": 44 },
+                { "Id": 48, "Catnaam": "zwarte salontafels", "ParentId": 44 },
+                { "Id": 49, "Catnaam": "industriële salontafels", "ParentId": 44 },
+
+                { "Id": 50, "Catnaam": "bijzettafels", "ParentId": 36 },
+                { "Id": 51, "Catnaam": "ronde bijzettafels", "ParentId": 50 },
+                { "Id": 52, "Catnaam": "vierkante bijzettafels", "ParentId": 50 },
+                { "Id": 53, "Catnaam": "houten bijzettafels", "ParentId": 50 },
+                { "Id": 54, "Catnaam": "hoektafels", "ParentId": 50 },
+
+                { "Id": 55, "Catnaam": "bartafels", "ParentId": 36 },
+                { "Id": 56, "Catnaam": "sidetables", "ParentId": 36 },
+                { "Id": 57, "Catnaam": "bureaus", "ParentId": 36 },
+
+                { "Id": 58, "Catnaam": "kasten", "ParentId": 1 },
+                { "Id": 59, "Catnaam": "tv-meubels", "ParentId": 58 },
+                { "Id": 60, "Catnaam": "houten tv-meubels", "ParentId": 59 },
+                { "Id": 61, "Catnaam": "witte tv-meubels", "ParentId": 59 },
+                { "Id": 62, "Catnaam": "zwarte tv-meubels", "ParentId": 59 },
+                { "Id": 63, "Catnaam": "industriële tv-meubels", "ParentId": 59 },
+                { "Id": 64, "Catnaam": "zwevende tv-meubels", "ParentId": 59 },
+
+                { "Id": 65, "Catnaam": "dressoirs", "ParentId": 58 },
+                { "Id": 66, "Catnaam": "opbergkasten", "ParentId": 58 },
+                { "Id": 67, "Catnaam": "boekenkasten", "ParentId": 58 },
+                { "Id": 68, "Catnaam": "buffetkasten", "ParentId": 58 },
+                { "Id": 69, "Catnaam": "vitrinekasten", "ParentId": 58 },
+                { "Id": 70, "Catnaam": "roomdividers", "ParentId": 58 },
+                { "Id": 71, "Catnaam": "industriële kasten", "ParentId": 58 }
+            ];
+
+            const pathsDiv = document.getElementById("paths");
+            pathsDiv.innerHTML = "";
+
+            // Helper: check of een item subcategorieën heeft
+            function hasChildren(id) {
+                return flatJson.some(item => item.ParentId === id);
+            }
+
+            // Helper: bouw pad met backslashes
+            function buildPath(id) {
+                const parts = [];
+                let current = flatJson.find(item => item.Id === id);
+                while (current) {
+                    parts.unshift(current.Catnaam.replace(/ /g, "-"));
+                    current = flatJson.find(item => item.Id === current.ParentId);
+                }
+                //return basePath + "/" + parts.join("/");
+                return parts.join("/");
+            }
+
+            for (const item of flatJson) {
+                const folderPath = buildPath(item.Id);
+
+                // Maak map aan
+                await fetch("/FileService.asmx/CreateFolder", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ path: folderPath })
+                }).then(res => res.text())
+                    .then(text => console.log("Folder response:", text))
+                    .catch(err => console.error("Folder error:", err));;
+
+                // Bepaal documenttype
+                const safeName = item.Catnaam.replace(/ /g, "-");
+                const hasSub = hasChildren(item.Id);
+                const docName = hasSub ? `od_${safeName}.html` : `eid_${safeName}.html`;
+                const fullDocPath = folderPath + "/" + docName;
+
+                // Maak document aan
+                await fetch("/FileService.asmx/CreateFile", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ path: fullDocPath })
+                }).then(res => res.text())
+                    .then(text => console.log("File response:", text))
+                    .catch(err => console.error("File error:", err));;
+
+                // Toon pad in div
+                pathsDiv.innerHTML += fullDocPath + "<br>";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <button onclick="createStructure()">Genereer Structuur</button>
+    </div>
+
+    <h3>📄 Overzichts- en Einddocumenten:</h3>
+    <div id="paths" style="font-family: monospace; white-space: pre-wrap;"></div>
+
+</body>
+</html>
+
+
+
+// FileService.samx
+
+        [WebMethod]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+        public string CreateFolder(string path)
+        {
+            try
+            {
+                string physicalPath = HttpContext.Current.Server.MapPath(path);
+                if (!Directory.Exists(physicalPath))
+                {
+                    Directory.CreateDirectory(physicalPath);
+                    return $"Folder created: {path}";
+                }
+                else
+                {
+                    return $"Folder already exists: {path}";
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"Error creating folder: {ex.Message}";
+            }
+        }
+
+        [WebMethod]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+        public string CreateFile(string path)
+        {
+            try
+            {
+                string physicalPath = HttpContext.Current.Server.MapPath(path);
+                string directory = Path.GetDirectoryName(physicalPath);
+
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                if (!File.Exists(physicalPath))
+                {
+                    File.WriteAllText(physicalPath, string.Empty);
+                    return $"File created: {path}";
+                }
+                else
+                {
+                    return $"File already exists: {path}";
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"Error creating file: {ex.Message}";
+            }
+        }

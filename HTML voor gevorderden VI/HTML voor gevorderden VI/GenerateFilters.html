@@ -1,0 +1,489 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Genereer filters</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <!--jQuery-ui for range slider-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        #linkswindow {
+            width: 25%;
+            min-height: 90vh;
+            height: auto;
+            float: left;
+            padding: 20px;
+            border: 1px solid;
+        }
+
+        #breadcrumb {
+            height: 70px;
+            margin: 20px auto 10px auto;
+            border: 1px solid;
+        }
+
+        #links {
+            position: relative;
+            height: auto;
+            overflow: auto;
+            margin: 10px auto 10px auto;
+            padding-bottom: 2px;
+            padding-left: 2px;
+            padding-top: 2px;
+            border: 1px solid;
+        }
+
+        #editwindow {
+            width: 65%;
+            height: 90vh;
+            float: left;
+            padding: 20px;
+            border: 1px solid;
+        }
+
+        #editor {
+            width: 95%;
+            height: 90%;
+            margin: 20px auto;
+            border: 1px solid;
+            padding: 20px;
+        }
+
+        .check {
+            float: left;
+        }
+
+        #edittekst, label {
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            clear: both;
+        }
+
+        #edittekst2 {
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            float: left;
+            margin-left: 10px;
+        }
+
+        .slider {
+            float: left;
+            width: 50px;
+        }
+
+        .uitleg {
+            font-size: 12px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: dodgerblue;
+        }
+
+        .childcont .childlink a {
+            text-decoration: none;
+            color: black;
+            font-family: Arial;
+            font-size: 12px;
+        }
+
+        .menulink {
+            background-color: lightgray;
+            padding: 4px 10px 4px 10px;
+        }
+
+        .childlink {
+            float: left;
+            width: auto;
+            margin-right: 2px;
+            border: 1px solid white;
+        }
+
+        .delchild, .edit {
+            color: green;
+        }
+
+        .crumb {
+            float: left;
+            width: auto;
+            overflow: auto;
+        }
+
+        .separator {
+            float: left;
+            width: 5px;
+            padding-left: 5px;
+            padding-right: 10px;
+        }
+
+        .content {
+            display: none;
+            overflow: hidden;
+        }
+
+        .plus {
+            cursor: pointer;
+        }
+
+        .minus {
+            cursor: pointer;
+        }
+
+        .chooser > h5 > a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .floater > h5 > a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .amountcont {
+            margin-left: 0px;
+        }
+
+        .slidercont {
+            margin-left: 10px;
+            margin-bottom: 35px;
+        }
+
+        .floater {
+            float: left;
+        }
+
+        .floater2 {
+            padding-top: 8px;
+            float: left;
+        }
+
+        .smallspacer5 {
+            height: 5px;
+            clear: both;
+        }
+
+        .mediumspacer {
+            height: 15px;
+            clear: both;
+        }
+        
+        @media only screen and (min-width: 0px) and (max-width: 1030px) {
+            #eigleft {
+                margin-right: 2.2%;
+            }
+        }
+
+        @media only screen and (min-width: 1030px) and (max-width: 1155px) {
+            #eigleft {
+                margin-right: 2.4%;
+            }
+        }
+
+        @media only screen and (min-width: 1155px) and (max-width: 1355px) {
+            #eigleft {
+                margin-right: 2.6%;
+            }
+        }
+
+        @media only screen and (min-width: 1355px) and (max-width: 1630px) {
+            #eigleft {
+                margin-right: 2.8%;
+            }
+        }
+    </style>
+    <script>
+        var parentid;
+        var childid;
+        var catid;
+        var eigid;
+        var bcarray = [];
+        var slider = false;
+        var prijsveld = false;
+        var statdyn = "static";
+        var eigenschap;
+        var filterelement;
+        var eig;
+        var min;
+        var max;
+        var step;
+        var waarde;
+        var waardeid;
+
+        $(document).ready(function () {
+
+            parentid = 0;
+            if (bcarray.length == 0) {
+                //alert("bcarray leeg");
+                bcarray.push(parentid);
+            }
+            BuildCrumb();
+            getChildren();
+        });
+
+        $(document).on('click', '.chooser h5', function (e) {
+            //Inner
+            var content = $(this).next(); // kies de op <h5></h5> volgende tag, dat is dus <div class="content"> waarbinnen zich de checkboxlijst bevindt
+
+            if (content.is(":visible")) //indien <div class="content"> zichtbaar is, dus expanded
+            {
+                content.slideUp(); // collapse <div class="content">
+                $(this).find('span').html('+'); // zoek de span en zet er een + teken neer
+            }
+            else //indien <div class="content"> onzichtbaar is, dus collapsed
+            {
+                content.slideDown(); // expandeer <div class="content">
+                $(this).find('span').html('-'); // zoek de span en zet er een - teken neer
+            }
+        });
+
+        $(document).on('click', 'a.parent', function (e) {
+
+            $("#Filters").empty();
+            parentid = $(this).attr("Id");
+            var clickedlevel = $(this).attr("Level");
+            CleanArray(clickedlevel);
+            BuildCrumb();
+            getChildren();
+        });
+
+        $(document).on('click', 'a.child', function (e) {
+
+            $("#Filters").empty();
+            var id = $(this).attr("Id");
+            bcarray.push(id); // child id wordt nu parent id
+            parentid = id;
+            catid = id;
+            getChildren($(this), id);
+        });
+
+        function BuildCrumb() {
+
+            $("#breadcrumb").empty();
+
+            $("#breadcrumb").append("<div class='crumb'><a class='parent' href='#' Id='0'" +
+                " Action='Parentclicked' Level='0'>zerolevel</a></div>");
+            var i;
+            var level = 1;
+            for (i = 1; i < bcarray.length; ++i) {
+                var id = bcarray[i];
+                getCrumb(id, level);
+                level++;
+            }
+        }
+
+        function CleanArray(clickedlevel) {
+            var end = bcarray.length; // zeg 5
+            var start = clickedlevel; // zeg 2, dus element 3
+            // times moet uitkomen op 2 zodat er 2x gepopt wordt
+            var times = end - start - 1;
+            for (i = 0; i < times; ++i) {
+                bcarray.pop(); // verwijder het laatste element van de array, doe dit 2x
+            }
+        }
+
+        function getChildren(thisObj, id) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/GetCategories',
+                data: "{'parentid':'" + parentid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var childrenlijst = response.d
+
+                    if (childrenlijst.length > 0) {
+                        $("#links").empty();
+                        $.each(childrenlijst, function (index, child) {
+                            $("#links").append("<div class='childcont'><div class='childlink'><a href='#' class='child' Id='" +
+                                child.Id + "' Action='Childclicked'><div class='menulink'>" + child.Categorienaam + "</div></a></div>" +
+                                "</div>");
+                        });
+                        BuildCrumb();
+                    }
+                    else {
+                        bcarray.pop(); // haal nieuwe parent weer weg
+                        BuildCrumb();
+                        // haal alle gekleurde borders weg
+                        $(".childlink").css('border-color', 'white');
+                        // omlijn het aangeklikte child
+                        thisObj.parent().css('border', '1px solid blue');
+                        generateFilters();
+                    }
+                },
+
+                error: function (response) {
+                    alert("GetCategories error");
+                }
+            });
+
+        }
+
+        function getCrumb(id, level) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/GetCrumb',
+                data: "{'id':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    $("#breadcrumb").append("<div class='separator'>></div>");
+
+                    var crumb = response.d;
+                    $("#breadcrumb").append("<div class='crumb'><a href='#' class='parent' Id='" +
+                        crumb.Id + "' Action='Parentclicked' Level='" + level + "'>" + crumb.Categorienaam + "</a></div>");
+
+                },
+
+                error: function (response) {
+                    alert("GetCrumb error");
+                }
+            });
+
+        }
+
+        function generateFilters() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'FilterService.asmx/GetEigenschappen',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    var eigenschappenlijst = response.d
+                    $("#Filters").empty();
+
+                    if (eigenschappenlijst.length > 0) {
+
+                        $.each(eigenschappenlijst, function (index, eig) {
+                            eigenschap = eig.Eigenschap;
+                            $.ajax({
+
+                                type: 'POST',
+                                url: 'FilterService.asmx/GetFilterElement',
+                                data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "'}",
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                async: false,
+                                success: function (response) {
+                                    var filterelement = response.d.FilterElement;
+
+                                    if (filterelement == "checkbox") {
+
+                                        $.ajax({
+
+                                            type: 'POST',
+                                            url: 'FilterService.asmx/GetWaarden',
+                                            data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "'}",
+                                            contentType: 'application/json; charset=utf-8',
+                                            dataType: 'json',
+                                            async: false,
+                                            success: function (response) {
+
+                                                var waardenlijst = response.d;
+                                                var array = [];
+                                                array.push("<div class='chooser'><h5><span class='plus'>+</span><a>" + " " + eigenschap + "</a></h5>" +
+                                                    "<div class='content'><div class='list-group'>");
+
+                                                $.each(waardenlijst, function (index, waarde) {
+                                                    array.push("<div class='list-group-item checkbox'>" +
+                                                        "<label><input type='checkbox' class='clickclass' value='" + waarde.Waarde + "'>" + waarde.Waarde + "</label></div>");
+                                                });
+                                                array.push("</div></div></div>");
+                                                $("#Filters").append(array.join(''));
+                                            },
+
+                                            error: function (response) {
+                                                alert("GetWaarden error");
+                                            }
+                                        });
+                                    }
+                                    if (filterelement == "slider") {
+                                        // GetSlider ajax call om de slidergegevens op te halen (min en max) en het id
+                                        $.ajax({
+
+                                            type: 'POST',
+                                            url: 'FilterService.asmx/GetSlider',
+                                            data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "','FilterElement':'" + filterelement + "'}",
+                                            contentType: 'application/json; charset=utf-8',
+                                            dataType: 'json',
+                                            async: false,
+                                            success: function (response) {
+                                                var id = response.d.Id;
+                                                var min = response.d.Min;
+                                                var max = response.d.Max;
+                                                var symb = response.d.Symbool;
+                                                var eig = eigenschap;
+                                                //alert('response ! ' + 'Id: ' + id + ' Min.: ' + min + ' Max.: ' + max);
+                                                // Voeg een amount div toe
+                                                $("#Filters").append("<div class='amountcont' id='amount" + id + "'></div>");
+                                                // Voeg het slider element met het juiste id toe aan de div Filters
+                                                $("#Filters").append("<div class='slidercont' id='slider" + id + "'></div>");
+                                                $("#amount" + id).append("<div id='slidername" + id + "'></div>");
+                                                // buildSlider() om de range slider op te zetten
+                                                buildSlider(id, min, max, eig, symb);
+                                            },
+
+                                            error: function (response) {
+                                                alert("GetSlider error");
+                                            }
+                                        });
+                                    }
+                                },
+
+                                error: function (response) {
+                                    alert("GetFilterElement error");
+                                }
+                            });
+                        });
+                    }
+                },
+
+                error: function (response) {
+                    alert("GetEigenschappen error");
+                }
+            });
+        }
+
+        function buildSlider(id, min, max, eig, symb) {
+            $("#slidername" + id).append("<div class='floater'><h5><span class='minus'>-</span><a>" + " " + eig + ":</a></h5></div>" + "<div class='floater2'>" + "&nbsp;" + min + " - " + max + " " + symb + "</div>");
+            $("#amount" + id).append("<div class='smallspacer5'></div>");
+            var $slide = $("#slider" + id).slider({
+                range: true,
+                min: parseInt(min),
+                max: parseInt(max),
+                values: [parseInt(min), parseInt(max)],
+                slide: function (event, ui) {
+                    $("#amount" + id).empty();
+                    $("#amount" + id).append("<div id='slidername" + id + "'></div>");
+                    $("#slidername" + id).empty();
+
+                    $("#slidername" + id).append("<div class='floater'><h5><span class='minus'>-</span><a>" + " " + eig + ":</a></h5></div>" + "<div class='floater2'>" + "&nbsp;" + ui.values[0] + " - " + ui.values[1] + " " + symb + "</div>");
+                    $("#amount" + id).append("<div class='smallspacer5'></div>");
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <div id="linkswindow">
+        <div id="breadcrumb"></div>
+        <div id="links"></div>
+    </div>
+    <div id="editwindow">
+        <div id="editor">
+            <div id="Filters">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

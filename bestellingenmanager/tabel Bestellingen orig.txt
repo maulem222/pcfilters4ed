@@ -1,0 +1,19 @@
+CREATE TABLE [dbo].[Bestellingen] (
+    [Id]                   INT             IDENTITY (1, 1) NOT NULL,
+    [Pid]                  INT             NULL,
+    [Prijs]                DECIMAL (10, 2) NULL,
+    [Produktnaam]          NVARCHAR (100)  NULL,
+    [Produktafbeelding]    NVARCHAR (MAX)  NULL,
+    [Aantal]               INT             NULL,
+    [Gewicht]              DECIMAL (5, 2)  NULL,
+    [Produktlink]          NVARCHAR (300)  NULL,
+    [Bestelguid]           NVARCHAR (50)   NULL,
+    [Tabelnaam]            NVARCHAR (100)  NULL,
+    [Besteldatum]          NVARCHAR (20)   NULL,
+    [Factuur]              NVARCHAR (10)   NULL,
+    [Bestelling_bevestigd] NVARCHAR (10)   NULL,
+    [Klaargezet]           NVARCHAR (10)   NULL,
+    [Ingepakt]             NVARCHAR (10)   NULL,
+    [Verzonden]            NVARCHAR (10)   NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);

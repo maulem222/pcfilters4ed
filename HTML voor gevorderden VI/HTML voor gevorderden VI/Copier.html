@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <style>
+        #container {
+            width: 70%;
+            margin: 0 auto;
+        }
+
+        .spacer {
+            height: 15px;
+        }
+    </style>
+    <script>
+        var html;
+        var catid = 34;
+
+        $(document).ready(function () {
+            $("#copybutt").click(function () {
+                html = $("#sourcetext").html();
+                Copy();
+            });
+        });
+
+        function Copy() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'FileService.asmx/Copy',
+                data: "{'html':'" + html + "','catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                 
+                },
+
+                error: function (response) {
+                    alert("Copy error");
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="container">
+        <button id="copybutt">Copy</button>
+        <div class='spacer'></div>
+        <div id="sourcetext">
+            <div class='spacer'></div>
+            <div class='parentdiv'>
+                <div class='type' type='cb'></div>
+                <div class='cbcat'>Hoogte</div>
+                <div class='cbs'>
+                    <label for='90'><input type='checkbox' id='90' class='cb'> 90 cm</label><br />
+                    <label for='100'><input type='checkbox' id='100' class='cb'> 100 cm</label><br />
+                    <label for='110'><input type='checkbox' id='110' class='cb'> 110 cm</label><br />
+                </div>
+            </div>
+            <div class='spacer'></div>
+            <div class='parentdiv'>
+                <div class='type' type='rangecb'></div>
+                <div class='cbcat'>Inhoud</div>
+                <div class='cbs'>
+                    <label for='0-2000'><input type='checkbox' id='0-2000' low='0' high='2000' class='cb'> 0-2000 cm³</label><br />
+                    <label for='2000-3000'><input type='checkbox' id='2000-3000' low='2000' high='3000' class='cb'> 2000-3000 cm³</label><br />
+                    <label for='3000-4000'><input type='checkbox' id='3000-4000' low='3000' high='4000' class='cb'> 3000-4000 cm³</label><br />
+                </div>
+            </div>
+            <div class='spacer'></div>
+            <div class='parentdiv'>
+                <div class='type' type='cb'></div>
+                <div class='cbcat'>Kleur</div>
+                <div class='cbs'>
+                    <label for='Rood'><input type='checkbox' id='Rood' class='cb'> Rood</label><br />
+                    <label for='Grijs'><input type='checkbox' id='Grijs' class='cb'> Grijs</label><br />
+                    <label for='Geel'><input type='checkbox' id='Geel' class='cb'> Geel</label><br />
+                    <label for='Oranje'><input type='checkbox' id='Oranje' class='cb'> Oranje</label><br />
+                </div>
+            </div>
+            <div class='spacer'></div>
+            <div class='parentdiv'>
+                <div class='type' type='cb'></div>
+                <div class='cbcat'>Vulling</div>
+                <div class='cbs'>
+                    <label for='Piepschuim'><input type='checkbox' id='Piepschuim' class='cb'> Piepschuim</label><br />
+                    <label for='Schuimrubber'><input type='checkbox' id='Schuimrubber' class='cb'> Schuimrubber</label><br />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

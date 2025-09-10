@@ -1,0 +1,101 @@
+            $("#prijsslider").slider({
+                range: true,
+                min: 0,
+                max: 1750,
+                values: [0, 1750],
+                slide: function (event, ui) {
+                    $("#prijsslidervalues").empty();
+                    $("#prijsslidervalues").append("<div>" + "&nbsp;" + "&euro;" + ui.values[0] + " - " + ui.values[1] + " " + "</div>");
+                }
+            });
+
+            $("#prijssliderbutton").click(function () {
+                var prijs = "Prijs";
+                var min = $("#prijsslider").slider("option", "values")[0],
+                    max = $("#prijsslider").slider("option", "values")[1]
+                var query = "(" + prijs + " BETWEEN " + min + " AND " + max + ")";
+                if (sliders.length == 0) { // is de array sliders nog leeg
+                    sliders.push(query); // zet dan meteen de query in de array
+                }
+                else { // indien er al elementen in de array sliders zitten
+                    var i, string, len = sliders.length;
+                    for (i = 0; i < len; ++i) { // loop de hele array sliders af
+                        string = sliders[i];
+                        if (string?.includes("(" + prijs + " BETWEEN ")) { // indien het array element begint met "(Prijs BETWEEN"
+                            sliders.splice(i, 1); // verwijder dan dit array element
+                        }  
+                    }
+                    sliders.push(query); // en vervang het door de query met de nieuwe sliderwaarden
+                }
+                assembleAND();
+            });
+
+
+
+--
+
+            $("#breedteslider").slider({
+                range: true,
+                min: 100,
+                max: 500,
+                values: [100, 500],
+                slide: function (event, ui) {
+                    $("#breedteslidervalues").empty();
+                    $("#breedteslidervalues").append("<div>" + "&nbsp;" + ui.values[0] + " - " + ui.values[1] + " cm"  + "</div>");
+                }
+            });
+
+            $("#breedtesliderbutton").click(function () {
+                var breedte = "Breedte";
+                var min = $("#breedteslider").slider("option", "values")[0],
+                    max = $("#breedteslider").slider("option", "values")[1]
+                var query = "(" + breedte + " BETWEEN " + min + " AND " + max + ")";
+                if (sliders.length == 0) {
+                    sliders.push(query);
+                }
+                else {
+                    var i, string, len = sliders.length;
+                    for (i = 0; i < len; ++i) {
+                        string = sliders[i];
+                        if (string?.includes("(" + breedte + " BETWEEN ")) {
+                            sliders.splice(i, 1);
+                        }
+                    }
+                    sliders.push(query);
+                }
+                assembleAND();
+            });
+
+-- HTML --
+
+        <div class="spacer"></div>
+        <div class="sliderdiv">
+            <div class="slcat">Prijs</div>
+            <div id="prijsslider" class="slider"></div>
+            <div class="slidervalues" id="prijsslidervalues"></div><button class="ibbutt" id="prijssliderbutton">Wijzig</button>
+        </div>
+
+
+-- CSS --
+
+        .cbcat, .slcat {
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .spacer {
+            height: 10px;
+        }
+
+        .slider {
+            width: 150px;
+            margin-bottom: 5px;
+        }
+
+        .ibbutt, .slidervalues {
+            display: inline-block;
+        }
+
+        .slidervalues {
+            width: 100px;
+        }

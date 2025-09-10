@@ -1,0 +1,10 @@
+OK - tabel Bezorging_en_betaling maken met velden Id | KlantId | Guid | Bestelnummer | Besteldatum | Verzenddatum | Bezorgdatum | Bezorgmethode | Bezorgtarief | Totaalbedrag | Betaalmethode
+OK - tabel Bestellingen de volgende velden verwijderen: KlantId | Datum_Besteld | Datum_Verzonden
+OK - als men op doorgaan klikt wordt eerst de tabel Bezorging_en_betaling afgetast, of de guid al voorkomt
+OK - zijn er geen records gevonden dan wordt een Bestelnummer via een stored procedure aangemaakt via de tabel Bestelnummer
+OK - de stored procedure haalt het laatste bestelnummer op, hoogt dat op, zet het weer in de tabel Bestelnummer en retourneert het
+OK - het bestelnummer wordt ingevoerd in de tabel Bezorging_en_betaling, samen met de guid 
+OK - daarna worden de state gegevens ingevoerd met een update van de tabel Bezorging_en_betaling
+OZ - daarna wordt voor alle Bestellingen met de guid het bestelnummer ingevoerd in de tabel Bestellingen
+OZ - wordt er alvorens af te rekenen nog iets bijbesteld, dan wordt na klikken op doorgaan het bestelnummer uit de tabel Bezorging_en_betaling gehaald en ge-update in de tabel Bestellingen voor alle bestellingen met die guid,
+OK - en tevens worden de overige gegevens (o.a. totaalbedrag, bezorgmethode, bezorgdatum/verzenddatum) ge-update in de tabel Bezorging_en_betaling

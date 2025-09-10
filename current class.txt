@@ -1,0 +1,20 @@
+              // (3)
+            const allli = document.querySelectorAll("#pagin li"); // neem alle li's binnen de div #pagin
+            var allpages = allli.length - 2; // aantal list items exclusief Prev en Next
+            console.log('there are ' + allpages + ' pages');
+            if (pg > allpages) { // als pg (een eerder geklikt pagenumber) uit sessie afkomstig is kan het het aantal pages van een nieuwe filterselectie (allpages) overtreffen!
+                //$(".current").click(); // klik dan het eerste element van de li's (eerste pagina) zodat er produkten getoond worden, anders blijven die onzichtbaar
+            }
+
+
+
+            var current = false;
+            const allli = document.querySelectorAll("#pagin li"); // neem alle li's binnen de div #pagin
+            for (let i = 0; i < allli.length; i++) {
+                if (allli[i].hasClass('current')) {
+                    current = true;
+                }
+            }
+            if (current == false) { // er is geen class current aangetroffen in de pagina links
+                $("#pagin li a").eq(0).addClass("current"); // zet dan het eerste pagina element op current zodat dit word onderstreept
+            }

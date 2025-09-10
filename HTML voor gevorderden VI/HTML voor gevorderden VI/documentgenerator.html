@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Overzichts- en einddocumentengenerator</title>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        var menuItems = [];
+
+        async function createStructure() {
+
+            getMenuItems()
+
+            const flatJson = menuItems;
+
+            const pathsDiv = document.getElementById("paths");
+            pathsDiv.innerHTML = "";
+
+            // Helper: check of een item subcategorieën heeft
+            function hasChildren(id) {
+                return flatJson.some(item => item.ParentId === id);
+            }
+
+            // Helper: bouw pad met backslashes
+            function buildPath(id) {
+                const parts = [];
+                let current = flatJson.find(item => item.Id === id);
+                while (current) {
+                    parts.unshift(current.Catnaam.replace(/ /g, "-"));
+                    current = flatJson.find(item => item.Id === current.ParentId);
+                }
+                //return basePath + "/" + parts.join("/");
+                return parts.join("/");
+            }
+
+            for (const item of flatJson) {
+                const folderPath = buildPath(item.Id);
+
+                // Maak map aan
+                await fetch("/FileService.asmx/CreateFolder", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ path: folderPath })
+                }).then(res => res.text())
+                    .then(text => console.log("Folder response:", text))
+                    .catch(err => console.error("Folder error:", err));;
+
+                // Bepaal documenttype
+                const safeName = item.Catnaam.replace(/ /g, "-");
+                const hasSub = hasChildren(item.Id);
+                const docName = hasSub ? `od_${safeName}.html` : `eid_${safeName}.html`;
+                const fullDocPath = folderPath + "/" + docName;
+
+                // Maak document aan
+                await fetch("/FileService.asmx/CreateFile", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ path: fullDocPath })
+                }).then(res => res.text())
+                    .then(text => console.log("File response:", text))
+                    .catch(err => console.error("File error:", err));;
+
+                // Toon pad in div
+                pathsDiv.innerHTML += fullDocPath + "<br>";
+            }
+        }
+
+        function getMenuItems() {
+
+            $.ajax({
+                type: 'POST',
+                url: '/CategorieService.asmx/GetCategoriesSorted',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    menuItems = JSON.parse(response.d);
+                    console.log(menuItems);
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <button onclick="createStructure()">Genereer Structuur</button>
+    </div>
+
+    <h3>📄 Overzichts- en Einddocumenten:</h3>
+    <div id="paths" style="font-family: monospace; white-space: pre-wrap;"></div>
+
+</body>
+</html>

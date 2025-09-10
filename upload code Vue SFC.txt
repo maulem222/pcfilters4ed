@@ -1,0 +1,79 @@
+        <div class="form-group spaced">
+          Picture:
+          <div class="col-md-10">
+            <input type="file" name="imgfile" required @change="onFileChange" />
+            <img v-if="url" :src="url" width=200 />
+          </div>
+        </div>
+        <div class="form-group spaced">
+          After clicking Browse...and choosing image, check here if url of uploaded image has a value:
+          <div class="smallspacer"></div>
+          <div class="col-md-10">
+            <div id="url"></div>
+          </div>
+          <div class="smallspacer"></div>
+          If you see no url here, click Browse... button again and choose image!
+        </div>
+
+
+      onFileChange(e) {
+        var cloudname = 'dz7ni7eqi';
+        var uploadpreset = 'gwhxdpwq';
+
+        const url = "https://api.cloudinary.com/v1_1/" + cloudname + "/image/upload";
+
+        const file = e.target.files[0];
+        this.url = URL.createObjectURL(file);
+
+        var data = new FormData();
+        data.append('upload_preset', uploadpreset);
+        data.append('file', file);
+        data.append('cloud_name', cloudname);
+        
+        fetch(url, {
+          method: "POST",
+          body: data
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            var http_string = data.url;
+            let https_string = http_string.replace("http:", "https:");
+            document.getElementById("url").innerHTML += https_string;
+            this.imageurl = https_string;
+          });
+
+      }
+
+
+-- dest
+
+
+            var cloudname = 'dk4i5hhps';
+            var uploadpreset = 'bbloepyp';
+
+            const url = "https://api.cloudinary.com/v1_1/" + cloudname + "/image/upload";
+
+            const file = e.target.files[0];
+
+            document.getElementById("url").src = URL.createObjectURL(file);
+
+            var data = new FormData();
+            data.append('upload_preset', uploadpreset);
+            data.append('file', file);
+            data.append('cloud_name', cloudname);
+
+            fetch(url, {
+                method: "POST",
+                body: data
+            })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    var http_string = data.url;
+                    let https_string = http_string.replace("http:", "https:");
+                    document.getElementById("uploadurl").innerHTML += https_string;
+                    //this.imageurl = https_string;
+                });

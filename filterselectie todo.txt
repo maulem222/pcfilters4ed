@@ -1,0 +1,10 @@
+OK - buitenste loop select distinct eigenschap from eigenschappen where catid=@catid
+OK - stel variabele eigenschap in in succestak
+OK - binnenste loop 
+OK - eerst ajax call select filterelement from eigenschappen where catid=@catid and eigenschap=@eig and waarde='' and statdyn != prijsveld
+OK - indien filterelement=checkbox
+OK - select distinct waarde from eigenschappen where catid=@catid and eigenschap=@eig and waarde != ''
+OK - in succestak each starten en per waarde checkbox genereren
+OK - indien filterelement=slider
+OK - select min, max, symbool from eigenschappen where eigenschap=@eig en catid=@catid en waarde=''
+OK - in succestak slider genereren met min max en symbool

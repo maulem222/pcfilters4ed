@@ -1,0 +1,71 @@
+poefs.html:
+
+        $(document).on('click', '.winkelm', function (e) {
+            e.preventDefault();
+
+            guid = getCookie('guid');
+            if (guid == null) { // geen guid aanwezig
+                //guid = uuidv4(); // maak een guid
+                generateguid(); // nieuwe routine met check op bestaande guid
+                //var time = 3600 * 1000 * 24 * 14; // 2 weken vanaf nu
+                //document.cookie = 'guid=' + guid + '; max-age=' + time + "; path=/"; // zet de guid cookie
+                setCookie('guid', guid, '14');
+                itemCount = 1; // er is maar 1 item besteld en itemCount bestaat nog niet dus itemCount wordt op 1 ingesteld
+                //document.cookie = 'itemCount=' + itemCount + '; max-age=' + time + "; path=/"; // zet de itemCount cookie
+                setCookie('itemCount', itemCount, '14'); // zet de guid cookie
+            }
+            else { // guid bestaat wel
+                //var time = 3600 * 1000 * 24 * 14; // 2 weken vanaf nu
+                itemCount = getCookie('itemCount'); // haal de itemCount cookie en zet hem in itemCount
+                itemCount++; // hoog itemCount op met 1
+                //document.cookie = 'itemCount=' + itemCount + '; max-age=' + time + "; path=/"; // en sla itemCount weer op als cookie
+                setCookie('itemCount', itemCount, '14'); // zet de guid cookie
+            }
+            $('#itemCount').html(itemCount).css('display', 'block'); // toon itemCount in het rondje
+            
+            var pid = $(this).attr('Id'); // het Id attribute werd gezet in $('#produkten').append() in getData()
+
+            var SQL = "SELECT * FROM " + table + " WHERE Id=" + pid;
+            getProductData(SQL);
+        });
+
+details.html:
+
+        $(document).on('click', '.winkelm', function (e) {
+            e.preventDefault();
+
+            guid = getCookie('guid');
+            if (guid == null) { // geen guid aanwezig
+                //guid = uuidv4(); // maak een guid
+                generateguid(); // nieuwe routine met check op bestaande guid
+                //var time = 3600 * 1000 * 24 * 14; // 2 weken vanaf nu
+                //document.cookie = 'guid=' + guid + '; max-age=' + time + "; path=/"; // zet de guid cookie
+                setCookie('guid', guid, '14');
+                itemCount = parseInt($('#counter').html()); // neem counterwaarde als itemCount
+                //document.cookie = 'itemCount=' + itemCount + '; max-age=' + time + "; path=/"; // zet de itemCount cookie
+                setCookie('itemCount', itemCount, '14'); // zet de itemCount cookie
+            }
+            else { // guid bestaat wel dus ook itemCount heeft al een waarde
+                //var time = 3600 * 1000 * 24 * 14; // 2 weken vanaf nu
+                itemCount = getCookie('itemCount'); // haal de itemCount cookie en zet hem in itemCount
+                itemCount = parseInt(itemCount) + parseInt($('#counter').html()); // hoog itemCount op met counterwaarde
+                //document.cookie = 'itemCount=' + itemCount + '; max-age=' + time + "; path=/"; // en sla itemCount weer op als cookie
+                setCookie('itemCount', itemCount, '14'); // zet de itemCount cookie
+            }
+            $('#itemCount').html(itemCount).css('display', 'block'); // toon itemCount in het rondje
+
+            var SQL = "SELECT * FROM " + table + " WHERE Id=" + pid;
+            getProductData(SQL);
+        });
+
+
+beide:
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }

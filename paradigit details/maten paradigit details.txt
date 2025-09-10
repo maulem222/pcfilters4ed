@@ -1,0 +1,9 @@
+gehele breedte: 1155
+linkse vak: 475 (41%)
+middelste vak: 370 (32%)
+rechtse vak: 310 (27%)
+
+gehele hoogte: 500
+bovenste vak: 55 (11%)
+middelste vak: 325 (65%)
+onderste vak: 120 (24%)

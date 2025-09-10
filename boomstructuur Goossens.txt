@@ -1,0 +1,71 @@
+wonen
+-banken
+--zitbanken
+---2-zits banken
+---3-zits banken
+---4-zits banken
+---stoffen banken
+---leren banken
+---velvet banken
+---slaapbanken
+--hoekbanken
+---stoffen hoekbanken
+---leren hoekbanken
+---kleine hoekbanken
+---grote hoekbanken
+---loungebanken
+---u-banken
+---modulaire banken
+-stoelen
+--eetkamerstoelen
+---stoelen met arm
+---stoelen zonder arm
+---leren eetkamerstoelen
+---velvet eetkamerstoelen
+---stoelen met wieltjes
+---kuipstoelen
+---buisframe stoelen
+---design stoelen
+--eetkamerbanken
+--barstoelen
+--fauteuils
+--relaxfauteuils
+--krukjes
+--poefs
+--stoelwielen
+-tafels
+--eettafels
+---rechthoekige eettafels
+---vierkante eettafels
+---ronde eettafels
+---eiken eettafels
+---boomstamtafels
+---kloostertafels
+--salontafels
+---ronde salontafels
+---houten salontafels
+---witte salontafels
+---zwarte salontafels
+---industriële salontafels
+--bijzettafels
+---ronde bijzettafels
+---vierkante bijzettafels
+---houten bijzettafels
+---hoektafels
+--bartafels
+--sidetables
+--bureaus
+-kasten
+--tv-meubels
+---houten tv-meubels
+---witte tv-meubels
+---zwarte tv-meubels
+---industriële tv-meubels
+---zwevende tv-meubels
+--dressoirs
+--opbergkasten
+--boekenkasten
+--buffetkasten
+--vitrinekasten
+--roomdividers
+--industriële kasten

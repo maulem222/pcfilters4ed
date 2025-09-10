@@ -1,0 +1,21 @@
+OK - tabel Tabellen maken met velden Id, Tabelnaam, Catid, Pad
+OK - alleen het veld Tabelnaam is verplicht
+OK - alvast testtabel invullen, verder niks
+OK - tabelveld Tabelnaam inlezen in dropdown
+OK - waarde van dropdown instellen op Id
+OK - na keuze van tabelnaam in dropdown de keuze opslaan in een variabele
+OK - tevens het Id van de tabelnaam ophalen en in variabele zetten
+OK - treeview openen met erboven de tekst: kies een eindcategorie:
+OK - na keuze van een eindcategorie dient de keuze geaccentueerd te worden
+OK - het catid wordt in een variabele gezet en het pad ook
+OK - na klikken op de button Opslaan worden a.d.h.v. het Id het catid en het pad opgeslagen in de tabel
+OK - in dd on change komt een routine om catid en pad in te lezen aan de hand van de gekozen tabelnaam Id value
+OK - daarna wordt er een query gegenereerd
+OK - deze query luidt: SELECT * FROM tabelnaam
+OK - de query wordt naar webmethode getProducts() gestuurd
+OK - alle records worden geretourneerd
+OZ - van de records wordt een JSON object gemaakt met de velden Id en Produktlink
+OK - dit JSON object wordt gelogd
+OK - per produktlink wordt een SQL UPDATE gedaan van het veld ProduktLink
+
+https://youtu.be/_QlxF_4Bp00

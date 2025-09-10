@@ -1,0 +1,21 @@
+als lengte van de bc-array 0 is,
+is parent id van de list-items ook 0
+toon dus alleen parents waarvan parent id 0 is
+indien er geen van zulke parents zijn
+kun je een child toevoegen met parent id 0
+na klikken op een child wordt de array overnieuw opgebouwd
+en wordt het child parent in de bc-array
+en de list-items de children van die parent
+de breadcrumb bevat ook een integer level
+zo kan slechts worden geloopt tot en met dit level
+tijdens het loopen wordt steeds het id van het item opgeslagen
+dit wordt dan gebruikt om de children te listen
+en de edit-link te maken per child
+ook is er een toevoeg-link onderaan
+de bc-array is opgebouwd uit id's
+hier wordt middels een loop steeds door een query
+de bijbehorende breadcrumb opgehaald en gelist
+de list-items bevatten daartoe ook hun id
+wordt er op een list-item geklikt
+dan wordt dit id eerst toegevoegd aan de array
+alvorens de bc-array overnieuw uit te lezen

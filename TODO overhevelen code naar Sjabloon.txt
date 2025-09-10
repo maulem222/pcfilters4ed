@@ -1,0 +1,5 @@
+OK - eerst headerafbeelding laden via catid
+OK - dan code van CheckboxTest.html overzetten naar poefs.html
+OK - url destillatie testen en inzetten in poefs.html
+OK - dan de code van poefs overzetten naar Sjabloon.html
+OK - verder werken aan Copy in de Generator

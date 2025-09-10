@@ -1,0 +1,1307 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/css/splide.min.css" rel="stylesheet">
+    <script src="/Scripts/moment-with-locales.min.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            overflow: visible;
+        }
+
+        #container {
+            width: 75%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 50px;
+            height: auto;
+            border: 0px solid red;
+        }
+
+        #details {
+            border: 0px solid black;
+            height: auto;
+            overflow: visible;
+            width: 100%;
+        }
+
+        #topbox {
+            height: 55px;
+            width: calc(100% - 2px);
+            border: 0px solid green;
+        }
+
+        #leftbox {
+            float: left;
+            height: 445px;
+            width: calc(41% - 2px);
+            border: 0px solid blue;
+        }
+
+        #leftupperbox {
+            height: 323px;
+            width: calc(100% - 2px);
+            border: 0px solid pink;
+            text-align: center;
+        }
+
+        #leftlowerbox {
+            height: 118px;
+            width: calc(100% - 2px);
+            border: 0px solid pink;
+        }
+
+        #rightbox {
+            float: left;
+            height: 445px;
+            width: calc(59% - 2px);
+            border: 0px solid blue;
+        }
+
+        #rightupperbox {
+            height: 323px;
+            width: calc(100% - 2px);
+            border: 0px solid pink;
+        }
+
+        #rupperleftbox {
+            float: left;
+            height: 321px;
+            width: calc(54% - 17px);
+            border: 0px solid black;
+            padding-left: 15px;
+        }
+
+        #rupperrightbox {
+            float: left;
+            height: 321px;
+            width: calc(46% - 2px);
+            border: 0px solid black;
+            text-align: center;
+        }
+
+            #rupperrightbox img {
+                width: 90%;
+            }
+
+
+        #rightlowerbox {
+            height: 118px;
+            width: calc(100% - 2px);
+            border: 0px solid green;
+        }
+
+        #rlowerleftbox {
+            height: 118px;
+            width: calc(54% - 2px);
+            border: 0px solid black;
+        }
+
+        .features {
+            font-family: 'Franklin Gothic Book';
+            font-size: 16px;
+            color: darkslategray;
+        }
+
+        #prodname {
+            font-family: Calibri;
+            font-size: 25px;
+            font-weight: bold;
+            color: darkblue;
+        }
+
+        li {
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        /* prijs, incrementer en bestelknop */
+
+        .butt { /* dit vakje bevat de bestelknop */
+            width: 300px;
+            height: 40px;
+            border: 0px solid red;
+        }
+
+        #incrandbutt {
+            display: flex;
+            justify-content: space-evenly;
+            margin-top: 10px;
+            margin-left: 90px;
+            gap: 20px; /* minimale space between */
+        }
+
+        .input-box {
+            height: 40px;
+            width: 100px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        button {
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+            font-size: 15px;
+            padding: 5px 10px;
+        }
+
+        p {
+            padding: 5px 10px;
+        }
+
+        #price {
+            margin-left: 220px;
+            font-size: 25px;
+        }
+
+        /* gray box met voorwaarden */
+
+        #graybox {
+            border: 1px solid transparent;
+            background-color: #F3F3F3;
+            width: 250px;
+            height: 95px;
+            border-radius: 4px;
+            padding: 25px;
+        }
+
+            #graybox .line {
+                height: 21px;
+                width: 260px;
+                border: 0px solid orange;
+                margin-bottom: 5px;
+            }
+
+            #graybox .image {
+                float: left;
+                height: 21px;
+                width: 21px;
+                border: 0px solid blue;
+            }
+
+                #graybox .image img {
+                    width: 25px;
+                    height: 25px;
+                }
+
+            #graybox .text {
+                text-align: left;
+                margin-left: 15px;
+                float: left;
+                height: 21px;
+                width: 215px;
+                border: 0px solid green;
+                font-family: Calibri;
+                font-size: 17px;
+                color: dimgrey;
+            }
+
+        .bold {
+            padding: 0px 0px;
+            font-weight: bold;
+            float: left;
+            margin-right: 5px;
+        }
+
+        .normal {
+            padding: 0px 0px;
+            font-weight: normal;
+            float: left;
+        }
+
+
+        /* breadcrumb */
+        .noaction {
+            text-decoration: none;
+            color: black;
+            pointer-events: none; /* voorkomt page reload bij het klikken op de lege link */
+            cursor: default;
+        }
+
+        .action {
+            text-decoration: none;
+            cursor: pointer;
+            color: blue;
+        }
+
+        .crumb {
+            float: left;
+            width: auto;
+            overflow: auto;
+        }
+
+        .grayed {
+            color: gray;
+        }
+
+        .separator {
+            float: left;
+            width: 5px;
+            padding-left: 5px;
+            padding-right: 10px;
+        }
+
+        #bccontainer {
+            width: 100%;
+            height: 20px;
+            border-bottom: 1px solid #e3e6e4;
+            margin-bottom: 15px;
+        }
+
+        /* thumbnail slider */
+
+        #thumbnail-carousel .splide__list {
+            justify-content: center;
+        }
+
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        img.hundred {
+            width: 100%;
+            height: auto;
+        }
+
+        #thumbnail-carousel .splide__slide {
+            opacity: 1;
+        }
+
+            #thumbnail-carousel .splide__slide.is-active {
+                opacity: 1;
+            }
+
+        /* winkelmandje */
+
+        #cart-container {
+            float: right;
+            width: 35px;
+            position: relative;
+            top: -35px;
+            border: 0px solid green;
+        }
+
+        #itemCount {
+            position: absolute;
+            display: none;
+            top: -10px;
+            left: -10px;
+            width: 24px;
+            height: 20px;
+            padding-top: 4px;
+            border-radius: 50%;
+            border: 1px solid grey;
+            background: white;
+            color: black;
+            text-align: center;
+        }
+
+        .winkelwagen {
+            cursor: pointer;
+        }
+
+        /* Plaats in winkelw btn */
+
+        .btn {
+            margin-bottom: 0;
+            font-weight: normal;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            padding: 6px 12px;
+            line-height: 1.42857143;
+            border-radius: 4px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .btn {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-transition: background-color .08s linear, color .08s linear;
+            -moz-transition: background-color .08s linear, color .08s linear;
+            -o-transition: background-color .08s linear, color .08s linear;
+            transition: background-color .08s linear, color .08s linear;
+            position: relative;
+        }
+
+        .btn {
+            background-color: #2fb502;
+            box-shadow: inset 0 -2px 0 0 #279b00;
+            color: white;
+        }
+
+            .btn:hover {
+                background-color: #2EA802;
+            }
+
+        .btn {
+            overflow: visible;
+            width: 160px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .both {
+            border: 0px solid white;
+            height: auto;
+            width: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btntext {
+            font-family: "Open Sans", arial;
+            font-size: 13px;
+            display: inline-block;
+        }
+
+        .btnimage {
+            width: 26px;
+            height: 21px;
+            margin-left: 5px;
+            margin-top: -1px;
+            content: " ";
+            display: inline-block;
+        }
+
+        @media only screen and (min-width: 0px) and (max-width: 739px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container {
+                width: 100%;
+            }
+
+            #leftbox {
+                float: none;
+                height: 400px;
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 50px;
+            }
+
+            #rightbox {
+                float: none;
+                height: 150px;
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+                border: 0px solid blue;
+            }
+
+            #rightupperbox {
+                height: 150px;
+                width: 100%;
+                border: 0px solid pink;
+            }
+
+            #rupperleftbox {
+                float: none;
+                width: 325px;
+                height: 150px;
+                margin-left: auto;
+                margin-right: auto;
+                border: 0px solid black;
+                text-align: center;
+            }
+
+            #rupperrightbox {
+                float: none;
+                display: flex;
+                justify-content: center;
+                width: 325px;
+                height: 150px;
+                margin-left: auto;
+                margin-right: auto;
+                border: 0px solid black;
+            }
+
+            #rightlowerbox {
+                margin-top: 170px;
+                height: 118px;
+                width: 325px;
+                margin-left: auto;
+                margin-right: auto;
+                border: 0px solid green;
+            }
+
+            #rlowerleftbox {
+                float: none;
+                width: 325px;
+                margin-left: auto;
+                margin-right: auto;
+                border: 0px solid blue;
+            }
+
+            #incrandbutt {
+                display: block;
+                justify-content: normal;
+                margin-top: -20px;
+                margin-left: 15px;
+                gap: 0px; /* minimale space between */
+            }
+
+            .butt {
+                margin-top: 10px;
+            }
+
+            #price {
+                margin-top: 10px;
+            }
+        }
+
+        @media only screen and (min-width: 740px) and (max-width: 829px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container {
+                width: 100%;
+            }
+
+            #leftbox {
+                float: none;
+                height: 400px;
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 50px;
+            }
+
+            #rightbox {
+                float: none;
+                height: 150px;
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+                border: 0px solid blue;
+            }
+
+            #rightupperbox {
+                display: flex;
+                justify-content: space-evenly;
+                height: 150px;
+                width: 100%;
+                border: 0px solid pink;
+            }
+
+            #rupperleftbox {
+                float: none;
+                width: 310px;
+                height: 150px;
+                border: 0px solid black;
+            }
+
+            #rupperrightbox {
+                display: flex;
+                justify-content: space-evenly;
+                float: none;
+                width: 310px;
+                height: 150px;
+                border: 0px solid black;
+            }
+
+            #rlowerleftbox {
+                float: none;
+                position: relative;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 20px;
+                border: 0px solid blue;
+            }
+
+            #incrandbutt {
+                position: absolute;
+                top: 50px;
+                left: -80px;
+                border: 0px solid red;
+            }
+
+            #price {
+                position: absolute;
+                left: -40px;
+                bottom: 70px;
+            }
+        }
+
+        @media only screen and (min-width: 830px) and (max-width: 1029px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container {
+                width: 90%;
+            }
+
+            #leftbox {
+                float: none;
+                height: 400px;
+                width: 80%;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 50px;
+            }
+
+            #rightbox {
+                float: none;
+                height: 150px;
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+                border: 0px solid blue;
+            }
+
+            #rightupperbox {
+                display: flex;
+                justify-content: space-evenly;
+                height: 150px;
+                width: 100%;
+                border: 0px solid pink;
+            }
+
+            #rupperleftbox {
+                float: left;
+                width: 35%;
+                height: 150px;
+                border: 0px solid black;
+            }
+
+            #rupperrightbox {
+                display: flex;
+                justify-content: space-evenly;
+                float: left;
+                width: 40%;
+                height: 150px;
+                border: 0px solid black;
+            }
+
+            #rlowerleftbox {
+                float: none;
+                position: relative;
+                display: flex;
+                justify-content: space-evenly;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 20px;
+                border: 0px solid blue;
+            }
+
+            #incrandbutt {
+                position: absolute;
+                top: 50px;
+                left: -80px;
+                border: 0px solid red;
+            }
+
+            #price {
+                position: absolute;
+                left: -40px;
+                bottom: 70px;
+            }
+        }
+
+        @media only screen and (min-width: 1030px) and (max-width: 1129px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container {
+                width: 90%;
+            }
+
+            #leftbox {
+                float: left;
+                height: 445px;
+                width: 50%;
+                border: 0px solid blue;
+            }
+
+            #rightbox {
+                float: left;
+                height: 445px;
+                width: 50%;
+                border: 0px solid blue;
+            }
+
+            #rupperleftbox {
+                float: none;
+                width: 330px;
+                height: 150px;
+                margin-left: 15%;
+                margin-bottom: 5px;
+            }
+
+            #rupperrightbox {
+                float: none;
+                width: 320px;
+                height: 150px;
+                margin-left: 18%;
+                margin-bottom: 20px;
+            }
+
+            #rlowerleftbox {
+                float: none;
+                width: 300px;
+                margin-left: 0px;
+                border: 0px solid blue;
+            }
+
+            #price {
+                margin-left: 200px;
+            }
+        }
+
+        @media only screen and (min-width: 1130px) and (max-width: 1340px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container {
+                width: 90%;
+            }
+
+            #leftbox {
+                float: left;
+                height: 445px;
+                width: 50%;
+                border: 0px solid blue;
+            }
+
+            #rightbox {
+                float: left;
+                height: 445px;
+                width: 50%;
+                border: 0px solid blue;
+            }
+
+            #rupperleftbox {
+                float: none;
+                width: 330px;
+                height: 150px;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 5px;
+                border: 0px solid blue;
+            }
+
+            #rupperrightbox {
+                float: none;
+                width: 320px;
+                height: 150px;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 20px;
+                border: 0px solid blue;
+            }
+
+            #rightlowerbox {
+                height: 118px;
+                width: calc(100% - 2px);
+                border: 0px solid green;
+            }
+
+            #rlowerleftbox {
+                float: none;
+                height: 118px;
+                width: 100%;
+                border: 0px solid black;
+            }
+
+            #price {
+                margin-left: 230px;
+            }
+        }
+    </style>
+    <script>
+        var SQL;
+        var counter = 1;
+        var id;
+        var afb;
+        var naam;
+        var prijs;
+        var catid;
+        var bcfirstpart;
+        var productname;
+
+        var table;
+        var pid;
+
+        var itemCount = 0;
+        var guid;
+
+        var pathanddoc;
+
+        $(document).ready(function () {
+
+            guid = getCookie('guid');
+            if (guid == null) { // geen guid aanwezig
+                document.cookie = 'itemCount=; max-age=0; path=/; domain=' + location.hostname; // haal ook de itemCount cookie weg
+            }
+            else { // guid bestaat wel
+                itemCount = getCookie('itemCount');
+                if (itemCount !== null) {
+                    if (itemCount > 0) {
+                        $('#itemCount').html(itemCount).css('display', 'block');
+                    }
+                    else {
+                        $('#itemCount').css('display', 'none');
+                    }
+                }
+                else { // itemCount cookie bestaat niet
+                    itemCount = 0;
+                }
+                // verleng zowel guid als itemCount cookie
+                setCookie('guid', guid, '14'); // verleng de guid cookie
+                setCookie('itemCount', itemCount, '14'); // verleng of maak de itemCount cookie
+            }
+
+            table = getParameterByName('table');
+            pid = getParameterByName('pid');
+            productname = getParameterByName('prodname');
+            catid = getParameterByName('catid');
+            //alert('tabel: ' + table + " productid: " + pid);
+
+            GetCrumbFromDB();
+
+            SQL = "SELECT * FROM " + table + " WHERE Id=" + pid;
+            getData();
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // gallery
+            var gallery = new Splide("#main-carousel", {
+                rewind: true,
+                pagination: false
+            });
+
+            var thumb = new Splide("#thumbnail-carousel", {
+                fixedWidth: 80,
+                fixedHeight: 60,
+                gap: 10,
+                rewind: true,
+                pagination: false,
+                cover: true,
+                isNavigation: true,
+                breakpoints: {
+                    600: {
+                        fixedWidth: 60,
+                        fixedHeight: 44,
+                    },
+                },
+            });
+
+            gallery.sync(thumb);
+            gallery.mount();
+            thumb.mount();
+        });
+
+        function getParameterByName(name) {
+            var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+            return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+        }
+
+        function plus() {
+            counter += 1;
+            document.getElementById("counter").innerHTML = counter;
+        }
+
+        function minus() {
+            if (counter > 1) {
+                counter -= 1;
+            }
+            document.getElementById("counter").innerHTML = counter;
+        }
+
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                date.setHours(date.getHours() + 1);
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+            else return null;
+        }
+
+        function getData() {
+            $.ajax({
+                type: 'POST',
+                url: '/ProduktService.asmx/getProduct',
+                data: JSON.stringify({ sql: SQL }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    //console.clear();
+                    console.log(data.d);
+
+                    var data = JSON.parse(data.d);
+                    $.each(data, function (i) {
+                        id = data[i].Id;
+                        afb = data[i].Produktafbeelding;
+                        naam = data[i].Produktnaam;
+                        prijs = data[i].Prijs;
+
+                        $("#afb").attr("src", afb);
+                        $("#prodname").append(naam);
+                        $("#price").append(formatcomma(prijs));
+
+                        var feat1 = data[i].Feature1;
+                        var feat2 = data[i].Feature2;
+                        var feat3 = data[i].Feature3;
+                        var feat4 = data[i].Feature4;
+                        var feat5 = data[i].Feature5;
+
+                        if ((feat1 !== "") || (feat2 !== "") || (feat3 !== "") || (feat4 !== "") || (feat5 !== "")) {
+                            $("#feat").append("<ul>");
+                        }
+                        if (feat1 !== "") {
+                            $("#feat").append("<li>" + feat1 + "</li>");
+                        }
+                        if (feat2 !== "") {
+                            $("#feat").append("<li>" + feat2 + "</li>");
+                        }
+                        if (feat3 !== "") {
+                            $("#feat").append("<li>" + feat3 + "</li>");
+                        }
+                        if (feat4 !== "") {
+                            $("#feat").append("<li>" + feat4 + "</li>");
+                        }
+                        if (feat5 !== "") {
+                            $("#feat").append("<li>" + feat5 + "</li>");
+                        }
+                        if ((feat1 !== "") || (feat2 !== "") || (feat3 !== "") || (feat4 !== "") || (feat5 !== "")) {
+                            $("#feat").append("</ul>");
+                        }
+                    });
+                },
+
+                //error: function (response) {
+                //    alert("getData error");
+                //}
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        $(document).on('click', '.winkelm', function (e) {
+            e.preventDefault();
+
+            guid = getCookie('guid');
+            if (guid == null) { // geen guid aanwezig
+                //guid = uuidv4(); // maak een guid
+                generateguid(); // nieuwe routine met check op bestaande guid
+                setCookie('guid', guid, '14'); // zet de guid cookie
+                itemCount = parseInt($('#counter').html()); // neem counterwaarde als itemCount
+                setCookie('itemCount', itemCount, '14'); // zet de itemCount cookie
+            }
+            else { // guid bestaat wel dus ook itemCount heeft al een waarde
+                itemCount = getCookie('itemCount'); // haal de itemCount cookie en zet hem in itemCount
+                itemCount = parseInt(itemCount) + parseInt($('#counter').html()); // hoog itemCount op met counterwaarde
+                setCookie('itemCount', itemCount, '14'); // zet de itemCount cookie
+            }
+            $('#itemCount').html(itemCount).css('display', 'block'); // toon itemCount in het rondje
+
+            var SQL = "SELECT * FROM " + table + " WHERE Id=" + pid;
+            getProductData(SQL);
+        });
+
+        function generateguid() {
+            guid = uuidv4();
+
+            if (Guidexists()) {
+                generateguid();
+                console.log("uuidv4 generated...");
+            }
+        }
+
+        function uuidv4() {
+            return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+                (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+            );
+        }
+
+        function Guidexists() {
+            var guidbestaat;
+
+            $.ajax({
+                type: 'POST',
+                url: '/BestellingenService.asmx/DoesGuidExist',
+                data: JSON.stringify({ guid: guid }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    console.log(data.d);
+                    if (data.d == "EXISTS") {
+                        guidbestaat = true;
+                        console.log("existing guid...");
+                    }
+                    if (data.d == "NOTEXISTS") {
+                        guidbestaat = false;
+                        console.log("non-existing guid, inserted.");
+                    }
+
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+
+            return guidbestaat;
+        }
+
+        function getProductData(SQL) {
+            $.ajax({
+                type: 'POST',
+                url: '/ProduktService.asmx/getProduct',
+                data: JSON.stringify({ sql: SQL }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    //console.clear();
+                    console.log(data.d);
+
+                    var data = JSON.parse(data.d);
+                    $.each(data, function (i) {
+                        var pid = data[i].Id;
+                        var produktafbeelding = data[i].Produktafbeelding;
+                        var produktnaam = data[i].Produktnaam;
+                        var prijs = data[i].Prijs;
+                        var aantal = parseInt($('#counter').html());
+                        var gewicht = data[i].Gewicht;
+                        var produktlink = data[i].ProduktLink;
+                        var bestelguid = guid;
+                        var tabelnaam = table;
+                        Bestel(pid, prijs, produktnaam, produktafbeelding, aantal, gewicht, produktlink, bestelguid, tabelnaam);
+                    });
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        function Bestel(pid, prijs, produktnaam, produktafbeelding, aantal, gewicht, produktlink, bestelguid, tabelnaam) {
+
+            var data = {};
+            data.pid = pid;
+            data.prijs = prijs;
+            data.produktnaam = produktnaam;
+            data.produktafbeelding = produktafbeelding;
+            data.aantal = aantal;
+            data.gewicht = gewicht;
+            data.produktlink = produktlink;
+            data.bestelguid = bestelguid;
+            data.tabelnaam = tabelnaam;
+            data.besteldatum = moment().locale('nl').format('YYYY-MM-DD');
+
+            $.ajax({
+                type: 'POST',
+                url: '/BestellingenService.asmx/BestelProdukt',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+
+
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        $(document).on('click', '.winkelwagen', function (e) {
+            e.preventDefault();
+            location.href = "/winkelmandje.html";
+        });
+
+        function GetCrumbFromDB() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: '/BreadcrumbService.asmx/ReadBCfromDB',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (response.d.Crumb == null) {
+                        // doe niets
+                    }
+                    else {
+                        var crumb = response.d.Crumb;
+                        $("#bccontainer").empty();
+                        $("#bccontainer").append(crumb);
+
+                        var links = document.querySelectorAll('#bccontainer .crumb'); // alle crumbs
+                        var crumbtext = links[links.length - 1].textContent; // pak de laatste crumb
+
+                        /* append to categorie en title */
+                        $("#categorie").append(crumbtext);
+                        $(document).prop('title', crumbtext);
+                        /* einde */
+
+                        // geen sessiewaarde /wonen/stoelen/poefs/poefs.html meer want die is niet altijd beschikbaar
+                        //var pathanddoc = sessionStorage.getItem('location');
+
+                        var loc = getLocation(location);
+                        var pathanddoc = loc.pathname; // /wonen/stoelen/poefs/details.html
+                        console.log('pathname: ' + pathanddoc);
+                        pathanddoc = pathanddoc.substring(0, pathanddoc.lastIndexOf('/') + 1); // /wonen/stoelen/poefs/
+
+                        // voeg - streepjes toe indien nodig en kleine letters
+                        var docname = replace(crumbtext).toLowerCase(); // crumbtext is bijv. Poefs
+                        pathanddoc = pathanddoc + docname + '.html'; // /wonen/stoelen/poefs/poefs.html
+                        console.log('pathanddoc: ' + pathanddoc);
+
+                        var editablecrumb = crumb;
+                        console.log('editablecrumb: ' + editablecrumb); // zie Inspecteren->Console voor waarde
+
+                        // in de breadcrumb / Home / Wonen / Stoelen / Poefs wordt Poefs ook een link nl.
+                        // de teruglink naar /wonen/stoelen/poefs/poefs.html
+
+                        editablecrumb = editablecrumb.substring(0, editablecrumb.lastIndexOf(crumbtext)) +
+                            "<a href='" + pathanddoc + "' class='action'>" + crumbtext + "</a></div>" +
+                            "<div class='separator'>/</div>";
+
+                        console.log(editablecrumb);
+
+                        bcfirstpart = editablecrumb;
+
+                        if (bcfirstpart !== null) {
+                            var bc = bcfirstpart + "<div class='crumb grayed'>" + productname + "</div>";
+                            $("#bccontainer").empty();
+                            $("#bccontainer").append(bc);
+                        }
+                    }
+                },
+
+                error: function (response) {
+                    alert("ReadBCfromDB error");
+                }
+            });
+        }
+
+        var replace = function (str) {
+            return str.replace(/\s+/g, "-") // vervang whitespace in de naam door - (een streepje)
+        }
+
+        function getLocation(href) {
+            var l = document.createElement("a");
+            l.href = href;
+            return l;
+        };
+
+        function formatcomma(prijs) {
+            var res;
+
+            var index = prijs.toString().indexOf('.'); // bepaal de plaats van de punt in het bedrag
+
+            prijs = prijs.toFixed(2); // rond de decimale waarde af op twee cijfers achter de komma
+            var str = prijs.toString(); // converteer naar string
+            var numarray = str.split('.'); // split de waarde waar de punt staat (dit mag een komma zijn in de tabel!)
+            var a = new Array(); // declareer een array
+            a = numarray; // zet de waarden voor en na de punt in de array
+
+            if (index > 0) { // indien er een punt in het bedrag zit
+                res = a[0] + "," + a[1]; // vervang die door een komma
+            }
+            else {
+                res = a[0] + ",-"; // indien de prijs een geheel getal is, voeg ,- toe
+            }
+            return res;
+        }
+    </script>
+</head>
+<body onunload="">
+    <div id="container">
+        <div id="cart-container">
+            <div id="cart">
+                <img class="winkelwagen" src="/images/winkelwagentje.jpg" />
+            </div>
+            <span id="itemCount"></span>
+        </div>
+        <div id="bccontainer">
+
+        </div>
+        <div id="details">
+            <div id="topbox">
+                <div id="prodname"></div>
+            </div>
+            <div id="leftbox">
+                <div id="leftupperbox">
+                    <div id="main-carousel" class="splide">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/main/1-1200x600.jpg">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/main/2-1200x600.jpg">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/main/3-1200x600.jpg">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/main/4-1200x600.jpg">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/main/5-1200x600.jpg">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/main/6-1200x600.jpg">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/main/7-1200x600.jpg">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="leftlowerbox">
+                    <div id="thumbnail-carousel" class="splide">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/thumbs/1-64x64.jpg">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/thumbs/2-64x64.jpg">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/thumbs/3-64x64.jpg">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/thumbs/4-64x64.jpg">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/thumbs/5-64x64.jpg">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/thumbs/6-64x64.jpg">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="/sliderimages/thumbs/7-64x64.jpg">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="rightbox">
+                <div id="rightupperbox">
+                    <div id="rupperleftbox">
+                        <div id="feat" class="features"></div>
+                    </div>
+                    <div id="rupperrightbox">
+                        <div id="graybox">
+                            <div class="line">
+                                <div class="image">
+                                    <img src="/images/groen_vinkje_transp.png" />
+                                </div>
+                                <div class="text">
+                                    <div class="bold">Gratis verzending</div><div class="normal">vanaf €50,-</div>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <div class="image">
+                                    <img src="/images/groen_vinkje_transp.png" />
+                                </div>
+                                <div class="text">
+                                    14 dagen bedenktijd
+                                </div>
+                            </div>
+                            <div class="line">
+                                <div class="image">
+                                    <img src="/images/groen_vinkje_transp.png" />
+                                </div>
+                                <div class="text">
+                                    Op werkdagen voor 23:30 besteld, morgen in huis!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="rightlowerbox">
+                    <div id="rlowerleftbox">
+                        <div id="price">€ </div>
+                        <div id="incrandbutt">
+                            <div class="input-box">
+                                <button type="button" onclick="minus()" style="font-size: 20px;">-</button>
+                                <p id="counter">1</p>
+                                <button type="button" onclick="plus()">+</button>
+                            </div>
+                            <div class='butt'>
+                                <div class="btn winkelm">
+                                    <div class="both">
+                                        <span class="btntext">Plaats in winkelmandje</span><img class="btnimage" src="/images/icon-winkelwagen-btn.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

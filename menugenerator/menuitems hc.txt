@@ -1,0 +1,17 @@
+
+        const menuItems = [
+            { id: 1, name: "wonen", parentId: null },
+            { id: 2, name: "stoelen", parentId: 1 },
+            { id: 3, name: "banken", parentId: 1 },
+            { id: 4, name: "2-zits banken", parentId: 3 },
+            { id: 5, name: "3-zits banken", parentId: 3 },
+            { id: 6, name: "4-zits banken", parentId: 3 },
+            { id: 7, name: "tafels", parentId: 1 },
+            { id: 8, name: "slapen", parentId: null },
+            { id: 9, name: "bedden", parentId: 8 },
+            { id: 10, name: "kinderbedden", parentId: 9 },
+            { id: 11, name: "eenpersoons bedden", parentId: 9 },
+            { id: 12, name: "tweepersoons bedden", parentId: 9 },
+            { id: 13, name: "hoge tweepersoons bedden", parentId: 12 },
+            { id: 14, name: "lage tweepersoons bedden", parentId: 12 }
+        ];

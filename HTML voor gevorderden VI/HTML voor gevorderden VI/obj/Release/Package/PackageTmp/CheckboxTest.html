@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script>
+        $(document).on('click', '.chk', function (e) {
+
+            var number = $(this).data("number");
+            alert(number);
+            
+        });
+    </script>
+</head>
+<body>
+    <input type="checkbox" class="chk" id="mango" data-number="1" value="mango" /> <label>MANGO</label><br>
+    <input type="checkbox" class="chk" id="santol" data-number="2" value="santol" /> <label>SANTOL</label><br>
+    <input type="checkbox" class="chk" id="guava" data-number="3" value="guava" /> <label>GUAVA</label><br>
+    <input type="checkbox" class="chk" id="lomboy" data-number="4" value="lomboy" /> <label>LOMBOY</label><br>
+    <input type="checkbox" class="chk" id="apple" data-number="5" value="apple" /> <label>APPLE</label><br>
+    <input type="checkbox" class="chk" id="orange" data-number="6" value="orange" /> <label>ORANGE</label><br>
+</body>
+</html>

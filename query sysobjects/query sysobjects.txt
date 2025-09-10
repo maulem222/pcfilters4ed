@@ -1,0 +1,1 @@
+select * from sysobjects where object_name(id) = 'Guidexists'

@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Documenten\\HTML voor gevorderden VI - catalogus - rev1 - filterparser ii\\HTML voor gevorderden VI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6265362C-1146-454D-811A-2D8E9D55CFD3}|HTML voor gevorderden VI\\HTML voor gevorderden VI.csproj|c:\\documenten\\html voor gevorderden vi - catalogus - rev1 - filterparser ii\\html voor gevorderden vi\\html voor gevorderden vi\\wonen\\stoelen\\poefs\\details.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6265362C-1146-454D-811A-2D8E9D55CFD3}|HTML voor gevorderden VI\\HTML voor gevorderden VI.csproj|solutionrelative:html voor gevorderden vi\\wonen\\stoelen\\poefs\\details.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6265362C-1146-454D-811A-2D8E9D55CFD3}|HTML voor gevorderden VI\\HTML voor gevorderden VI.csproj|c:\\documenten\\html voor gevorderden vi - catalogus - rev1 - filterparser ii\\html voor gevorderden vi\\html voor gevorderden vi\\wonen\\stoelen\\poefs\\poefs.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6265362C-1146-454D-811A-2D8E9D55CFD3}|HTML voor gevorderden VI\\HTML voor gevorderden VI.csproj|solutionrelative:html voor gevorderden vi\\wonen\\stoelen\\poefs\\poefs.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "details.html",
+              "DocumentMoniker": "C:\\Documenten\\HTML voor gevorderden VI - catalogus - rev1 - filterparser ii\\HTML voor gevorderden VI\\HTML voor gevorderden VI\\wonen\\stoelen\\poefs\\details.html",
+              "RelativeDocumentMoniker": "HTML voor gevorderden VI\\wonen\\stoelen\\poefs\\details.html",
+              "ToolTip": "C:\\Documenten\\HTML voor gevorderden VI - catalogus - rev1 - filterparser ii\\HTML voor gevorderden VI\\HTML voor gevorderden VI\\wonen\\stoelen\\poefs\\details.html",
+              "RelativeToolTip": "HTML voor gevorderden VI\\wonen\\stoelen\\poefs\\details.html",
+              "ViewState": "AgIAAFkAAAAAAAAAAAAAAGQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-01-09T18:10:37.445Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "poefs.html",
+              "DocumentMoniker": "C:\\Documenten\\HTML voor gevorderden VI - catalogus - rev1 - filterparser ii\\HTML voor gevorderden VI\\HTML voor gevorderden VI\\wonen\\stoelen\\poefs\\poefs.html",
+              "RelativeDocumentMoniker": "HTML voor gevorderden VI\\wonen\\stoelen\\poefs\\poefs.html",
+              "ToolTip": "C:\\Documenten\\HTML voor gevorderden VI - catalogus - rev1 - filterparser ii\\HTML voor gevorderden VI\\HTML voor gevorderden VI\\wonen\\stoelen\\poefs\\poefs.html",
+              "RelativeToolTip": "HTML voor gevorderden VI\\wonen\\stoelen\\poefs\\poefs.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-01-09T18:09:47.768Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

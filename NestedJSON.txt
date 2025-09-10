@@ -1,0 +1,20 @@
+
+        function GenerateNestedJSON(recordset) {
+            var array = recordset;
+
+                async function getNestedChildren(arr, parent) {
+                    var children = [];
+                    for (var i = 0; i < arr.length; ++i) {
+                        if (arr[i].parentid == parent) {
+                            var grandChildren = await getNestedChildren(arr, arr[i].id);
+                            if (grandChildren.length) {
+                                arr[i].children = grandChildren;
+                            }
+                            children.push(arr[i]);
+                        }
+                    }
+                    return children;
+                }
+                nest = getNestedChildren(array, 0);
+            return nest;
+        }

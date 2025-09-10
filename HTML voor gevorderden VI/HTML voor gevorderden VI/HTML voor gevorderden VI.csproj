@@ -1,0 +1,486 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6265362C-1146-454D-811A-2D8E9D55CFD3}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HTML_voor_gevorderden_VI</RootNamespace>
+    <AssemblyName>HTML voor gevorderden VI</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Stripe.net, Version=34.26.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stripe.net.34.26.0\lib\net45\Stripe.net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="AspNet.ScriptManager.bootstrap">
+      <HintPath>..\packages\AspNet.ScriptManager.bootstrap.3.0.0\lib\net45\AspNet.ScriptManager.bootstrap.dll</HintPath>
+    </Reference>
+    <Reference Include="AspNet.ScriptManager.jQuery">
+      <HintPath>..\packages\AspNet.ScriptManager.jQuery.1.10.2\lib\net45\AspNet.ScriptManager.jQuery.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ScriptManager.MSAjax">
+      <HintPath>..\packages\Microsoft.AspNet.ScriptManager.MSAjax.5.0.0\lib\net45\Microsoft.ScriptManager.MSAjax.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ScriptManager.WebForms">
+      <HintPath>..\packages\Microsoft.AspNet.ScriptManager.WebForms.5.0.0\lib\net45\Microsoft.ScriptManager.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Web.Optimization.WebForms">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.WebForms.1.1.3\lib\net45\Microsoft.AspNet.Web.Optimization.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.FriendlyUrls">
+      <HintPath>..\packages\Microsoft.AspNet.FriendlyUrls.Core.1.0.2\lib\net45\Microsoft.AspNet.FriendlyUrls.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="7-digit-number.html" />
+    <Content Include="App_Data\pcfilters.mdf" />
+    <Content Include="App_Data\pcfilters_log.ldf">
+      <DependentUpon>pcfilters.mdf</DependentUpon>
+    </Content>
+    <Content Include="BedrijfsgegevensManager.html" />
+    <Content Include="BestellingenManager.html" />
+    <Content Include="BestellingenManager2.html" />
+    <Content Include="BestellingenService.asmx" />
+    <Content Include="betaalmethode.html" />
+    <Content Include="BetaalService.asmx" />
+    <Content Include="Bootstrap-nav.html" />
+    <Content Include="BreadcrumbService.asmx" />
+    <Content Include="CartButton_poefs.html" />
+    <Content Include="CartButtontest2.html" />
+    <Content Include="CartButtontest.html" />
+    <Content Include="CategorieService.asmx" />
+    <Content Include="Checkboxes.html" />
+    <Content Include="CheckboxTest.html" />
+    <Content Include="documentgenerator.html" />
+    <Content Include="eid_sjabloon.html" />
+    <Content Include="headerimages\0b6e4d6a-683c-4182-bf5e-2c376d300b7b.jpg" />
+    <Content Include="headerimages\159a5b2b-a597-41bc-ae01-e56b228e3f05.jpg" />
+    <Content Include="headerimages\2a3abe88-5e88-4472-befa-845081c5d8b5.jpg" />
+    <Content Include="headerimages\3d74f93d-2949-4719-819d-21d6c2019be8.jpg" />
+    <Content Include="headerimages\41f5bf31-5aac-4ea9-99e4-b6a4b1e4d937.jpg" />
+    <Content Include="headerimages\450d74b2-f520-46d5-b426-6dff6571ecbc.jpg" />
+    <Content Include="headerimages\5f9f3ab3-b2c8-4616-8b51-c64303b694ed.jpg" />
+    <Content Include="headerimages\753b6b8f-83c7-4f66-8e61-ccc571732608.jpg" />
+    <Content Include="headerimages\77f2fb92-8b04-460f-b041-e2709ec97cc1.jpg" />
+    <Content Include="headerimages\95fa5577-892c-4788-95d7-bc5610d494f1.jpg" />
+    <Content Include="headerimages\afe89fd1-9e19-40b8-b9cf-d43789af7a2f.jpg" />
+    <Content Include="headerimages\b4163c4c-683b-4d93-98ab-d81820803fb5.jpg" />
+    <Content Include="headerimages\bd28f458-5b26-48ec-90c2-d4bb07b1bb1f.jpg" />
+    <Content Include="headerimages\bf49f799-7da2-422b-b24c-3b35b3cc950e.jpg" />
+    <Content Include="headerimages\c362ae68-d029-42dd-816f-b5c0444dcb83.jpg" />
+    <Content Include="HTMLService.asmx" />
+    <Content Include="od_testdocument.html" />
+    <Content Include="ContentTest.html" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\style.css" />
+    <Content Include="Content\vgnav-theme.css" />
+    <Content Include="Content\vgnav.css" />
+    <Content Include="Cookies.html" />
+    <Content Include="Copier.html" />
+    <Content Include="DatumPlanner.html" />
+    <Content Include="Dest.html" />
+    <Content Include="EigenschappenService.asmx" />
+    <Content Include="favicon.ico" />
+    <Content Include="FileService.asmx" />
+    <Content Include="FilterService.asmx" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="GegevensService.asmx" />
+    <Content Include="GenerateFilters.html" />
+    <Content Include="GetFullPath.html" />
+    <Content Include="getNestedChildren4.html" />
+    <Content Include="getNestedChildren.html" />
+    <Content Include="Global.asax" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fileUploader.ashx" />
+    <Content Include="ImageService.asmx" />
+    <Content Include="images\arrows-up.jpg" />
+    <Content Include="images\arrows-up.png" />
+    <Content Include="images\deletebutton.jpg" />
+    <Content Include="images\deletebuttongray.jpg" />
+    <Content Include="images\Doorgaan_met_bestellen.jpg" />
+    <Content Include="images\eennieuwinterieur-sfeer-desktop.jpg" />
+    <Content Include="images\eennieuwinterieur_bed.jpg" />
+    <Content Include="images\eennieuwinterieur_eettafel.jpg" />
+    <Content Include="images\eennieuwinterieur_salon.jpg" />
+    <Content Include="images\groen_vinkje_transp.png" />
+    <Content Include="images\icon-winkelwagen-btn.png" />
+    <Content Include="images\idealvisapaypaldhl.jpg" />
+    <Content Include="images\winkelwagentje.jpg" />
+    <Content Include="images\plaatsinwinkelmandje.jpg" />
+    <Content Include="images\plaatsinwinkelmandje_large.jpg" />
+    <Content Include="images\voorwaarden.jpg" />
+    <Content Include="isnumeric.html" />
+    <Content Include="KlantenService.asmx" />
+    <Content Include="klantregistratie.html" />
+    <Content Include="klantregistratie_orig.html" />
+    <Content Include="menugen.html" />
+    <Content Include="MenuHandler.ashx" />
+    <Content Include="menuonly.html" />
+    <Content Include="od_sjabloon.html" />
+    <Content Include="OrderService.asmx" />
+    <Content Include="output.txt" />
+    <Content Include="Pathname.html" />
+    <Content Include="Scripts\datepicker-nl.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\vgnav.min.js" />
+    <Content Include="sjabloon_old.html" />
+    <Content Include="slapen\eid_slapen.html" />
+    <Content Include="sliderimages\main\1-1200x600.jpg" />
+    <Content Include="sliderimages\main\2-1200x600.jpg" />
+    <Content Include="sliderimages\main\3-1200x600.jpg" />
+    <Content Include="sliderimages\main\4-1200x600.jpg" />
+    <Content Include="sliderimages\main\5-1200x600.jpg" />
+    <Content Include="sliderimages\main\6-1200x600.jpg" />
+    <Content Include="sliderimages\main\7-1200x600.jpg" />
+    <Content Include="sliderimages\thumbs\1-64x64.jpg" />
+    <Content Include="sliderimages\thumbs\2-64x64.jpg" />
+    <Content Include="sliderimages\thumbs\3-64x64.jpg" />
+    <Content Include="sliderimages\thumbs\4-64x64.jpg" />
+    <Content Include="sliderimages\thumbs\5-64x64.jpg" />
+    <Content Include="sliderimages\thumbs\6-64x64.jpg" />
+    <Content Include="sliderimages\thumbs\7-64x64.jpg" />
+    <Content Include="splitfullname.html" />
+    <Content Include="sql-dumps\dbo.Bestellingen.data.sql" />
+    <Content Include="sql-dumps\dbo.Bezorgkosten.data.sql" />
+    <Content Include="sql-dumps\dbo.Breadcrumbs.data.sql" />
+    <Content Include="sql-dumps\dbo.Crosscat.data.sql" />
+    <Content Include="sql-dumps\dbo.Eigenschappen.data.sql" />
+    <Content Include="sql-dumps\dbo.ProduktEigenschappen.data.sql" />
+    <Content Include="sql-dumps\dbo.Produkten.data.sql" />
+    <Content Include="sql-dumps\dbo.Tabellen.data.sql" />
+    <Content Include="sql-dumps\dbo.testtabel.data.sql" />
+    <Content Include="sql-dumps\dbo.UploadedImages.data.sql" />
+    <Content Include="sql-dumps\dbo.Verzendkosten.data.sql" />
+    <Content Include="StripeWebhook.asmx" />
+    <Content Include="stripe_webhook_log.txt" />
+    <Content Include="TableService.asmx" />
+    <Content Include="thumbnailslider.html" />
+    <Content Include="VerzendService.asmx" />
+    <Content Include="VoegEigToe_orig.html" />
+    <Content Include="Vue_HTML.html" />
+    <Content Include="webeditor.html" />
+    <Content Include="winkelmandje.html" />
+    <Content Include="imageUploader.ashx" />
+    <Content Include="ImageUploadHandler.ashx" />
+    <Content Include="wonen\banken\hoekbanken\grote-hoekbanken\eid_grote-hoekbanken.html" />
+    <Content Include="wonen\banken\hoekbanken\kleine-hoekbanken\eid_kleine-hoekbanken.html" />
+    <Content Include="wonen\banken\hoekbanken\leren-hoekbanken\eid_leren-hoekbanken.html" />
+    <Content Include="wonen\banken\hoekbanken\loungebanken\eid_loungebanken.html" />
+    <Content Include="wonen\banken\hoekbanken\modulaire-banken\eid_modulaire-banken.html" />
+    <Content Include="wonen\banken\hoekbanken\od_hoekbanken.html" />
+    <Content Include="wonen\banken\hoekbanken\stoffen-hoekbanken\eid_stoffen-hoekbanken.html" />
+    <Content Include="wonen\banken\hoekbanken\u-banken\eid_u-banken.html" />
+    <Content Include="wonen\banken\od_banken.html" />
+    <Content Include="wonen\banken\zitbanken\2-zits-banken\eid_2-zits-banken.html" />
+    <Content Include="wonen\banken\zitbanken\3-zits-banken\eid_3-zits-banken.html" />
+    <Content Include="wonen\banken\zitbanken\4-zits-banken\eid_4-zits-banken.html" />
+    <Content Include="wonen\banken\zitbanken\leren-banken\eid_leren-banken.html" />
+    <Content Include="wonen\banken\zitbanken\od_zitbanken.html" />
+    <Content Include="wonen\banken\zitbanken\slaapbanken\eid_slaapbanken.html" />
+    <Content Include="wonen\banken\zitbanken\stoffen-banken\eid_stoffen-banken.html" />
+    <Content Include="wonen\banken\zitbanken\velvet-banken\eid_velvet-banken.html" />
+    <Content Include="wonen\od_wonen.html" />
+    <Content Include="wonen\stoelen\barstoelen\eid_barstoelen.html" />
+    <Content Include="wonen\stoelen\eetkamerbanken\eid_eetkamerbanken.html" />
+    <Content Include="wonen\stoelen\eetkamerstoelen\buisframe-stoelen\eid_buisframe-stoelen.html" />
+    <Content Include="wonen\stoelen\eetkamerstoelen\design-stoelen\eid_design-stoelen.html" />
+    <Content Include="wonen\stoelen\eetkamerstoelen\kuipstoelen\eid_kuipstoelen.html" />
+    <Content Include="wonen\stoelen\eetkamerstoelen\leren-eetkamerstoelen\eid_leren-eetkamerstoelen.html" />
+    <Content Include="wonen\stoelen\eetkamerstoelen\od_eetkamerstoelen.html" />
+    <Content Include="wonen\stoelen\eetkamerstoelen\stoelen-met-arm\eid_stoelen-met-arm.html" />
+    <Content Include="wonen\stoelen\eetkamerstoelen\stoelen-met-wieltjes\eid_stoelen-met-wieltjes.html" />
+    <Content Include="wonen\stoelen\eetkamerstoelen\stoelen-zonder-arm\eid_stoelen-zonder-arm.html" />
+    <Content Include="wonen\stoelen\eetkamerstoelen\velvet-eetkamerstoelen\eid_velvet-eetkamerstoelen.html" />
+    <Content Include="wonen\stoelen\fauteuils\eid_fauteuils.html" />
+    <Content Include="wonen\stoelen\krukjes\eid_krukjes.html" />
+    <Content Include="wonen\stoelen\od_stoelen.html" />
+    <Content Include="wonen\stoelen\poefs\details.html" />
+    <Content Include="wonen\stoelen\poefs\eid_poefs.html" />
+    <Content Include="wonen\stoelen\poefs\poefs.html" />
+    <Content Include="wonen\stoelen\relaxfauteuils\eid_relaxfauteuils.html" />
+    <Content Include="wonen\stoelen\stoelwielen\eid_stoelwielen.html" />
+    <Content Include="wonen\tafels\bijzettafels\hoektafels\eid_hoektafels.html" />
+    <Content Include="wonen\tafels\bijzettafels\houten-bijzettafels\eid_houten-bijzettafels.html" />
+    <Content Include="wonen\tafels\bijzettafels\od_bijzettafels.html" />
+    <Content Include="wonen\tafels\bijzettafels\ronde-bijzettafels\eid_ronde-bijzettafels.html" />
+    <Content Include="wonen\tafels\bijzettafels\vierkante-bijzettafels\eid_vierkante-bijzettafels.html" />
+    <Content Include="wonen\tafels\bureaus\eid_bureaus.html" />
+    <Content Include="wonen\tafels\eettafels\boomstamtafels\eid_boomstamtafels.html" />
+    <Content Include="wonen\tafels\eettafels\eiken-eettafels\eid_eiken-eettafels.html" />
+    <Content Include="wonen\tafels\eettafels\kloostertafels\eid_kloostertafels.html" />
+    <Content Include="wonen\tafels\eettafels\od_eettafels.html" />
+    <Content Include="wonen\tafels\eettafels\rechthoekige-eettafels\eid_rechthoekige-eettafels.html" />
+    <Content Include="wonen\tafels\eettafels\ronde-eettafels\eid_ronde-eettafels.html" />
+    <Content Include="wonen\tafels\eettafels\vierkante-eettafels\eid_vierkante-eettafels.html" />
+    <Content Include="wonen\tafels\od_tafels.html" />
+    <Content Include="wonen\tafels\salontafels\houten-salontafels\eid_houten-salontafels.html" />
+    <Content Include="wonen\tafels\salontafels\industriële-salontafels\eid_industriële-salontafels.html" />
+    <Content Include="wonen\tafels\salontafels\od_salontafels.html" />
+    <Content Include="wonen\tafels\salontafels\ronde-salontafels\eid_ronde-salontafels.html" />
+    <Content Include="wonen\tafels\salontafels\witte-salontafels\eid_witte-salontafels.html" />
+    <Content Include="wonen\tafels\salontafels\zwarte-salontafels\eid_zwarte-salontafels.html" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <Content Include="images\kies_een_afbeelding.jpg" />
+    <Content Include="images\refresh_button.jpg" />
+    <Content Include="ProduktEigenschappenService.asmx" />
+    <Content Include="ProduktService.asmx" />
+    <Content Include="randomnumbers.html" />
+    <Content Include="Scripts\renderMenu.js" />
+    <Content Include="SessionService.asmx" />
+    <Content Include="SmartMenu.html" />
+    <Content Include="TestDestFile.html" />
+    <Content Include="UploadFile.html" />
+    <Content Include="ViewSwitcher.ascx" />
+    <Content Include="VoegCatToe.html" />
+    <Content Include="VoegEigToe.html" />
+    <Content Include="VoegProduktToe.html" />
+    <Content Include="WaardenService.asmx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Bundle.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="BestellingenService.asmx.cs">
+      <DependentUpon>BestellingenService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BetaalService.asmx.cs">
+      <DependentUpon>BetaalService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BreadcrumbService.asmx.cs">
+      <DependentUpon>BreadcrumbService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CategorieService.asmx.cs">
+      <DependentUpon>CategorieService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="EigenschappenService.asmx.cs">
+      <DependentUpon>EigenschappenService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FileService.asmx.cs">
+      <DependentUpon>FileService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="fileUploader.ashx.cs">
+      <DependentUpon>fileUploader.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="FilterService.asmx.cs">
+      <DependentUpon>FilterService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GegevensService.asmx.cs">
+      <DependentUpon>GegevensService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="HTMLService.asmx.cs">
+      <DependentUpon>HTMLService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ImageService.asmx.cs">
+      <DependentUpon>ImageService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="imageUploader.ashx.cs">
+      <DependentUpon>imageUploader.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="ImageUploadHandler.ashx.cs">
+      <DependentUpon>ImageUploadHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="KlantenService.asmx.cs">
+      <DependentUpon>KlantenService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Menu.cs" />
+    <Compile Include="MenuHandler.ashx.cs">
+      <DependentUpon>MenuHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="OrderService.asmx.cs">
+      <DependentUpon>OrderService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProduktEigenschappenService.asmx.cs">
+      <DependentUpon>ProduktEigenschappenService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProduktService.asmx.cs">
+      <DependentUpon>ProduktService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SessionService.asmx.cs">
+      <DependentUpon>SessionService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="StripeWebhook.asmx.cs">
+      <DependentUpon>StripeWebhook.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TableService.asmx.cs">
+      <DependentUpon>TableService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="VerzendService.asmx.cs">
+      <DependentUpon>VerzendService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ViewSwitcher.ascx.cs">
+      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewSwitcher.ascx.designer.cs">
+      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WaardenService.asmx.cs">
+      <DependentUpon>WaardenService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="afbeeldingen\" />
+    <Folder Include="odimages\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>51820</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:51820/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

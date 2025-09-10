@@ -1,0 +1,42 @@
+          <fieldset v-show="fieldset" class="Comp_bestel">
+            <div id="medium_div_Comp_Bestel">
+              <input
+                id="medium_Comp_Bestel"
+                v-model="picked"
+                type="radio"
+                class="radio"
+                name="grootte"
+                value="medium"
+                @change="checkboxChangedtomedium"
+              >
+              <label id="label_medium_Comp_Bestel" for="medium_Comp_Bestel">Medium (25 cm)</label>
+            </div>
+            <div id="large_div_Comp_Bestel">
+              <input
+                id="large_Comp_Bestel"
+                v-model="picked"
+                type="radio"
+                class="radio"
+                name="grootte"
+                value="large"
+                @change="checkboxChangedtolarge"
+              >
+              <label id="label_large_Comp_Bestel" for="large_Comp_Bestel">Large (35 cm)</label>
+            </div>
+          </fieldset>
+
+
+  data () {
+    return {
+      picked: 'medium'
+    }
+  },
+
+methods
+
+    checkboxChangedtomedium () {
+      this.picked = 'medium'
+    },
+    checkboxChangedtolarge () {
+      this.picked = 'large'
+    }

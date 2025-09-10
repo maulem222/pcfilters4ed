@@ -1,0 +1,591 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script src="/Scripts/moment-with-locales.min.js"></script>
+    <script src="/Scripts/vgnav.min.js"></script>
+    <link href="/Content/vgnav.css?version=1" rel="stylesheet" />
+    <link href="/Content/vgnav-theme.css" rel="stylesheet" />
+    <link href="/Content/style.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: Arial;
+            overflow: visible;
+        }
+
+        #left {
+            width: 20%;
+            float: left;
+        }
+
+        #right {
+            width: 20%;
+            float: right;
+        }
+
+        #container_ {
+            width: 75%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 0px;
+            height: auto;
+            border: 0px solid black;
+        }
+
+        #vegasmenu {
+            width: 75%;
+            height: 50px;
+        }
+
+        /* breadcrumb */
+
+        .noaction {
+            text-decoration: none;
+            color: black;
+            pointer-events: none; /* voorkomt page reload bij het klikken op de lege link */
+            cursor: default;
+        }
+
+        .action {
+            text-decoration: none;
+            cursor: pointer;
+            color: blue;
+        }
+
+        .crumb {
+            float: left;
+            width: auto;
+            overflow: auto;
+            font-family: Arial;
+            font-size: 17px;
+        }
+
+        .separator {
+            float: left;
+            width: 5px;
+            padding-left: 5px;
+            padding-right: 10px;
+            font-family: Arial;
+            font-size: 17px;
+        }
+
+        #bccontainer {
+            width: 100%;
+            height: 40px;
+            border-bottom: 1px solid #e3e6e4;
+            margin-bottom: 15px;
+        }
+
+        /* headertext */
+
+        #headertext {
+            margin-top: 20px;
+            font-family: Arial;
+            font-size: 12px;
+        }
+
+        /* headerafbeelding */
+
+        #imagecontainer {
+            width: 100%;
+            height: 300px;
+            border: 0px solid red;
+            /* background-image wordt programmatisch ingesteld */
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin-bottom: 15px;
+            margin-top: 0px;
+        }
+
+        /* winkelmandje */
+
+        #cart-container {
+            float: right;
+            width: 35px;
+            position: relative;
+            top: -35px;
+            border: 0px solid green;
+        }
+
+        #itemCount {
+            position: absolute;
+            display: none;
+            top: -10px;
+            left: -10px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid grey;
+            background: white;
+            color: black;
+            text-align: center;
+            line-height: 28px;
+            font-size: 16px;
+        }
+
+        .winkelwagen {
+            cursor: pointer;
+        }
+
+        /* vg-nav */
+
+        svg#ham-menue {
+            fill: white;
+            width: 50px;
+            height: 50px;
+            margin-left: 10px;
+            margin-right: 30px;
+        }
+
+        .line {
+            fill: none;
+            stroke: #333333;
+            stroke-width: 3;
+            transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1), stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .line1 {
+            stroke-dasharray: 60 207;
+            stroke-width: 3;
+        }
+
+        .line2 {
+            stroke-dasharray: 60 60;
+            stroke-width: 3;
+        }
+
+        .line3 {
+            stroke-dasharray: 60 207;
+            stroke-width: 3;
+        }
+
+        .vg-nav-hamburger.vg-sidebar-active .line1 {
+            stroke-dasharray: 90 207;
+            stroke-dashoffset: -134;
+            stroke-width: 3;
+        }
+
+        .vg-nav-hamburger.vg-sidebar-active .line2 {
+            stroke-dasharray: 1 60;
+            stroke-dashoffset: -30;
+            stroke-width: 3;
+        }
+
+        .vg-nav-hamburger.vg-sidebar-active .line3 {
+            stroke-dasharray: 90 207;
+            stroke-dashoffset: -134;
+            stroke-width: 3;
+        }
+
+        .image {
+            width: 100%;
+        }
+
+        /* responsive video */
+
+        @media only screen and (min-width: 1200px) {
+
+            .responsive-video {
+                position: relative;
+                padding-bottom: 56.25%; /* 16:9 aspect ratio */
+                height: 0;
+                overflow: hidden;
+                max-width: 100%;
+            }
+
+                .responsive-video iframe {
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                }
+        }
+
+        @media only screen and (min-width: 1200px) and (max-width: 1340px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container_ {
+                width: 100%;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            #vegasmenu {
+                width: 100%;
+            }
+        }
+
+        @media only screen and (min-width: 740px) and (max-width: 1199px) {
+            .image {
+                width: 50%;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .video {
+                width: 700px;
+                height: 350px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .responsive-video iframe {
+                width: 700px;
+                height: 350px;
+            }
+
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container_ {
+                width: 100%;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            #vegasmenu {
+                width: 100%;
+            }
+        }
+
+        @media only screen and (min-width: 0px) and (max-width: 739px) {
+
+            .video {
+                width: 500px;
+                height: 250px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .responsive-video iframe {
+                width: 500px;
+                height: 250px;
+            }
+
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container_ {
+                width: 100%;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            #vegasmenu {
+                width: 100%;
+            }
+        }
+
+        .margin {
+            margin-bottom: 50px;
+        }
+
+        /* Default: full width on small screens */
+        .container {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Custom: 75% width on medium screens and up */
+        @media (min-width: 1341px) {
+            .container {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        #blockseditor {
+            font-size: 16px !important;
+        }
+    </style>
+    <script>
+        var catid = ##CATID##;
+
+        var itemCount = 0;
+        var guid;
+
+        var menuItems = [];
+
+        const slugify = str => str.trim().toLowerCase().replace(/\s+/g, "-");
+
+        const buildPath = (arr, id) => {
+            const path = [];
+            let current = arr.find(item => item.Id === id);
+            while (current) {
+                path.unshift(slugify(current.Catnaam));
+                current = arr.find(item => item.Id === current.ParentId);
+            }
+            return "/" + path.join("/") + "/" + path[path.length - 1] + ".html";
+        };
+
+        const buildMenu = (arr, parentId = 0, isRoot = true) => {
+            const children = arr.filter(item => item.ParentId === parentId);
+            if (!children.length) return "";
+
+            const ulClass = isRoot ? ' class="vg-nav-wrapper"' : "";
+            let html = `<ul${ulClass}>`;
+
+            for (let child of children) {
+                const hasChildren = arr.some(item => item.ParentId === child.Id);
+                const classAttr = hasChildren ? ' class="dropdown"' : "";
+                const href = hasChildren ? "#" : buildPath(arr, child.Id);
+
+                html += `<li${classAttr}><a href="${href}">${child.Catnaam}</a>`;
+                html += buildMenu(arr, child.Id, false);
+                html += `</li>`;
+            }
+
+            html += `</ul>`;
+            return html;
+        };
+
+
+        $(document).ready(function () {
+
+            // get menuItems
+            getMenuItems();
+            // Render the menu
+            const htmlMenu = buildMenu(menuItems);
+            document.querySelector(".vg-nav").innerHTML = htmlMenu;
+            enableNav(); // dropdown menu
+
+            //sessionStorage.clear();
+
+            var links = document.querySelectorAll(".vg-flip-list li a");
+            for (let i = 0; i < links.length; i++) {
+                console.log('hi i am vg-flip-list li a');
+                let link = links[i];
+                // Als de link text Back is wijzig dat dan in << Vorige
+                if (link.text === "Back") {
+                    link.text = "<< Vorige";
+                    link.style.fontSize = '15px';
+                    link.style.fontWeight = 'bold';
+                }
+            }
+
+            guid = getCookie('guid');
+            if (guid == null) { // geen guid aanwezig
+                document.cookie = 'itemCount=; max-age=0; path=/; domain=' + location.hostname; // haal ook itemCount cookie weg
+            }
+            else { // guid bestaat wel
+                itemCount = getCookie('itemCount');
+                if (itemCount !== null) {
+                    if (itemCount > 0) {
+                        $('#itemCount').html(itemCount).css('display', 'block');
+                    }
+                    else {
+                        $('#itemCount').css('display', 'none');
+                    }
+                }
+                else { // itemCount cookie bestaat niet
+                    itemCount = 0;
+                }
+                // verleng zowel guid als itemCount cookie
+                setCookie('guid', guid, '14'); // verleng de guid cookie
+                setCookie('itemCount', itemCount, '14'); // verleng of maak de itemCount cookie
+            }
+
+            GetCrumbFromDB();
+            getHeaderimage();
+            gethtmlContent();
+        });
+
+        function enableNav() {
+            new VGNav({
+                sidebar: {
+                    placement: 'right'
+                },
+                expand: "md",
+                mobileTitle: "",
+                flip: true,
+                move: true,
+                hamburger: "<svg id=\"ham-menue\" viewBox=\"0 0 100 100\"><path class=\"line line1\" d=\"M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058\"></path><path class=\"line line2\" d=\"M 20,50 H 80\"></path><path class=\"line line3\" d=\"M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942\"></path></svg>"
+            });
+        }
+
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                date.setHours(date.getHours() + 1);
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+            else return null;
+        }
+
+        function GetCrumbFromDB() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: '/BreadcrumbService.asmx/ReadBCfromDB',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (response.d.Crumb == null) {
+                        // doe niets
+                    }
+                    else {
+                        var crumb = response.d.Crumb;
+                        $("#bccontainer").empty();
+                        $("#bccontainer").append(crumb);
+
+                        var links = document.querySelectorAll('#bccontainer .crumb'); // alle crumb's
+                        var crumbtext = links[links.length - 1].textContent; // pak de laatste crumb
+
+                        /* append to categorie en title */
+                        $("#categorie").append(crumbtext);
+                        $(document).prop('title', crumbtext);
+                        /* einde */
+
+                        /* append to div headertext */
+                        $("#headertext").append(crumbtext + " - overzicht");
+                        /* einde */
+                    }
+                },
+
+                error: function (response) {
+                    alert("ReadBCfromDB error");
+                }
+            });
+        }
+
+        function getHeaderimage() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: '/ImageService.asmx/getHeaderImage',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var imagepath = response.d.ImagePath;
+                    if (imagepath !== null) {
+                        $("#imagecontainer").css('background-image', 'url(' + imagepath + ')');
+                    }
+                },
+
+                error: function (response) {
+                    alert("getHeaderImage error");
+                }
+            });
+        }
+
+        function getMenuItems() {
+
+            $.ajax({
+                type: 'POST',
+                url: '/CategorieService.asmx/GetCategoriesSorted',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    menuItems = JSON.parse(response.d);
+                    console.log(menuItems);
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        function gethtmlContent() {
+            $.ajax({
+                type: 'POST',
+                url: '/HTMLService.asmx/GetHTML',
+                data: "{'od_id':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    htmlfromdb = response.d.html;
+                    console.log("htmlfromdb: " + htmlfromdb);
+                    const text = document.getElementById('blockseditor');
+                    text.innerHTML = htmlfromdb;
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        function getLocation(href) {
+            var l = document.createElement("a");
+            l.href = href;
+            return l;
+        };
+
+        $(document).on('click', '.winkelwagen', function (e) {
+            e.preventDefault();
+            location.href = "/winkelmandje.html";
+        });
+
+    </script>
+</head>
+<body onunload="">
+    <div id="left"></div>
+    <div id="right"></div>
+    <div id="container_">
+        <div id="vegasmenu">
+            <nav class="vg-nav">
+
+            </nav>
+        </div>
+        <div id="cart-container">
+            <div id="cart">
+                <img class="winkelwagen" src="/images/winkelwagentje.jpg" />
+            </div>
+            <span id="itemCount"></span>
+        </div>
+        <div id="headertext"></div>
+        <div id="imagecontainer">
+        </div>
+        <div id="bccontainer">
+        </div>
+        <div id="blockseditor">
+        </div>
+    </div>
+</body>
+</html>

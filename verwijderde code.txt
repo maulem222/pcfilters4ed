@@ -1,0 +1,72 @@
+doc ready
+            // radiobuttons static of dynamic
+            $('input:radio[name="stat"]').change(
+                function () {
+                    if (this.checked && this.value == 'static') {
+                        if (prijsveld == true) {
+                            // doe niets
+                        }
+                        else {
+                            statdyn = "static";
+                        }
+                    }
+                    if (this.checked && this.value == 'dynamic') {
+                        statdyn = "dynamic";
+                    }
+                });
+
+HTML
+
+                    <div id="edittekst">Static of dynamic:</div>
+                    <div class="smallspacer"></div>
+                    <label><input type="radio" name="stat" id="dynamic" value="dynamic">Dynamic</label>
+                    <label><input type="radio" name="stat" id="static" value="static">Static</label>
+                    <div class="smallspacer"></div>
+
+
+function getEigGegevens()
+
+                    if ((st == "static") || (st == "prijsveld")) {
+                        $("#static").prop("checked", true).change();
+                    }
+                    if (st == "dynamic") {
+                        $("#dynamic").prop("checked", true).change();
+                    }
+
+
+generateFilters() if filterelement == slider
+
+                                                // Voeg een amount div toe
+                                                $("#Filters").append("<div class='amountcont' id='amount" + id + "'></div>");
+                                                // Voeg het slider element met het juiste id toe aan de div Filters
+                                                $("#Filters").append("<div class='slidercont' id='slider" + id + "'></div>");
+                                                $("#amount" + id).append("<div id='slidername" + id + "'></div>");
+
+CSS
+
+        .slider {
+            float: left;
+            width: 50px;
+        }
+
+
+buildSlider()
+
+        function buildSlider(id, min, max, eig, symb) {
+            $("#slidername" + id).append("<div class='floater'><h5><span class='minus'>-</span><a>" + " " + eig + ":</a></h5></div>" + "<div class='floater2'>" + "&nbsp;" + min + " - " + max + " " + symb + "</div>");
+            $("#amount" + id).append("<div class='smallspacer5'></div>");
+            var $slide = $("#slider" + id).slider({
+                range: true,
+                min: parseInt(min),
+                max: parseInt(max),
+                values: [parseInt(min), parseInt(max)],
+                slide: function (event, ui) {
+                    $("#amount" + id).empty();
+                    $("#amount" + id).append("<div id='slidername" + id + "'></div>");
+                    $("#slidername" + id).empty();
+
+                    $("#slidername" + id).append("<div class='floater'><h5><span class='minus'>-</span><a>" + " " + eig + ":</a></h5></div>" + "<div class='floater2'>" + "&nbsp;" + ui.values[0] + " - " + ui.values[1] + " " + symb + "</div>");
+                    $("#amount" + id).append("<div class='smallspacer5'></div>");
+                }
+            });
+        }

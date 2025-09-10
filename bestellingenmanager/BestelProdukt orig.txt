@@ -1,0 +1,85 @@
+BestellingenService.asmx
+
+        [WebMethod]
+        public void BestelProdukt(string pid, string prijs, string produktnaam, string produktafbeelding, string aantal, string gewicht, string produktlink, string bestelguid, string tabelnaam, string besteldatum)
+        {
+            int Id = 0;
+            int Aantal;
+            int nieuwe_aantal = 0;
+
+            string query = "SELECT * FROM Bestellingen WHERE Pid=@pid AND Tabelnaam=@tab AND Bestelguid=@guid";
+            SqlCommand cmd = new SqlCommand(query);
+            cmd.Parameters.AddWithValue("@pid", pid);
+            cmd.Parameters.AddWithValue("@tab", tabelnaam);
+            cmd.Parameters.AddWithValue("@guid", bestelguid);
+            DataSet ds = GetData(cmd);
+            DataTable dt = ds.Tables[0];
+            // doe dit alleen indien bestelling al bestaat
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow row in dt.Rows)
+                {
+                    Id = Convert.ToInt32(row["Id"]);
+                    Aantal = Convert.ToInt32(row["Aantal"]);
+                    nieuwe_aantal = Aantal + Convert.ToInt32(aantal);
+                }
+                string con_str = ConfigurationManager.ConnectionStrings["pcfilters"].ConnectionString;
+                string updatequery = "UPDATE Bestellingen SET Aantal=@aantal WHERE Id=@id";
+                SqlConnection con = new SqlConnection(con_str);
+                SqlCommand command = new SqlCommand(updatequery, con);
+                command.Parameters.AddWithValue("@aantal", nieuwe_aantal);
+                command.Parameters.AddWithValue("@id", Convert.ToInt32(Id));
+                try
+                {
+                    con.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }
+            }
+            else // bestelling bestaat nog niet
+            {
+                string con_str = ConfigurationManager.ConnectionStrings["pcfilters"].ConnectionString;
+                string insertquery = "INSERT INTO Bestellingen (Pid, Prijs, Produktnaam, Produktafbeelding, Aantal, Gewicht, ProduktLink, Bestelguid," +
+                    " Tabelnaam, Besteldatum, Factuur, Bestelling_bevestigd, Klaargezet, Ingepakt, Verzonden) VALUES " +
+                    "(@pid, @prijs, @prodnaam, @prodafb, @aantal, @gewicht, @prodlink, @guid, @tabelnaam, @bestdatum, @fact, @bestbev, @klaarg, @ingep, @verz)";
+                SqlConnection con = new SqlConnection(con_str);
+                SqlCommand command = new SqlCommand(insertquery, con);
+                command.Parameters.AddWithValue("@pid", pid);
+                command.Parameters.AddWithValue("@prijs", prijs);
+                command.Parameters.AddWithValue("@prodnaam", produktnaam);
+                command.Parameters.AddWithValue("@prodafb", produktafbeelding);
+                command.Parameters.AddWithValue("@aantal", aantal);
+                command.Parameters.AddWithValue("@gewicht", gewicht);
+                command.Parameters.AddWithValue("@prodlink", produktlink);
+                command.Parameters.AddWithValue("@guid", bestelguid);
+                command.Parameters.AddWithValue("@tabelnaam", tabelnaam);
+                command.Parameters.AddWithValue("@bestdatum", besteldatum);
+                command.Parameters.AddWithValue("@fact", "Nee");
+                command.Parameters.AddWithValue("@bestbev", "Nee");
+                command.Parameters.AddWithValue("@klaarg", "Nee");
+                command.Parameters.AddWithValue("@ingep", "Nee");
+                command.Parameters.AddWithValue("@verz", "Nee");
+                try
+                {
+                    con.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }
+            }
+        }

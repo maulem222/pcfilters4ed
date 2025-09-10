@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+
+
+    $(document).ready(function () {
+        var rollDie = getRandomizer(35, 90);
+
+        var results = [];
+        for (var i = 0; i < 50; i++) {
+            results.push(rollDie());    // Make an array filled with 50 random numbers in a range.
+        }
+        results.sort(function (a, b) {
+            return a - b;
+        });
+        console.log(results);
+    });
+
+        function getRandomizer(bottom, top) {
+            return function () {
+                return Math.floor(Math.random() * (1 + top - bottom)) + bottom;
+            }
+        }
+
+    </script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,1 @@
+<add name="pcfilters" connectionString="Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=pcfilters;AttachDbFilename=|DataDirectory|\pcfilters.mdf;Integrated Security=SSPI" providerName="System.Data.SqlClient" />

@@ -1,0 +1,15 @@
+OK -
+
+hoofdcontainer breedte 100% en flex, justify-content: center
+
+centered container is 950px breed en 1200px hoog
+
+deze bevat een bovenste en een onderste container
+
+breedte (ook onderste container): 950px
+hoogte bovenste container: 270px
+hoogte onderste container: 800px
+
+centered, bovenste en onderste container hebben zolang een border
+
+tussen bovenste en onderste container 100px ruimte laten

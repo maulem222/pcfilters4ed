@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var vollnaam = splitFullName("Stephen van den Berg");
+            console.log(vollnaam.voornaam + " " + vollnaam.tussenvoegsels + " " + vollnaam.achternaam);
+        });
+
+        function splitFullName(fullName) {
+            let nameParts = fullName.trim().split(/\s+/); // Split by spaces
+            let givenName = nameParts[0] || "";
+            let familyName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
+            let additionalName = nameParts.slice(1, -1).join(" ") || ""; // Middle names
+
+            return {
+                voornaam: givenName,
+                tussenvoegsels: additionalName,
+                achternaam: familyName
+            };
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>

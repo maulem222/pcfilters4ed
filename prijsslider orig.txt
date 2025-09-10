@@ -1,0 +1,34 @@
+            jqsliders.push("$('#" + naam + "slider').slider({");
+            jqsliders.push("range: true,");
+            jqsliders.push("min: " + min + ",");
+            jqsliders.push("max: " + max + ",");
+            jqsliders.push("values: [" + min + ", " + max + "],");
+            jqsliders.push("slide: function (event, ui) {");
+            jqsliders.push("$('#" + naam + "slidervalues').empty();");
+            jqsliders.push("$('#" + naam + "slidervalues').append('<div>' + '&nbsp;' + '&euro;' + ui.values[0] + ' - ' + ui.values[1] + ' ' + '</div>');");
+            jqsliders.push("}");
+            jqsliders.push("});");
+
+            jqsliders.push("");
+
+            jqsliders.push("$('#" + naam + "sliderbutton').click(function () {");
+            jqsliders.push("var min = $('#" + naam + "slider').slider('option', 'values')[0],");
+            jqsliders.push("max = $('#" + naam + "slider').slider('option', 'values')[1];");
+            jqsliders.push("var query = '(' + '" + Hoofdletter(naam) + " BETWEEN ' + min + ' AND ' + max + ')';");
+            jqsliders.push("if (sliders.length == 0) {");
+            jqsliders.push("sliders.push(query);");
+            jqsliders.push("}");
+            jqsliders.push("else {");
+            jqsliders.push("var i, string, len = sliders.length;");
+            jqsliders.push("for (i = 0; i < len; ++i) {");
+            jqsliders.push("string = sliders[i];");
+            jqsliders.push("if (string?.includes('(" + Hoofdletter(naam) + " BETWEEN')) {");
+            jqsliders.push("sliders.splice(i, 1);");    
+            jqsliders.push("}");
+            jqsliders.push("}");
+            jqsliders.push("sliders.push(query);");
+            jqsliders.push("}");            
+            jqsliders.push("assembleAND();");          
+            jqsliders.push("});");
+            jqsliders.push("");
+            jqsliders.push("");

@@ -1,0 +1,56 @@
+        <div class="spacer"></div>
+        <div class="parentdiv">
+            <div class="type" type="cb"></div>
+            <div class="cbcat">Kleur</div>
+            <div class="cbs">
+                <label for="Wit"><input type="checkbox" id="Wit" class="cb"> Wit</label><br>
+
+                <label for="Bruin"><input type="checkbox" id="Bruin" class="cb"> Bruin</label><br>
+
+                <label for="Zwart"><input type="checkbox" id="Zwart" class="cb"> Zwart</label><br>
+            </div>
+        </div>
+
+--
+
+
+        <div class="spacer"></div>
+        <div class="parentdiv">
+            <div class="type" type="rangecb"></div>
+            <div class="cbcat">Hoogte</div>
+            <div class="cbs">
+                <label for="50-100"><input type="checkbox" id="50-100" low="50" high="100" class="cb"> 50-100 cm</label><br>
+
+                <label for="101-150"><input type="checkbox" id="101-150" low="101" high="150" class="cb"> 101-150 cm</label><br>
+
+                <label for="151-200"><input type="checkbox" id="151-200" low="151" high="200" class="cb"> 151-200 cm</label><br>
+            </div>
+        </div>
+
+
+        var range = "2000-3000 cm³";
+        let arr1 = range.split(' ');
+        var rangenumbers = arr1[0];
+        let arr2 = rangenumbers.split('-');
+        var low = arr2[0];
+        var high = arr2[1];
+
+--
+
+        <div class="spacer"></div>
+        <div class="parentdiv">
+            <div class="type" type="cb"></div>
+            <div class="cbcat">Gewicht</div>
+            <div class="cbs">
+                <label for="10"><input type="checkbox" id="10" class="cb"> 10 kg</label><br>
+
+                <label for="20"><input type="checkbox" id="20" class="cb"> 20 kg</label><br>
+
+                <label for="50"><input type="checkbox" id="50" class="cb"> 50 kg</label><br>
+            </div>
+        </div>
+
+
+        var range2 = "20 kg";
+        let arr3 = range2.split(' ');
+        var value = arr3[0];

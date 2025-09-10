@@ -1,0 +1,1264 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winkelmandje</title>
+    <style>
+        body {
+            font-family: Arial;
+            overflow: visible;
+        }
+
+        #container {
+            width: 75%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 50px;
+            height: auto;
+            border: 0px solid red;
+        }
+
+        #bestelcontainer {
+            width: calc(100% - 387px); /* gecorrigeerd voor de vaste breedte van de bezorgcontainer, de margin-left en de borders */
+            float: left;
+            height: auto;
+            border: 0px solid green;
+        }
+
+        /* rij met bestelling */
+
+        .topborder {
+            border-top: 1px solid #E4E4E4;
+        }
+
+        .prodcont {
+            width: calc(100% - 2px);
+            height: 100px;
+            border-bottom: 1px solid #E4E4E4;
+            display: block;
+            align-content: center;
+        }
+
+        .photo {
+            margin-top: 10px;
+            width: calc(17.5% - 2px);
+            float: left;
+            height: auto;
+            border: 0px solid blue;
+        }
+
+        .nameandcounter {
+            width: calc(50% - 2px);
+            float: left;
+            height: auto;
+            border: 0px solid blue;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 20px; /* minimale (verticale) ruimte tussen de twee flex items */
+        }
+
+        .name {
+            font-family: "Open Sans", Arial;
+            font-weight: 700;
+            font-size: 16px;
+            color: rgb(35,82,124);
+            line-height: 21px;
+        }
+
+            .name a {
+                text-decoration: none;
+                color: rgb(35,82,124);
+            }
+
+                .name a:hover {
+                    text-decoration: underline;
+                }
+
+                .name a:active {
+                    text-decoration: underline;
+                }
+
+        .counter {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .input-box {
+            height: 40px;
+            width: 100px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        p {
+            padding: 5px 10px;
+        }
+
+        .subtotaal {
+            width: calc(25% - 2px);
+            float: left;
+            height: 25px;
+            border: 0px solid blue;
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-family: "Open Sans", Arial;
+            font-weight: 400;
+            font-size: 15px;
+            color: rgb(102,102,102);
+            line-height: 21px;
+        }
+
+        .spaceblock {
+            height: 30px;
+            float: left;
+            width: calc(32.5% - 2px);
+            border: 0px solid blue;
+        }
+
+        .verw {
+            width: calc(7.5% - 2px);
+            float: left;
+            height: 25px;
+            border: 0px solid blue;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #bedragenblok { /* bedragen onder de streep */
+            width: 190px;
+            border: 0px solid blue;
+            float: right;
+            height: 110px;
+        }
+
+        #endspacer { /* houdt een beetje ruimte vrij achter het bedragenblok */
+            width: calc(8.5% - 2px);
+            border: 0px solid blue;
+            float: right;
+            height: 90px;
+        }
+
+        #tariefdiv, #totaaldiv {
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        #tariefdiv {
+            font-family: "Open Sans", Arial;
+            font-weight: 400;
+            font-size: 13px;
+            color: rgb(51, 51, 51);
+            line-height: 19px;
+        }
+
+        #totaaldiv {
+            font-family: "Open Sans", Arial;
+            font-weight: 700;
+            font-size: 16px;
+            color: rgb(51, 51, 51);
+            line-height: 23px;
+        }
+
+        #exclbtw {
+            text-align: right;
+            margin-top: 0px;
+            font-family: "Open Sans", Arial;
+            font-weight: 100;
+            font-size: 11px;
+            color: rgb(51, 51, 51);
+            line-height: 16px;
+        }
+
+        /* blue box met radio button */
+
+        .bluebox {
+            border: 1px solid transparent;
+            background-color: transparent;
+            width: calc(100% - 22px);
+            height: 115px;
+            border-radius: 8px;
+            padding-top: 15px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+        }
+
+            .bluebox:hover, .bluebox:active {
+                border: 1px solid cornflowerblue;
+                background-color: #d3e3f8;
+            }
+
+            .bluebox .text {
+                text-align: left;
+                margin-left: 25px;
+                margin-top: 10px;
+                float: left;
+                height: 21px;
+                width: 320px;
+                border: 0px solid green;
+                font-family: "Open Sans", arial, tahoma;
+                font-size: 14px;
+                font-weight: 400;
+                color: rgb(51, 51, 51);
+                line-height: 21px;
+            }
+
+        .bold {
+            padding: 0px 0px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .normal {
+            padding: 0px 0px;
+            font-weight: normal;
+            float: left;
+        }
+
+        .labelheader {
+            border: 0px solid green;
+            display: inline-block;
+        }
+
+        .bzprijs {
+            display: inline-block;
+            font-family: "Open Sans", arial, tahoma;
+            font-size: 15px;
+            font-weight: 400;
+            color: rgb(51, 51, 51);
+            line-height: 21px;
+        }
+
+        #bezorgcontainer { /* hierin staan de blueboxen onder elkaar */
+            width: 365px;
+            float: left;
+            height: auto;
+            border: 0px solid green;
+            margin-left: 20px;
+        }
+
+        /* winkelmandje */
+
+        #cart-container {
+            float: right;
+            width: 35px;
+            position: relative;
+            top: -35px;
+            border: 0px solid green;
+        }
+
+        #itemCount {
+            position: absolute;
+            display: none;
+            top: -10px;
+            left: -10px;
+            width: 24px;
+            height: 20px;
+            padding-top: 4px;
+            border-radius: 50%;
+            border: 1px solid grey;
+            background: white;
+            color: black;
+            text-align: center;
+        }
+
+        #bccontainer {
+            width: 100%;
+            height: 20px;
+            border-bottom: 1px solid #e3e6e4;
+            margin-bottom: 15px;
+        }
+
+        .smallspacer {
+            height: 20px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Load Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="Scripts/moment-with-locales.min.js"></script>
+    <script>
+        var guid;
+        var itemCount;
+        var tarief;
+        var clicked;
+        var levertijd = 1;
+        var bestellingen = false;
+
+        $(document).ready(function () {
+
+            $(".bluebox").mouseover(function () {
+                $(this).css('background-color', '#d3e3f8');
+                $(this).css('border', '1px solid cornflowerblue');
+            }).mouseout(function () {
+                var hovered = $(this).attr('bzm');
+                console.log('clicked: ' + clicked + ' hovered: ' + hovered);
+                if (hovered !== clicked) { // zorg dat bij mouseout niet weer de div transparant wordt waar net op is geklikt, die moet blauw blijven
+                    $(this).css('background-color', 'transparent');
+                    $(this).css('border', '1px solid transparent');
+                }
+            });
+
+            guid = getCookie('guid');
+            if (guid == null) { // geen guid aanwezig
+                document.cookie = 'itemCount=; max-age=0; path=/; domain=' + location.hostname; // haal ook de itemCount cookie weg
+            }
+            else { // guid bestaat wel
+                itemCount = getCookie('itemCount');
+                if (itemCount !== null) {
+                    if (itemCount > 0) {
+                        $('#itemCount').html(itemCount).css('display', 'block');
+                    }
+                    else {
+                        $('#itemCount').css('display', 'none');
+                    }
+                }
+                else { // itemCount cookie bestaat niet
+                    itemCount = 0;
+                }
+                // verleng zowel guid als itemCount cookie
+                setCookie('guid', guid, '14'); // verleng de guid cookie
+                setCookie('itemCount', itemCount, '14'); // verleng of maak de itemCount cookie
+            }
+
+            getBestellingen();
+        });
+
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+            else return null;
+        }
+
+        function getBestellingen() {
+            var SQL = "SELECT * FROM Bestellingen WHERE Bestelguid='" + guid + "'";
+            console.log('SQL: ' + SQL);
+
+            $.ajax({
+                type: 'POST',
+                url: '/BestellingenService.asmx/getBestellingen',
+                data: JSON.stringify({ sql: SQL }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    //console.clear();
+                    console.log(data.d);
+
+                    vue_bestellingen.SetBestellingen(data.d); // call Vue method to set data
+
+                    var Totaalgewicht = 0.00;
+                    var data = JSON.parse(data.d);
+
+                    $.each(data, function (i) {
+                        var subgewicht = data[i].Gewicht * data[i].Aantal;
+                        Totaalgewicht += subgewicht;
+                    });
+
+                    console.log('Totaalgewicht: ' + Totaalgewicht);
+                    getVerzendkosten(Totaalgewicht);
+
+                    // get Totaalbedrag
+                    var Totaalbedrag = 0.00;
+
+                    $.each(data, function (i) {
+                        var subtotaal = data[i].Prijs * data[i].Aantal;
+                        Totaalbedrag += subtotaal;
+                    });
+                    Totaalbedrag = parseFloat(Totaalbedrag).toFixed(2);
+                    vue_bestellingen.SetTotaal(Totaalbedrag);
+                    console.log('Totaalbedrag: ' + Totaalbedrag);
+
+                    // get bezorgkosten
+                    getBezorgkosten();
+
+                    // levertijd
+                    var pidarray = [];
+                    var tabel;
+
+                    if (data.length > 0) { // er zijn bestellingen
+                        $.each(data, function (i) {
+                            tabel = data[i].Tabelnaam;
+                            //pidarray.push(data[i].Pid); // verzamel de produktid's in de pidarray
+
+                            pidarray.push(tabel + "_" + data[i].Pid);
+                        });
+                        pidarray.join(",");
+
+                        var vandaag = moment().locale('nl').format('YYYY-MM-DD');
+                        //vandaag = moment("01-03-2025", "DD-MM-YYYY"); // hier kun je de datum instellen om te testen
+                        //selectMAXLevertijd(tabel, pidarray, vandaag); // Levertijd wordt bepaald vanuit produkttabel
+                        verwerkPidArray(pidarray, vandaag);
+                        // zet bestellingen op true zodat button Doorgaan functioneert
+                        bestellingen = true;
+                    }
+                    else { // Er zijn geen bestellingen om Pid's en de levertijd vanaf te leiden. Levertijd is een globale variabele en is standaard 1 dag
+                        var vandaag = moment().locale('nl').format('YYYY-MM-DD');
+                        nedBezorgdatum(vandaag); // bepaal alleen de bezorgdatum vanuit 1 dag levertijd
+                        // zet bestellingen op false zodat button Doorgaan niet functioneert
+                        bestellingen = false;
+                    }
+
+                    // stel de bluebox bezorgen in en geef een click()
+                    BlueboxInstellen();
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    //alert(err.Message);
+                }
+            });
+        }
+
+        function getVerzendkosten(tot) {
+
+            var SQL = "SELECT * FROM Verzendkosten";
+
+            $.ajax({
+                type: 'POST',
+                url: '/VerzendService.asmx/getTariefgroepen',
+                data: JSON.stringify({ sql: SQL }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    //console.clear();
+                    console.log('Tariefgroepen: ' + data.d);
+
+                    var data = JSON.parse(data.d);
+
+                    $.each(data, function (i) {
+                        if (tot > data[i].MinGewicht && tot <= data[i].MaxGewicht) {
+                            tarief = data[i].Tarief;
+                        }
+                    });
+                    console.log('tarief: ' + tarief);
+                    vue_bestellingen.SetTarief(tarief);
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    //alert(err.Message);
+                }
+            });
+        }
+
+        function getBezorgkosten() {
+
+            var SQL = "SELECT * FROM Bezorgkosten";
+
+            $.ajax({
+                type: 'POST',
+                url: '/VerzendService.asmx/getBezorgkosten',
+                data: JSON.stringify({ sql: SQL }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    //console.clear();
+                    console.log('Bezorgkosten: ' + data.d);
+
+                    var data = JSON.parse(data.d);
+
+                    var bez;
+                    var afh;
+                    var av;
+                    var zak;
+
+                    $.each(data, function (i) {
+                        bez = data[i].Bezorgen;
+                        afh = data[i].Afhalen;
+                        av = data[i].Avond;
+                        zak = data[i].Zakelijk;
+                    });
+
+                    vue_bestellingen.SetBezorgkosten(bez, afh, av, zak);
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    //alert(err.Message);
+                }
+            });
+        }
+
+        function verwerkPidArray(pidarray, vandaag) {
+            let queries = generateQueries(pidarray);
+            console.log(queries);
+
+            let levt;
+            levertijdarray = [];
+            queries.forEach(query => {
+                console.log("Executing query:", query);
+                levt = selectMAXLevertijd(query);
+                console.log("Levt: " + levt);
+                levertijdarray.push(levt); // zet de MAX Levertijd uit elke tabel in een array
+            });
+
+            if (levertijdarray.length > 0) {
+                levertijd = Math.max(levertijdarray); // neem het maximum van deze array en zet dat in de globale variabele levertijd
+            }
+            console.log("Levertijd: " + levertijd);
+            nedBezorgdatum(vandaag);
+        }
+
+        // genereer per tabel de SELECT MAX(Levertijd) query
+        function generateQueries(inputArray) {
+            let groupedData = {};
+
+            // Splitsen en groeperen per tabelnaam
+            inputArray.forEach(item => {
+                let parts = item.split("_"); // Splits bij "_"
+                if (parts.length === 2) {
+                    let tableName = parts[0];
+                    let productId = parseInt(parts[1], 10);
+
+                    if (!groupedData[tableName]) {
+                        groupedData[tableName] = [];
+                    }
+                    groupedData[tableName].push(productId);
+                }
+            });
+
+            // SQL queries genereren per tabel
+            let queries = Object.keys(groupedData).map(tableName => {
+                let ids = groupedData[tableName].join(", ");
+                return `SELECT MAX(Levertijd) FROM ${tableName} WHERE Id IN (${ids});`;
+            });
+
+            return queries;
+        }
+
+
+        function selectMAXLevertijd(query) {
+
+            var SQL = query;
+            var levert;
+
+            $.ajax({
+                type: 'POST',
+                url: '/VerzendService.asmx/getLevertijd',
+                data: JSON.stringify({ sql: SQL }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    //console.clear();
+                    //alert('MAX Levertijd: ' + data.d);
+
+                    levert = JSON.parse(data.d);
+                    console.log("MAX Levertijd from tabel: " + levert);
+                    //nedBezorgdatum(vandaag);
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    //alert(err.Message);
+                }
+            });
+
+            return levert;
+        }
+
+        function nedBezorgdatum(amdatum) {
+            var werkdagen = levertijd;
+
+            // leverdatums bepalen
+            var leverdatum = addWeekdays(amdatum, werkdagen, false);
+            var leverdatum_avond = addWeekdays(amdatum, werkdagen, true);
+
+            // verzenddatum bepalen en vertalen
+            var verzenddatum = addWeekdays(amdatum, werkdagen - 1, false);
+            var verzdatum = Vertaal(verzenddatum);
+            console.log("verzenddatum: " + verzdatum);
+            // Vue setter
+            vue_bestellingen.setVerzenddatum(verzdatum);
+
+            // besteldatum bepalen en vertalen
+            var besteldatum = moment(amdatum);
+            var bestdatum = Vertaal(besteldatum.toString());
+            console.log("besteldatum: " + bestdatum);
+            // Vue setter
+            vue_bestellingen.setBesteldatum(bestdatum);
+
+            // leverdatums vertalen
+            var bezdatum = Vertaal(leverdatum);
+            var avondbezdatum = Vertaal(leverdatum_avond);
+            console.log("bezdatum: " + bezdatum);
+            console.log("avondbezdatum: " + avondbezdatum);
+            // Vue setter voor beide waarden
+            vue_bestellingen.setBezorgdagen(bezdatum, avondbezdatum);
+        }
+
+        function Vertaal(leverdatum) {
+            var d = leverdatum.toString().split(" ");
+            var amdagnaam = d[0];
+            var ammaandnaam = d[1];
+            var amdagnummer = d[2];
+
+            var dagnaam, maandnaam, dagnummer;
+
+            if (amdagnaam == 'Mon') {
+                dagnaam = 'maandag';
+            }
+            if (amdagnaam == 'Tue') {
+                dagnaam = 'dinsdag';
+            }
+            if (amdagnaam == 'Wed') {
+                dagnaam = 'woensdag';
+            }
+            if (amdagnaam == 'Thu') {
+                dagnaam = 'donderdag';
+            }
+            if (amdagnaam == 'Fri') {
+                dagnaam = 'vrijdag';
+            }
+            if (amdagnaam == 'Sat') {
+                dagnaam = 'zaterdag';
+            }
+            if (amdagnaam == 'Sun') {
+                dagnaam = 'zondag';
+            }
+
+            if (ammaandnaam == 'Jan') {
+                maandnaam = 'januari';
+            }
+            if (ammaandnaam == 'Feb') {
+                maandnaam = 'februari';
+            }
+            if (ammaandnaam == 'Mar') {
+                maandnaam = 'maart';
+            }
+            if (ammaandnaam == 'Apr') {
+                maandnaam = 'april';
+            }
+            if (ammaandnaam == 'May') {
+                maandnaam = 'mei';
+            }
+            if (ammaandnaam == 'Jun') {
+                maandnaam = 'juni';
+            }
+            if (ammaandnaam == 'Jul') {
+                maandnaam = 'juli';
+            }
+            if (ammaandnaam == 'Aug') {
+                maandnaam = 'augustus';
+            }
+            if (ammaandnaam == 'Sep') {
+                maandnaam = 'september';
+            }
+            if (ammaandnaam == 'Oct') {
+                maandnaam = 'oktober';
+            }
+            if (ammaandnaam == 'Nov') {
+                maandnaam = 'november';
+            }
+            if (ammaandnaam == 'Dec') {
+                maandnaam = 'december';
+            }
+            dagnummer = amdagnummer;
+
+            var nedbezorgdag = dagnaam + ' ' + dagnummer + ' ' + maandnaam;
+
+            return nedbezorgdag.toString();
+        }
+
+        function addWeekdays(amdatum, numberOfWeekdays, avond) {
+            var originalDate = amdatum;
+            var futureDate = moment(originalDate);
+            var currentDayOfWeek = futureDate.day();
+            if (currentDayOfWeek == 0) { // zondag besteld
+                futureDate.add(1, 'day'); // zet naar maandag
+            }
+            currentDayOfWeek = futureDate.day();
+            var numberOfWeekends = Math.floor((currentDayOfWeek + numberOfWeekdays - 1) / 6);   // calculate the number of weekends to skip over
+
+            futureDate.add(numberOfWeekdays + numberOfWeekends * 1, 'days');    // account for the 1 day per weekend
+
+            if (avond == true) {
+                futureDate.add(1, 'day'); // avondbezorging
+            }
+            currentDayOfWeek = futureDate.day();
+            if (currentDayOfWeek == 0) { // indien de bezordag zondag is
+                futureDate.add(1, 'day'); // verplaats naar maandag
+            }
+            return futureDate;
+        }
+
+        function BlueboxInstellen() {
+            // haal de bezorgmethode uit de tabel Bezorging_en_betaling
+            // stel de juiste bluebox in en geef een click()
+            $.ajax({
+                type: 'POST',
+                url: '/VerzendService.asmx/GetBezorgmethode',
+                data: JSON.stringify({ guid: guid }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    var bezmethode = data.d;
+                    console.log("bezorgmethode voor bluebox: " + bezmethode);
+
+                    $('#div_' + bezmethode).css('background-color', '#d3e3f8');
+                    $('#div_' + bezmethode).css('border', '1px solid cornflowerblue');
+                    // hieronder wordt $(document).on('click', '.bluebox') aangeroepen
+                    // op deze wijze doet elke call naar getBestellingen() uiteindelijk ook een call naar vue_bestellingen.getData();
+                    $('#div_' + bezmethode).click();
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    //alert(err.Message);
+                }
+            });
+        }
+
+        // De volgende functie wordt aangeroepen vanuit Vue via de getter vue_bestellingen.getData();
+        // de getter wordt enkel aangeroepen aan het eind van $(document).on('click', '.bluebox')
+        // met als doel de Vue data te updaten in de tabel Bezorging_en_betaling
+        function setVueData(tot, verzk, bezm, bezd, beztar, bestd, verzd) {
+            console.log("totaal: € " + tot);
+            console.log("verzkosten: " + verzk);
+            console.log("bezmethode: " + bezm);
+            console.log("bezdatum: " + bezd);
+            console.log("bezorgtarief: € " + beztar);
+            console.log("bestdatum: " + bestd);
+            console.log("verzdatum: " + verzd);
+
+            // tast eerst de tabel Bezorgen_en_betalen af, of de guid al voorkomt
+
+            var guidbestaat;
+            var bestelnummer;
+
+            $.ajax({
+                type: 'POST',
+                url: '/VerzendService.asmx/BestaatGuid',
+                data: JSON.stringify({ guid: guid }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    if (data.d == false) {
+                        guidbestaat = false;
+                    } else {
+                        guidbestaat = true;
+                    }
+
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    //alert(err.Message);
+                }
+            });
+
+            if (guidbestaat) { // Er is reeds een entry in Bezorging_en_betaling met minimaal de guid en het bestelnummer
+                console.log("guid reeds ingevoerd...");
+                // sla de data afkomstig uit Vue op in de tabel Bezorging_en_betaling
+                UpdateData(guid, tot, verzk, bezm, bezd, beztar, bestd, verzd);
+            }
+            else {
+                console.log("guid bestaat nog niet...");
+                // maak via stored procedure een bestelnummer
+                // en retourneer dit
+                $.ajax({
+                    type: 'POST',
+                    url: '/VerzendService.asmx/UpdateBestelnummer',
+                    data: ({}),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        bestelnummer = data.d;
+                        // Maak van de simpele integer een integer van 7 digits
+                        const formattedNum = new Intl.NumberFormat('en', { minimumIntegerDigits: 7, useGrouping: false }).format(bestelnummer);
+                        console.log('Bestelnummer: #' + formattedNum);
+                        bestelnummer = formattedNum;
+
+                        console.log("guid: " + guid + " bestelnummer: " + bestelnummer);
+
+                        // Er is nog geen entry in Bezorging_en_betaling dus worden hier eerst de guid en het bestelnummer geINSERT
+                        $.ajax({
+                            type: 'POST',
+                            url: '/VerzendService.asmx/InsertBestelnummer',
+                            data: "{'guid':'" + guid + "','bestelnummer':'" + bestelnummer + "'}",
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            async: false,
+                            success: function (data) {
+                                // sla de data afkomstig uit Vue op in de tabel Bezorging_en_betaling (in hetzelfde record)
+                                UpdateData(guid, tot, verzk, bezm, bezd, beztar, bestd, verzd);
+                            },
+                            error: function (xhr) {
+                                var err = eval("(" + xhr.responseText + ")");
+                                alert(err.Message);
+                            }
+                        });
+                    },
+                    error: function (xhr) {
+                        var err = eval("(" + xhr.responseText + ")");
+                        //alert(err.Message);
+                    }
+                });
+            }
+        }
+
+        function UpdateData(guid, tot, verzk, bezm, bezd, beztar, bestd, verzd) {
+            var data = {};
+            data.guid = guid;
+            data.besteldatum = bestd;
+            data.verzenddatum = verzd;
+            data.bezorgdatum = bezd;
+            data.bezorgmethode = bezm;
+            data.bezorgtarief = beztar;
+            data.totaalbedrag = tot;
+            data.verzendkosten = verzk;
+
+
+            console.log("tot: " + tot + " beztar: " + beztar);
+            $.ajax({
+                type: 'POST',
+                url: '/VerzendService.asmx/UpdateData',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        $(document).on('click', '#doorgaanbutt', function (e) {
+            e.preventDefault();
+            if (bestellingen) {
+                location.href = "/klantregistratie.html";
+            }
+        });
+
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                date.setHours(date.getHours() + 1);
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        $(document).on('click', '.minus', function (e) {
+
+            var pid = $(this).attr('pid');
+            var tabel = $(this).attr('tabel');
+            var tabelpid = tabel + "-" + pid;
+            var aantal = $("#" + tabelpid).html();
+            if (aantal !== "1") {
+                aantal--;
+            }
+            else {
+                // laat aantal 1
+            }
+
+            if (aantal !== $("#" + tabelpid).html()) { // indien aantal is gewijzigd
+                Vervang_aantal(pid, aantal, guid, tabel); // vervang aantal door het verlaagde aantal
+
+                //var time = 3600 * 1000 * 24 * 14; // 2 weken vanaf nu
+                itemCount = getCookie('itemCount'); // haal de itemCount cookie en zet hem in itemCount
+                itemCount = parseInt(itemCount); // maak er een integer waarde van
+                itemCount--; // verlaag itemCount met 1
+                //document.cookie = 'itemCount=' + itemCount + '; max-age=' + time + "; path=/"; // en sla itemCount weer op als cookie
+                setCookie("itemCount", itemCount, '14');
+                if (itemCount > 0) {
+                    $('#itemCount').html(itemCount).css('display', 'block'); // toon itemCount in het rondje
+                }
+                else {
+                    $('#itemCount').css('display', 'none'); // // verberg itemCount rondje
+                }
+            }
+        });
+
+        $(document).on('click', '.plus', function (e) {
+
+            var pid = $(this).attr('pid');
+            var tabel = $(this).attr('tabel');
+            var tabelpid = tabel + "-" + pid;
+            var aantal = $("#" + tabelpid).html();
+            aantal++;
+            Vervang_aantal(pid, aantal, guid, tabel); // vervang aantal door het verhoogde aantal
+
+            //var time = 3600 * 1000 * 24 * 14; // 2 weken vanaf nu
+            itemCount = getCookie('itemCount'); // haal de itemCount cookie en zet hem in itemCount
+            itemCount = parseInt(itemCount); // maak er een integer waarde van
+            itemCount++; // hoog itemCount op met 1
+            //document.cookie = 'itemCount=' + itemCount + '; max-age=' + time + "; path=/"; // en sla itemCount weer op als cookie
+            setCookie("itemCount", itemCount, '14');
+            $('#itemCount').html(itemCount).css('display', 'block'); // toon itemCount in het rondje
+        });
+
+        function Vervang_aantal(pid, aant, guid, tabel) {
+
+            var data = {};
+            data.pid = pid;
+            data.aantal = aant;
+            data.bestelguid = guid;
+            data.tabelnaam = tabel;
+
+            $.ajax({
+                type: 'POST',
+                url: '/BestellingenService.asmx/Vervang_aantal',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    getBestellingen();
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    //alert(err.Message);
+                }
+            });
+        }
+
+        $(document).on('click', '.deletebutt', function (e) {
+
+            var id = $(this).attr('id');
+            var teverw_aantal = $(this).attr('aantal');
+            VerwijderBestelling(id);
+
+            //var time = 3600 * 1000 * 24 * 14; // 2 weken vanaf nu
+            itemCount = getCookie('itemCount'); // haal de itemCount cookie en zet hem in itemCount
+            itemCount = parseInt(itemCount); // maak er een integer waarde van
+            itemCount = itemCount - teverw_aantal; // verlaag itemCount met het te verwijderen aantal
+            //document.cookie = 'itemCount=' + itemCount + '; max-age=' + time + "; path=/"; // en sla itemCount weer op als cookie
+            setCookie("itemCount", itemCount, '14');
+            if (itemCount > 0) {
+                $('#itemCount').html(itemCount).css('display', 'block'); // toon itemCount in het rondje
+            }
+            else {
+                $('#itemCount').css('display', 'none'); // // verberg itemCount rondje
+            }
+        });
+
+        function VerwijderBestelling(id) {
+
+            var data = {};
+            data.id = id;
+
+            $.ajax({
+                type: 'POST',
+                url: '/BestellingenService.asmx/DELETEBestelling',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    getBestellingen();
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    //alert(err.Message);
+                }
+            });
+        }
+
+        $(document).on('click', '.bluebox', function (e) {
+            clicked = $(this).attr('bzm');
+            // haal alle gekleurde borders/backgrounds weg
+            $('.bluebox').css('background-color', 'transparent');
+            $('.bluebox').css('border', '1px solid transparent');
+            // vul de aangeklikte box met kleur
+            $(this).css('background-color', '#d3e3f8');
+            $(this).css('border', '1px solid cornflowerblue');
+
+            var bezorgmethode = $(this).attr('bzm'); // zet de bezorgmethode in verband met mouseout in doc. ready
+            //alert(bezorgmethode);
+            if (bezorgmethode == 'bezorgen') {
+                vue_bestellingen.checkboxChangedtobezorgen();
+            }
+            if (bezorgmethode == 'afhalen') {
+                vue_bestellingen.checkboxChangedtoafhalen();
+            }
+            if (bezorgmethode == 'avond') {
+                vue_bestellingen.checkboxChangedtoavond();
+            }
+            if (bezorgmethode == 'zakelijk') {
+                vue_bestellingen.checkboxChangedtozakelijk();
+            }
+            // call naar vue_bestellingen.getData();
+            vue_bestellingen.getData();
+        });
+    </script>
+</head>
+<body onunload="">
+    <div id="container">
+        <div id="cart-container">
+            <div id="cart">
+                <img src="/images/winkelwagentje.jpg" />
+            </div>
+            <span id="itemCount"></span>
+        </div>
+        <div id="bccontainer">
+            WINKELMANDJE
+        </div>
+        <div class="smallspacer"></div>
+        <div id="vuebestellingen">
+            <div id="bestelcontainer">
+                <div v-show="bestellingen.length" class="topborder"></div>
+                <div v-show="!bestellingen.length" class="winkelwleeg">Er bevinden zich geen produkten in uw winkelwagen.</div>
+                <div id="bestellingen" v-for="bestelling in bestellingen">
+                    <div class="prodcont">
+                        <div class="photo"><a :href="`${bestelling.Produktlink}`"><img :src="bestelling.Produktafbeelding" width="60" /></a></div>
+                        <div class="nameandcounter">
+                            <div class="name"><a :href="`${bestelling.Produktlink}`">{{bestelling.Produktnaam}}</a></div>
+                            <div class="counter">
+                                <div class="input-box">
+                                    <button type="button" class="minus" :pid="`${bestelling.Pid}`" :tabel="`${bestelling.Tabelnaam}`">-</button>
+                                    <p :id="`${bestelling.Tabelnaam}-${bestelling.Pid}`">{{bestelling.Aantal}}</p>
+                                    <button type="button" class="plus" :pid="`${bestelling.Pid}`" :tabel="`${bestelling.Tabelnaam}`">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="spaceblock"></div>
+                        <div class="subtotaal">€ {{Subtotaal(bestelling)}}</div>
+                        <div class="verw">
+                            <img class="deletebutt" :id="`${bestelling.Id}`" :aantal="`${bestelling.Aantal}`" src="/images/deletebuttongray.jpg" width="20" />
+                        </div>
+                    </div>
+                </div>
+                <div id="endspacer"></div>
+                <div v-show="bestellingen.length" id="bedragenblok">
+                    <div id="tariefdiv">Verzendkosten  {{getVerzendkosten}}</div>
+                    <div v-show="this.beztarief > 0.00" id="tariefdiv">Bezorgkosten  {{getBezorgkosten}}</div>
+                    <div id="totaaldiv">Totaal  {{getTotaal}}</div>
+                    <div id="exclbtw">excl. BTW {{getExcl}}</div>
+                </div>
+            </div>
+            <div id="bezorgcontainer">
+                <img src="/images/Doorgaan_met_bestellen.jpg" id="doorgaanbutt" />
+                <img src="/images/idealvisapaypaldhl.jpg" width="335" />
+                <div class="bluebox" id="div_bezorgen" bzm="bezorgen">
+                    <input id="bezorgen"
+                           v-model="picked"
+                           type="radio"
+                           class="radio"
+                           name="bezorgoptie"
+                           value="bezorgen">
+                    <label for="bezorgen">
+                        <span class="labelheader bold">Bezorgen</span><span class="bzprijs">({{getBezorgen}})</span>
+                        <span class="text">
+                            Nu besteld, {{ getBezorgdag}} in huis.
+                            Bezorgd met DHL.
+                        </span>
+                    </label>
+                </div>
+                <div class="bluebox" id="div_afhalen" bzm="afhalen">
+                    <input id="afhalen"
+                           v-model="picked"
+                           type="radio"
+                           class="radio"
+                           name="bezorgoptie"
+                           value="afhalen">
+                    <label for="afhalen">
+                        <span class="labelheader bold">Afhalen bij een servicepunt</span><span class="bzprijs">({{getAfhalen}})</span>
+                        <span class="text">
+                            Afhalen altijd dichtbij met 2.500 DHL ServicePoints. Handig, want dan loopt u geen risico om de bezorger mis te lopen. Zodra uw pakket klaarligt, ontvangt u een bericht.
+                        </span>
+                    </label>
+                </div>
+                <div class="bluebox" id="div_avond" bzm="avond">
+                    <input id="avond"
+                           v-model="picked"
+                           type="radio"
+                           class="radio"
+                           name="bezorgoptie"
+                           value="avond">
+                    <label for="avond">
+                        <span class="labelheader bold">Bezorgen in de avond</span><span class="bzprijs">({{getAvond}})</span>
+                        <span class="text">
+                            Nu besteld, {{ getBezorgdagavond }} tussen 17:30u en 21:30u geleverd. Bezorgd met DHL.
+                        </span>
+                    </label>
+                </div>
+                <div class="bluebox" id="div_zakelijk" bzm="zakelijk">
+                    <input id="zakelijk"
+                           v-model="picked"
+                           type="radio"
+                           class="radio"
+                           name="bezorgoptie"
+                           value="zakelijk">
+                    <label for="zakelijk">
+                        <span class="labelheader bold">Zakelijk of grote afmetingen</span><span class="bzprijs">({{getZakelijk}})</span>
+                        <span class="text">
+                            Leveringen met grotere afmetingen en/of levering op zakelijke locaties tot 18.00u. Bezorgd met DHL.
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var vue_bestellingen = new Vue({
+            el: '#vuebestellingen', //Attach to element id vuebestellingen
+            data() {
+                return {
+                    bestellingen: [],
+                    totaal: 0.00, // totaal is niet het eindtotaal, echter de som van de subtotalen
+                    tarief: 0.00, // de verzendkosten
+                    picked: 'bezorgen',
+                    beztarief: 0.00, // het bezorgtarief van de actieve bezorgmethode, 1 van de volgende 4 dus
+                    bezorgen: 0.00,
+                    afhalen: 0.00,
+                    avond: 0.00,
+                    zakelijk: 0.00,
+                    bezdatum: '',
+                    avondbezdatum: '',
+                    besteldatum: '',
+                    verzenddatum: ''
+                }
+            },
+            methods: {
+                SetBestellingen(best) {
+                    this.bestellingen = JSON.parse(best);
+                    console.log("bestellingen: " + this.bestellingen);
+                },
+                SetTarief(tarief) {
+                    this.tarief = tarief; // verzendtarief afgeleid van het gewicht
+                },
+                SetTotaal(tot) { // som van alle subtotalen
+                    this.totaal = tot;
+                },
+                Subtotaal(item) { // het subtotaal van 1 afzonderlijke bestelling
+                    return parseFloat(item.Prijs * item.Aantal).toFixed(2)
+                },
+                checkboxChangedtobezorgen() {
+                    this.picked = 'bezorgen' // zodra picked wordt ingesteld wordt de bijbehorende radio button gevinkt
+                    this.beztarief = this.bezorgen // stel beztarief in op het actieve bezorgtarief
+                },
+                checkboxChangedtoafhalen() {
+                    this.picked = 'afhalen'
+                    this.beztarief = this.afhalen
+                },
+                checkboxChangedtoavond() {
+                    this.picked = 'avond'
+                    this.beztarief = this.avond
+                },
+                checkboxChangedtozakelijk() {
+                    this.picked = 'zakelijk'
+                    this.beztarief = this.zakelijk
+                },
+                SetBezorgkosten(bez, afh, av, zak) {
+                    // stel per bezorgoptie het bezorgtarief in
+                    this.bezorgen = bez
+                    this.afhalen = afh
+                    this.avond = av
+                    this.zakelijk = zak
+                    // zet beztarief op het tarief van bezorgen, zodat getBezorgkosten aanvankelijk
+                    // de kosten van de optie bezorgen toont, de eerste bluebox is immers actief
+                    this.beztarief = bez
+                },
+                setBezorgdagen(bezdag, avondbezdag) {
+                    this.bezdatum = bezdag
+                    this.avondbezdatum = avondbezdag
+                },
+                setBesteldatum(bestdatum) {
+                    this.besteldatum = bestdatum
+                },
+                setVerzenddatum(verzdatum) {
+                    this.verzenddatum =  verzdatum
+                },
+                getData() {
+                    var totaal;
+                    if (this.totaal < 50.00) {
+                        totaal = (parseFloat(this.totaal) + parseFloat(this.tarief) + parseFloat(this.beztarief)).toFixed(2)
+                    }
+                    else {
+                        totaal = (parseFloat(this.totaal) + parseFloat(this.beztarief)).toFixed(2)
+                    }
+                    var bezmethode = this.picked
+                    var bezdatum;
+                    if (bezmethode == 'bezorgen') {
+                        bezdatum = this.bezdatum
+                    }
+                    if (bezmethode == 'avond') {
+                        bezdatum = this.avondbezdatum
+                    }
+                    if (bezmethode == 'afhalen' || bezmethode == 'zakelijk') {
+                        bezdatum = 'nvt'
+                    }
+                    var bezorgtarief = this.beztarief.toFixed(2)
+                    var bestdatum, verzdatum, verzendkosten;
+                    if (this.totaal < 50.00) { // boven de 50 euro is verzenden gratis
+                        verzendkosten = this.tarief.toFixed(2)
+                    }
+                    else {
+                        verzendkosten = 0.00
+                    }
+                    bestdatum = this.besteldatum
+                    verzdatum = this.verzenddatum
+                    setVueData(totaal, verzendkosten, bezmethode, bezdatum, bezorgtarief, bestdatum, verzdatum) // dit is een externe Javascript functie die wordt aangeroepen buiten Vue!
+                }
+            }, // end methods
+            computed: {
+                // de volgende computed properties zorgen voor de bedragen onder de streep
+                getVerzendkosten: function () {
+                    if (this.totaal < 50.00) { // boven de 50 euro is verzenden gratis
+                        return "€ " + this.tarief;
+                    }
+                    else {
+                        return " Gratis";
+                    }
+                },
+                getBezorgkosten: function () {
+                    return "€ " + parseFloat(this.beztarief).toFixed(2)
+                },
+                getTotaal: function () {
+                    if (this.totaal < 50.00) {
+                        return "€ " + (parseFloat(this.totaal) + parseFloat(this.tarief) + parseFloat(this.beztarief)).toFixed(2)
+                    }
+                    else {
+                        return "€ " + (parseFloat(this.totaal) + parseFloat(this.beztarief)).toFixed(2)
+                    }
+                },
+                getExcl: function () {
+                    if (this.totaal < 50.00) {
+                        return "€ " + ((parseFloat(this.totaal) + parseFloat(this.tarief) + parseFloat(this.beztarief)) / 1.21).toFixed(2)
+                    }
+                    else {
+                        return "€ " + ((parseFloat(this.totaal) + parseFloat(this.beztarief)) / 1.21).toFixed(2)
+                    }
+                },
+                // de volgende computed properties dienen om de span class bzprijs van een prijswaarde te voorzien, in de blueboxen
+                getBezorgen: function () {
+                    return "€ " + parseFloat(this.bezorgen).toFixed(2)
+                },
+                getAfhalen: function () {
+                    return "€ " + parseFloat(this.afhalen).toFixed(2)
+                },
+                getAvond: function () {
+                    return "€ " + parseFloat(this.avond).toFixed(2)
+                },
+                getZakelijk: function () {
+                    return "€ " + parseFloat(this.zakelijk).toFixed(2)
+                },
+                getBezorgdag: function () {
+                    return this.bezdatum
+                },
+                getBezorgdagavond: function () {
+                    return this.avondbezdatum
+                }
+            } // end computed
+        }) // end vue
+    </script>
+</body>
+</html>

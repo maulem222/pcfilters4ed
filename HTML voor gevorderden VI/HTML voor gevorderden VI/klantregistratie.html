@@ -1,0 +1,1044 @@
+﻿<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulier</title>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Axios library -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Load Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .outer-container {
+            width: 950px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .inner-container {
+            padding: 20px; /* Ruimte binnen het binnenste vak */
+            padding-right: 40px; /* Extra ruimte rechts binnen het vak */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .inner-container2 {
+            padding: 20px; /* Ruimte binnen het binnenste vak */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .inner-container3, .inner-container4, .inner-container5, .inner-container6 {
+            padding: 20px; /* Ruimte binnen het binnenste vak */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .inner-container7 {
+            padding: 20px; /* Ruimte binnen het binnenste vak */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        #nieuweklant {
+            border: 0px solid;
+            height: 270px;
+            width: 380px;
+        }
+
+        .head {
+            font-family: Calibri;
+        }
+
+        .detail {
+            font-family: Arial;
+            color: gray;
+        }
+
+        #separator {
+            border-left: 2px solid lightgray;
+            height: 260px;
+            width: 1px;
+        }
+
+        #klantlogin {
+            border: 0px solid;
+            height: 270px;
+            width: 380px;
+        }
+
+        .logininp {
+            width: 355px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 40px; /* Ruimte tussen de velden */
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* Flexibel bij kleinere schermen */
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .half-width {
+            flex: 0 0 47.5%; /* Beperkt velden tot de helft van het formulier */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+        /* old css */
+        #container {
+            width: 100%;
+            height: auto;
+            justify-items: center;
+            border: 0px solid red;
+            margin-top: 50px;
+        }
+
+        #narrowcontainer {
+            width: 950px;
+        }
+
+        /* winkelmandje */
+
+        #cart-container {
+            float: right;
+            width: 35px;
+            position: relative;
+            top: -35px;
+            border: 0px solid green;
+        }
+
+        #itemCount {
+            position: absolute;
+            display: none;
+            top: -10px;
+            left: -10px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid grey;
+            background: white;
+            color: black;
+            text-align: center;
+            padding: 0;
+            line-height: 28px;
+            font-size: 16px;
+        }
+
+        .winkelwagen {
+            cursor: pointer;
+        }
+
+        #bccontainer {
+            width: 100%;
+            height: 20px;
+            border-bottom: 1px solid #e3e6e4;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .smallspacer {
+            height: 20px;
+        }
+
+        .extrasmallspacer {
+            height: 10px;
+        }
+
+        /* fa eye */
+
+        #p-viewer {
+            float: right;
+            margin-top: -27px;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        #p-viewer2 {
+            float: right;
+            margin-top: -27px;
+            margin-right: 25px;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .fa-eye {
+            color: #000;
+        }
+
+        /* green btn */
+
+        .btn {
+            margin-bottom: 0;
+            font-weight: normal;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            padding: 6px 12px;
+            line-height: 1.42857143;
+            border-radius: 4px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .btn {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-transition: background-color .08s linear, color .08s linear;
+            -moz-transition: background-color .08s linear, color .08s linear;
+            -o-transition: background-color .08s linear, color .08s linear;
+            transition: background-color .08s linear, color .08s linear;
+            position: relative;
+        }
+
+        .btn {
+            background-color: #2fb502;
+            box-shadow: inset 0 -2px 0 0 #279b00;
+            color: white;
+        }
+
+            .btn:hover {
+                background-color: #2EA802;
+            }
+
+        .btn {
+            overflow: visible;
+            width: 350px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .both {
+            border: 0px solid white;
+            height: auto;
+            width: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btntext {
+            font-family: "Open Sans", arial;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .upperbutton {
+            margin-top: 104px;
+        }
+
+        /* formuliertje voor verficatiecode */
+
+        #verstuurcodeform, #voercodeinform {
+            width: 400px;
+        }
+
+        @media only screen and (min-width: 0px) and (max-width: 955px) {
+            .outer-container {
+                width: 490px;
+            }
+
+            #narrowcontainer {
+                width: 490px;
+            }
+
+            .inner-container2 {
+                display: block;
+                text-align: center;
+            }
+
+            #nieuweklant, #klantlogin {
+                display: inline-block;
+                border: 0px solid red;
+            }
+
+            #separator {
+                display: none;
+            }
+
+            .half-width {
+                flex: 0 0 100%; /* volle breedte */
+            }
+        }
+    </style>
+    <script>
+        var itemCount = 0;
+        var guid;
+        var bevguid;
+
+        $(document).ready(function () {
+
+            guid = getCookie('guid');
+            if (guid == null) { // geen guid aanwezig
+                document.cookie = 'itemCount=; max-age=0; path=/; domain=' + location.hostname; // haal ook de itemCount cookie weg
+            }
+            else { // guid bestaat wel
+                itemCount = getCookie('itemCount');
+                if (itemCount !== null) {
+                    if (itemCount > 0) {
+                        $('#itemCount').html(itemCount).css('display', 'block');
+                    }
+                    else {
+                        $('#itemCount').css('display', 'none');
+                    }
+                }
+                else { // itemCount cookie bestaat niet
+                    itemCount = 0;
+                }
+                // verleng zowel guid als itemCount cookie
+                setCookie('guid', guid, '14'); // verleng de guid cookie
+                setCookie('itemCount', itemCount, '14'); // verleng of maak de itemCount cookie
+            }
+        });
+
+        $(document).on('click', '#p-viewer', function (e) {
+            let password = document.getElementById('wachtwoord');
+
+            if (password.type === "password") {
+                password.type = "text";
+            }
+            else {
+                password.type = "password";
+            }
+        });
+
+        $(document).on('click', '#p-viewer2', function (e) {
+            let password = document.getElementById('loginpassword');
+
+            if (password.type === "password") {
+                password.type = "text";
+            }
+            else {
+                password.type = "password";
+            }
+        });
+
+        function sendData(voornaam, tussenvoegsel, achternaam, adres, postcode, woonplaats, email, wachtwoord, telefoonnummer) {
+            event.preventDefault();
+            //alert('You clicked Verzenden...!');
+            var arr = [];
+            if (tussenvoegsel == "") {
+                arr.push(voornaam);
+                arr.push(achternaam);
+            }
+            else {
+                arr.push(voornaam);
+                arr.push(tussenvoegsel);
+                arr.push(achternaam);
+            }
+
+            var vollnaam = arr.join(' ');
+            registreerKlant(vollnaam, adres, postcode, woonplaats, email, wachtwoord, telefoonnummer);
+        };
+
+        function sendDataUpd(klantid, voornaam, tussenvoegsel, achternaam, adres, postcode, woonplaats, email, wachtwoord, telefoonnummer) {
+            event.preventDefault();
+            alert('You clicked Wijzigen...!');
+            var arr = [];
+            if (tussenvoegsel == "") {
+                arr.push(voornaam);
+                arr.push(achternaam);
+            }
+            else {
+                arr.push(voornaam);
+                arr.push(tussenvoegsel);
+                arr.push(achternaam);
+            }
+
+            var vollnaam = arr.join(' ');
+            updateKlant(klantid, vollnaam, adres, postcode, woonplaats, email, wachtwoord, telefoonnummer);
+        }
+
+        function uuidv4() {
+            return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+                (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+            );
+        }
+
+        function registreerKlant(vollnaam, adres, postcode, woonplaats, email, wachtwoord, telefoonnummer) {
+            //alert('hi from registreerKlant!');
+
+            console.log(vollnaam);
+            console.log(adres);
+            console.log(postcode);
+            console.log(woonplaats);
+            console.log(email);
+            console.log(wachtwoord);
+            console.log(telefoonnummer);
+
+            if (bevguid == null || "") {
+                bevguid = uuidv4();
+            }
+
+            var data = {};
+            data.Naam = vollnaam;
+            data.Adres = adres;
+            data.Postcode = postcode;
+            data.Woonplaats = woonplaats;
+            data.Email = email;
+            data.Wachtwoord = wachtwoord;
+            data.Telefoon = telefoonnummer;
+            data.Bevestigingsguid = bevguid;
+
+            $.ajax({
+                type: "POST",
+                url: "/KlantenService.asmx/checkExists",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    // verberg de links naar account bevestigen en wachtwoord vergeten
+                    vue_klantregistratie.hideLinks();
+
+                    console.log(response.d);
+                    if (response.d === "ww_vergeten") {
+                        // Toon de link naar 'Wachtwoord vergeten'
+                        vue_klantregistratie.showwwverg();
+                    } else if (response.d === "niet_bevestigd") {
+                        // Toon de link naar 'Account bevestigen'
+                        vue_klantregistratie.showaccbev();
+                    } else if (response.d === "record_ingevoerd") {
+                        vue_klantregistratie.shownwaccbev();
+                        console.log("Nieuwe gebruiker aangemaakt. Bevestigingsmail verzonden!");
+                    }
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+
+        }
+
+        function updateKlant(klantid, vollnaam, adres, postcode, woonplaats, email, wachtwoord, telefoonnummer) {
+            var data = {};
+            data.Id = klantid;
+            data.Naam = vollnaam;
+            data.Adres = adres;
+            data.Postcode = postcode;
+            data.Woonplaats = woonplaats;
+            data.Email = email;
+            data.Wachtwoord = wachtwoord;
+            data.Telefoon = telefoonnummer;
+
+            $.ajax({
+                type: "POST",
+                url: "/KlantenService.asmx/updateKlant",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    // maak de formuliervelden leeg
+                    vue_klantregistratie.cleanupform();
+
+                    // log het queryresultaat
+                    console.log(response.d);
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+            else return null;
+        }
+
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                date.setHours(date.getHours() + 1);
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        $(document).on('click', '.winkelwagen', function (e) {
+            e.preventDefault();
+            location.href = "/winkelmandje.html";
+        });
+    </script>
+</head>
+<body>
+    <div id="container">
+        <div id="narrowcontainer">
+            <div id="cart-container">
+                <div id="cart">
+                    <img class="winkelwagen" src="/images/winkelwagentje.jpg" />
+                </div>
+                <span id="itemCount"></span>
+            </div>
+            <div id="bccontainer">
+                KLANTREGISTRATIE
+            </div>
+        </div>
+        <div class="smallspacer"></div>
+        <div class="outer-container">
+            <div v-if="innercont2" class="inner-container2">
+                <div id="nieuweklant">
+                    <h1 class="head">Nieuwe klant</h1>
+                    <div class="detail">Maak eenvoudig een account aan</div>
+                    <div class="extrasmallspacer"></div>
+                    <div @click="nieuwaccbutt" class='butt upperbutton'>
+                        <div class='btn'>
+                            <div class='both'>
+                                <span class='btntext'>Maak account aan</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="separator"></div>
+                <div id="klantlogin">
+                    <h1 class="head">Ik heb een account</h1>
+                    <div class="detail">Log in met jouw gegevens</div>
+                    <div class="extrasmallspacer"></div>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" v-model="loginemail" id="loginemail" class="logininp" name="loginemail" placeholder="E-mailadres" autocomplete="email" required>
+                                <div class="extrasmallspacer"></div>
+                                <input type="password" v-model="loginpassword" id="loginpassword" class="logininp" name="loginpassword" placeholder="Wachtwoord" required>
+                                <span id="p-viewer2">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div type="submit" @click="login" class='butt'>
+                            <div class='btn'>
+                                <div class='both'>
+                                    <span class='btntext'>Inloggen en doorgaan</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div v-if="innercont7" class="inner-container7">
+                <div id="loginwwverg" v-show="loginwwverg">De ingevulde inloggegevens zijn onjuist. Ben je misschien jouw <a href="#" @click="ganaarwwverg">wachtwoord vergeten</a>?</div>
+                <div id="loginaccbev" v-show="loginaccbev">De ingevulde inloggegevens zijn juist, maar het account is niet bevestigd. Klik hier om naar <a href="#" @click="ganaaraccbev">account bevestigen</a> te gaan</div>
+                <div id="naarbetalen" v-show="naarbetalen">Wilt u de  <a href="#" @click="klantgegwijzigen">klantgegevens wijzigen?</a> Of wilt u <a href="#" @click="ganaarbetalen">naar de betaalpagina</a>?</div>
+            </div>
+            <div v-if="innercont3" class="inner-container3">
+                <div id="verstuurcodeform">
+                    <form>
+                        <label for="emailInput">Voer jouw e-mailadres in:</label>
+                        <input id="emailInput" type="text" v-model="bevemail" placeholder="E-mailadres" autocomplete="email" required>
+                        <div class="smallspacer"></div>
+                        <button type="submit" @click="fetchUuid">Verstuur verificatiecode</button>
+                        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+                        <p v-if="successMessage" class="success">{{ successMessage }}</p>
+                        <div v-if="showverder"><a href="#" @click="gaverder">Ga verder...</a></div>
+                    </form>
+                </div>
+            </div>
+            <div v-if="innercont4" class="inner-container4">
+                <div id="voercodeinform">
+                    <form>
+                        <label for="verificationCodeinput">Voer de verificatiecode in:</label>
+                        <input id="verificationCodeinput" v-model="verificationCode" type="text" required>
+                        <div class="smallspacer"></div>
+                        <button type="submit" @click="checkCode">Controleer Code</button>
+                        <p v-if="message">{{ message }}</p>
+                        <div class="smallspacer"></div>
+                        <div v-if="message" @click="terugnaarinloggenbutt" class='butt'>
+                            <div class='btn'>
+                                <div class='both'>
+                                    <span class='btntext'>Doorgaan en inloggen</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div v-if="innercont5" class="inner-container5">
+                <div id="verstuurcodeform">
+                    <form>
+                        <label for="emailInput">Voer jouw e-mailadres in:</label>
+                        <input id="emailInput" type="text" v-model="bevemail" placeholder="E-mailadres" autocomplete="email" required>
+                        <div class="smallspacer"></div>
+                        <button type="submit" @click="fetchUuid">Verstuur verificatiecode</button>
+                        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+                        <p v-if="successMessage" class="success">{{ successMessage }}</p>
+                        <div v-if="showverder2"><a href="#" @click="gaverder2">Ga verder...</a></div>
+                    </form>
+                </div>
+            </div>
+            <div v-if="innercont6" class="inner-container6">
+                <div id="verstuurcodeform">
+                    <form>
+                        <label for="verificationCodeinput2">Voer de verificatiecode in:</label>
+                        <input id="verificationCodeinput2" v-model="verificationCode2" type="text" required>
+                        <div class="smallspacer"></div>
+                        <button type="submit" @click="opvragenWachtwoord">Toon wachtwoord</button>
+                        <div class="smallspacer"></div>
+                        <p v-if="vergwachtwoord">Wachtwoord:  {{ vergwachtwoord }}</p>
+                        <div class="smallspacer"></div>
+                        <div v-if="vergwachtwoord" @click="terugnaarinloggenbutt" class='butt'>
+                            <div class='btn'>
+                                <div class='both'>
+                                    <span class='btntext'>Doorgaan en inloggen</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div v-if="innercont" class="inner-container">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="voornaam">Voornaam</label>
+                            <input type="text" v-model="voornaam" id="voornaam" name="voornaam" placeholder="Voornaam" autocomplete="given-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tussenvoegsel">Tussenvoegsel</label>
+                            <input type="text" v-model="tussenvoegsel" id="tussenvoegsel" name="tussenvoegsel" placeholder="Tussenvoegsel" autocomplete="additional-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="achternaam">Achternaam</label>
+                            <input type="text" v-model="achternaam" id="achternaam" name="achternaam" placeholder="Achternaam" autocomplete="family-name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="adres">Adres</label>
+                            <input type="text" v-model="adres" id="adres" name="adres" placeholder="Adres" autocomplete="street-address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="postcode">Postcode</label>
+                            <input type="text" v-model="postcode" id="postcode" name="postcode" placeholder="Postcode" autocomplete="postal-code" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label for="woonplaats">Woonplaats</label>
+                            <input type="text" v-model="woonplaats" id="woonplaats" name="woonplaats" placeholder="Woonplaats" autocomplete="address-level2" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label for="email">E-mailadres</label>
+                            <input type="email" v-model="email" id="email" name="email" placeholder="E-mailadres" :readonly="readonly" autocomplete="email" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label for="wachtwoord">Wachtwoord</label>
+                            <input type="password" v-model="wachtwoord" id="wachtwoord" name="wachtwoord" placeholder="Wachtwoord" required>
+                            <span id="p-viewer">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label for="telefoonnummer">Telefoonnummer</label>
+                            <input type="tel" v-model="telefoonnummer" id="telefoonnummer" name="telefoonnummer" placeholder="Telefoonnummer" autocomplete="phone" required>
+                        </div>
+                    </div>
+                    <button v-if="!updating" type="submit" id="verzenden" @click="setData">Verzenden</button>
+                    <button v-if="updating" type="submit" id="wijzigen" @click="setDataUpd">Wijzigen</button>
+                    <div class="smallspacer"></div>
+                    <div id="wwverg" v-show="wwverg">Een account met dit e-mailadres bestaat al. Ben je misschien jouw <a href="#" @click="ganaarwwverg">wachtwoord vergeten</a>?</div>
+                    <div id="accbev" v-show="accbev">Een account met dit e-mailadres bestaat al, maar het is niet bevestigd. Klik hier om naar <a href="#" @click="ganaaraccbev" v-show="accbev">account bevestigen</a> te gaan</div>
+                    <div id="accbev" v-show="nwaccbev">Het account is aangemaakt, maar het is nog niet bevestigd. Klik hier om naar <a href="#" @click="ganaaraccbev" v-show="nwaccbev">account bevestigen</a> te gaan</div>
+                </form>
+                <div class="smallspacer"></div>
+                <div ref="scrolltome"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var vue_klantregistratie = new Vue({
+            el: '#container', //Attach to element id container
+            data() {
+                return {
+                    innercont: false,
+                    innercont2: true,
+                    innercont3: false,
+                    innercont4: false,
+                    innercont5: false,
+                    innercont6: false,
+                    innercont7: false,
+                    bevemail: "",
+                    errorMessage: "",
+                    successMessage: "",
+                    wwverg: false,
+                    accbev: false,
+                    nwaccbev: false,
+                    showverder: false,
+                    voornaam: '',
+                    tussenvoegsel: '',
+                    achternaam: '',
+                    adres: '',
+                    postcode: '',
+                    woonplaats: '',
+                    email: '',
+                    wachtwoord: '',
+                    telefoonnummer: '',
+                    existinguuid: '',
+                    verificationCode: "",
+                    verificationCode2: "",
+                    message: "",
+                    vergwachtwoord: "",
+                    loginwwverg: true,
+                    loginaccbev: true,
+                    naarbetalen: false,
+                    loginemail: '',
+                    loginpassword: '',
+                    emailfor: '',
+                    klantid: 0,
+                    bestelguid: '',
+                    readonly: false,
+                    updating: false,
+                    vollnaam: '',
+                    totaalbedrag: 0.00
+                }
+            },
+            methods: {
+                async fetchUuid() {
+                    event.preventDefault();
+                    if (this.bevemail) { // is het bevestigings e-mailadres wel ingevuld?
+                        try {
+                            const response = await axios.post("/KlantenService.asmx/FetchUuid", {
+                                email: this.bevemail,
+                            });
+
+                            if (response.data.d.success) {
+                                this.existinguuid = response.data.d.uuid;
+                                this.successMessage = `De UUID-verfificatiecode is succesvol naar ${this.bevemail} verstuurd.`;
+                                this.showverder = true; // toon Ga verder... linkje
+                                this.showverder2 = true;
+                                this.errorMessage = ""; // Reset foutmelding
+                            } else {
+                                this.errorMessage = "Het e-mailadres bestaat niet in de database.";
+                                this.successMessage = ""; // Reset succesmelding
+                            }
+                        } catch (error) {
+                            this.errorMessage = "Er is een fout opgetreden tijdens de verwerking.";
+                            this.successMessage = "";
+                            console.error(error);
+                        }
+                    }
+                },
+                nieuwaccbutt() {
+                    this.cleanupform()
+                    this.innercont = true
+                },
+                async login() {
+                    if (this.loginemail && this.loginpassword) {
+                        this.hideinlogLinks() // verberg innercont7 en de 2 links
+                        try {
+                            this.innercont7 = false
+                            const response = await axios.post("KlantenService.asmx/Login", {
+                                Email: this.loginemail,
+                                Wachtwoord: this.loginpassword
+                            });
+
+                            if (response.data.d.message === 'ingelogd') { // gegevens juist, succesvol ingelogd
+                                this.innercont7 = true
+                                this.naarbetalen = true
+                                // reset loginformuliertje
+                                this.emailfor = this.loginemail // bewaar het e-mailadres voor wanneer er wordt egredirect naar betaalmethode.html
+                                this.loginemail = ""
+                                this.loginpassword = ""
+                                this.klantid = response.data.d.id
+                                this.bestelguid = getCookie('guid')
+                                // zet het KlantId in de tabel Bezorging_en_betaling
+                                if (this.klantid) {
+                                    try {
+                                        await axios.post("/KlantenService.asmx/VoerKlantIDin", {
+                                            bestelguid: this.bestelguid,
+                                            klantid: this.klantid
+                                        });
+                                    } catch (error) {
+                                        console.log("KlantID: " + this.klantid + " Bestelguid: " + this.bestelguid)
+                                        console.log("Er is een fout opgetreden bij VoerKlantIDin.")
+                                    }
+                                }
+                            } else if (response.data.d.message === 'niet_bevestigd') { // account niet bevestigd
+                                this.innercont7 = true
+                                this.loginaccbev = true // toon link naar account bevestigen
+                            } else { // gegevens onjuist, wachtwoord vergeten
+                                this.innercont7 = true
+                                this.loginwwverg = true // toon link naar wachtwoord vergeten
+                            }
+                        } catch (error) {
+                            console.error(error)
+                        }
+                    }
+                },
+                async klantgegwijzigen() {
+                    event.preventDefault();
+                    this.innercont = true
+                    axios.post("/KlantenService.asmx/GetKlantById", { Id: this.klantid })
+                        .then(response => {
+                            let data = JSON.parse(response.data.d) // Deze regel is belangrijk! Anders zul je geen individuele velden kunnen nemen!
+                            console.log(data)
+
+                            if (data) {
+                                // Data toewijzen aan losse v-model variabelen
+                                this.vollnaam = data.Naam
+                                this.splitFullName(this.vollnaam)
+                                this.adres = data.Adres
+                                this.postcode = data.Postcode
+                                this.woonplaats = data.Woonplaats
+                                this.email = data.Email
+                                this.wachtwoord = data.Wachtwoord
+                                this.telefoonnummer = data.Telefoon
+
+                                this.readonly = true // zet readonly van het veld e-mailadres op true
+                                this.updating = true // zet updating op true zodat we een updatebutton krijgen
+                            } else {
+                                alert("Klant niet gevonden!");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Fout bij ophalen klantgegevens:", error);
+                        });
+                },
+                splitFullName(fullName) {
+                    let nameParts = fullName.trim().split(/\s+/); // Split by spaces
+                    let givenName = nameParts[0] || "";
+                    let familyName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
+                    let additionalName = nameParts.slice(1, -1).join(" ") || ""; // Middle names
+
+                    this.voornaam = givenName
+                    this.tussenvoegsel = additionalName
+                    this.achternaam = familyName
+                },
+                ganaarbetalen() {
+                    event.preventDefault();
+                    this.fetchTotaalbedrag()
+                },
+                async fetchTotaalbedrag() {
+                    try {
+                        const response = await axios.post('/KlantenService.asmx/GetTotaalbedrag', {
+                            Bestelguid: this.bestelguid,
+                            KlantId: this.klantid
+                        }, {
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+
+                        this.totaalbedrag = response.data.d;
+                        window.location.href = `betaalmethode.html?Bestelguid=${this.bestelguid}&KlantId=${this.klantid}&Totaalbedrag=${this.totaalbedrag}&Email=${this.emailfor}`;
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                },
+                terugnaarinloggenbutt() {
+                    event.preventDefault()
+                    this.hideLinks()
+                    this.bevemail = ""
+                    this.vergwachtwoord = ""
+                    this.verificationCode = ""
+                    this.verificationCode2 = ""
+                    this.message = ""
+                    this.showverder = false
+                    this.showverder2 = false
+                    this.innercont = false
+                    this.innercont2 = true
+                    this.innercont3 = false
+                    this.innercont4 = false
+                    this.innercont5 = false
+                    this.innercont6 = false
+                },
+                ganaarwwverg() {
+                    this.innercont = false
+                    this.innercont2 = false
+                    this.innercont3 = false
+                    this.innercont4 = false
+                    this.innercont5 = true
+                    this.hideinlogLinks()
+                },
+                ganaaraccbev() {
+                    this.innercont = false
+                    this.innercont2 = false
+                    this.innercont3 = true
+                    this.hideinlogLinks()
+                },
+                gaverder() {
+                    this.innercont3 = false
+                    this.innercont4 = true
+                    this.errorMessage = "";
+                    this.successMessage = ""
+                    this.showverder = false
+                },
+                gaverder2() {
+                    this.innercont5 = false
+                    this.innercont6 = true
+                    this.errorMessage = "";
+                    this.successMessage = ""
+                    this.showverder2 = false
+                },
+                showwwverg() {
+                    this.wwverg = true
+                    this.scrollToElement()
+                },
+                showaccbev() {
+                    this.accbev = true
+                    this.scrollToElement()
+                },
+                shownwaccbev() {
+                    this.nwaccbev = true
+                    this.scrollToElement()
+                },
+                hideLinks() {
+                    this.wwverg = false // verberg link wachtwoord vergeten
+                    this.accbev = false // verberg link account bevestigen
+                },
+                hideinlogLinks() {
+                    this.innercont7 = false
+                    this.loginaccbev = false
+                    this.loginwwverg = false
+                },
+                setData() {
+                    if (this.voornaam && this.achternaam && this.adres && this.postcode && this.woonplaats && this.email && this.wachtwoord && this.telefoonnummer) {
+                        sendData(this.voornaam, this.tussenvoegsel, this.achternaam, this.adres, this.postcode, this.woonplaats, this.email, this.wachtwoord, this.telefoonnummer)
+                        // reset het formulier
+                        this.voornaam = ''
+                        this.tussenvoegsel = ''
+                        this.achternaam = ''
+                        this.adres = ''
+                        this.postcode = ''
+                        this.woonplaats = ''
+                        this.email = ''
+                        this.wachtwoord = ''
+                        this.telefoonnummer = ''
+                    }
+                },
+                setDataUpd() {
+                    if (this.voornaam && this.achternaam && this.adres && this.postcode && this.woonplaats && this.email && this.wachtwoord && this.telefoonnummer) {
+                        sendDataUpd(this.klantid, this.voornaam, this.tussenvoegsel, this.achternaam, this.adres, this.postcode, this.woonplaats, this.email, this.wachtwoord, this.telefoonnummer)
+                    }
+                },
+                cleanupform() {
+                    // reset het formulier
+                    this.voornaam = ''
+                    this.tussenvoegsel = ''
+                    this.achternaam = ''
+                    this.adres = ''
+                    this.postcode = ''
+                    this.woonplaats = ''
+                    this.email = ''
+                    this.wachtwoord = ''
+                    this.telefoonnummer = ''
+
+                    // zet button verzenden weer terug
+                    this.updating = false
+                    // maak veld email weer readwrite
+                    this.readonly = false
+                },
+                checkCode() {
+                    event.preventDefault();
+                    if (this.verificationCode === this.existinguuid) {
+                        this.callWebService();
+                    } else {
+                        this.message = "Ongeldige code, probeer opnieuw.";
+                    }
+                },
+                async callWebService() {
+                    if (this.verificationCode) { // is de verificatiecode wel ingevuld?
+                        try {
+                            const response = await axios.post("/KlantenService.asmx/VerifieerKlant", {
+                                email: this.bevemail,
+                                verificatieCode: this.verificationCode
+                            });
+                            this.message = response.data.d.success ? "Bevestiging geslaagd! Jouw account is bevestigd, je kunt nu inloggen." : "Bevestiging mislukt.";
+                        } catch (error) {
+                            this.message = "Er is een fout opgetreden.";
+                        }
+                    }
+                },
+                async opvragenWachtwoord() {
+                    event.preventDefault();
+                    if (this.verificationCode2) { // is de verificatiecode wel ingevuld?)
+                        try {
+                            const response = await axios.post("/KlantenService.asmx/GetWachtwoord", {
+                                email: this.bevemail,
+                                bevestigingsGuid: this.verificationCode2
+                            });
+                            this.vergwachtwoord = response.data.d;
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    }
+                },
+                scrollToElement() {
+                    const el = this.$refs.scrolltome;
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth' });
+                    }
+                },
+            } // end methods
+        }); // end vue
+    </script>
+</body>
+</html>

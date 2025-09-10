@@ -1,0 +1,279 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kies betaalmethode</title>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Axios library -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Load Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- Load Stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        #container {
+            width: 350px;
+            display: inline-block;
+        }
+
+        .payment-form-container {
+            background-color: #fff;
+            padding: 20px; /* Binnenmarge minimaal 20px */
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 350px; /* Max breedte 350px */
+            box-sizing: border-box; /* Zorgt ervoor dat padding binnen de breedte blijft */
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            margin-bottom: 15px;
+        }
+
+            .payment-option label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+                color: #555;
+                cursor: pointer;
+            }
+
+            .payment-option input[type="radio"] {
+                margin-right: 10px;
+                transform: scale(1.2); /* Maakt de radiobuttons iets groter */
+            }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+        /* sessie verlopen */
+
+        .form-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+            .form-container a {
+                color: #007bff;
+                text-decoration: none;
+            }
+
+                .form-container a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+    <script>
+        var itemCount = 0;
+        var guid;
+        var bestelguid;
+        var klantid;
+        var totaalbedrag;
+        var email;
+
+        $(document).ready(function () {
+
+            guid = getCookie('guid');
+            if (guid == null) { // geen guid aanwezig
+                document.cookie = 'itemCount=; max-age=0; path=/; domain=' + location.hostname; // haal ook de itemCount cookie weg
+                // TODO: toon i.p.v. Vue formulier met betaalmethoden een bericht dat de sessie verlopen is
+                vue_betaalmethode.setSessieVerlopen();
+            }
+            else { // guid bestaat wel
+                itemCount = getCookie('itemCount');
+                if (itemCount !== null) {
+                    if (itemCount > 0) {
+                        $('#itemCount').html(itemCount).css('display', 'block');
+                    }
+                    else {
+                        $('#itemCount').css('display', 'none');
+                    }
+                }
+                else { // itemCount cookie bestaat niet
+                    itemCount = 0;
+                }
+                // verleng zowel guid als itemCount cookie
+                setCookie('guid', guid, '14'); // verleng de guid cookie
+                setCookie('itemCount', itemCount, '14'); // verleng of maak de itemCount cookie
+            }
+
+            // Get the URL parameters
+            const params = new URLSearchParams(window.location.search);
+
+            // Retrieve a specific parameter value
+            bestelguid = params.get('Bestelguid');
+            klantid = params.get('KlantId');
+            totaalbedrag = params.get('Totaalbedrag');
+            email = params.get('Email');
+
+            vue_betaalmethode.setData(bestelguid, klantid);
+            console.log(bestelguid + " " + klantid + " " + totaalbedrag + " " + email);
+        });
+
+
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+            else return null;
+        }
+
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                date.setHours(date.getHours() + 1);
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function naarBetalen(betmeth) {
+            // zet guid en itemCount cookie op nul
+            document.cookie = 'guid=; max-age=0; path=/; domain=' + location.hostname;
+            document.cookie = 'itemCount=; max-age=0; path=/; domain=' + location.hostname;
+
+            var data = {}
+            data.bestelguid = bestelguid;
+            data.klantid = klantid;
+            data.totaalbedrag = totaalbedrag;
+            data.email = email;
+            data.betaalmethode = betmeth;
+
+            $.ajax({
+                type: "POST",
+                url: "/BetaalService.asmx/CreateSession",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    //alert("session Id: " + data.d.sessionId + " totaal: " + data.d.totaal);
+                    Id = data.d.sessionId;
+                    //var stripe = Stripe('pk_live_3GJboMo4jd7inz4ur5ZLuVmz001GVT9kdQ');
+                    var stripe = Stripe('pk_test_51O80HeCj2LNHE2SjAvluJodSvRMijM0oLvG7eNVJnyaBxJa7rqFgtKzppdU3aBYKxN0ToGVeOLC19VDRce2FV6vn00ytxK89qF');
+
+                    stripe.redirectToCheckout({
+                        // Make the id field from the Checkout Session creation API response
+                        // available to this file, so you can provide it as parameter here
+                        // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+                        sessionId: Id
+                    }).then(function (result) {
+                        // If `redirectToCheckout` fails due to a browser or network
+                        // error, display the localized error message to your customer
+                        // using `result.error.message`.
+                        alert(result.error.message);
+                    });
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+    </script>
+</head>
+<body onunload="">
+    <div id="container">
+        <div v-if="!sessieverl" class="payment-form-container">
+            <h2>Kies je betaalmethode</h2>
+            <form @submit.prevent="handleSubmit" action="#" method="post">
+                <div class="payment-option">
+                    <input type="radio" id="ideal" value="ideal" v-model="betaalmethode" name="payment_method" checked>
+                    <label for="ideal">iDeal</label>
+                </div>
+
+                <div class="payment-option">
+                    <input type="radio" id="paypal" value="paypal" v-model="betaalmethode" name="payment_method">
+                    <label for="paypal">PayPal</label>
+                </div>
+
+                <div class="payment-option">
+                    <input type="radio" id="card" value="card" v-model="betaalmethode" name="payment_method">
+                    <label for="card">Betaalkaart</label>
+                </div>
+
+                <button type="submit">Ga naar afrekenen</button>
+            </form>
+        </div>
+        <div v-if="sessieverl" class="form-container">
+            <p>De sessie is verlopen. Als je opnieuw wilt bestellen, volg dan <a href="/wonen/stoelen/poefs/poefs.html">deze link</a>.</p>
+        </div>
+    </div>
+    <script>
+        var vue_betaalmethode = new Vue({
+            el: '#container', //Attach to element id container
+            data() {
+                return {
+                    betaalmethode: 'ideal',
+                    bestelguid: '',
+                    klantid: 0,
+                    sessieverl: false
+                }
+            },
+            methods: {
+                handleSubmit() {
+                    this.zetBetaalmethode()
+                },
+                async zetBetaalmethode() {
+                    try {
+                        const response = await axios.post('/BetaalService.asmx/UpdateBetaalmethode', {
+                            Bestelguid: this.bestelguid,
+                            KlantId: this.klantid,
+                            Betaalmethode: this.betaalmethode
+                        }, {
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        console.log(response.data.d); // Geeft de update-status terug
+
+                        naarBetalen(this.betaalmethode)
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                },
+                setData(bestguid, klantid) {
+                    this.bestelguid = bestguid
+                    this.klantid = klantid
+                },
+                setSessieVerlopen() {
+                    this.sessieverl = true
+                }
+            } // end methods
+        }); // end vue
+    </script>
+</body>
+</html>

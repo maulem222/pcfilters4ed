@@ -1,0 +1,11 @@
+OK - id in breadcrumb a's maken met dezelfde naam als de crumb, maar kleine letter
+OK - met for door a's lopen en een array maken van de id's plus een array van de hrefs, undefined pushen indien een href leeg is
+OK - door de ids array lopen en editors maken met een kop id:, id_ed als id en een classname, en als inhoud (value?) de hrefs
+OK - bij Opslaan klikken door de classnames lopen en m.b.v. ids[i] array en de toevoeging _ed de val() van de div nemen en toevoegen aan array editors
+OK - is de val() evenwel leeg, dan kun je undefined pushen
+OK - door de a's lopen, en tegelijk door de array editors lopen, en de href van de a vervangen indien niet null en ook de class naar action zetten
+
+
+https://www.mijndomein.nl/Home.html
+https://www.mijndomein.nl/wonen/Wonen.html
+https://www.mijndomein.nl/wonen/stoelen/Stoelen.html

@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <title></title>
+    <style>
+        #afbeelding_chooser {
+            display: block;
+            padding: 10px 70px 10px 13px !important;
+            width: 250px;
+            height: 50px;
+            border: 1px solid #e3e3e3;
+            border-radius: 3px;
+            background-color: #fff;
+            color: gray;
+            font-size: 15px;
+            font-family: Arial;
+            line-height: 16px !important;
+            /* this is must */ -webkit-appearance: none;
+            -moz-appearance: none;
+            float: left;
+        }
+
+        #gekozen_afbeelding {
+            width: 300px;
+            height: 200px;
+        }
+    </style>
+    <script>
+
+        function Upload() {
+            var formData = new FormData();
+            formData.append('file', $('#afbeelding_chooser')[0].files[0]);
+
+            //if (document.getElementById("afbeelding_chooser").files.length != 0) {
+            //    alert("files selected");
+            //}
+
+            $.ajax({
+                type: 'post',
+                url: 'fileUploader.ashx',
+                data: formData,
+                success: function (status) {
+                    if (status != 'error') {
+                        var my_path = "afbeeldingen/" + status;
+                        $("#gekozen_afbeelding").attr("src", my_path);
+                        //$("#afbeelding_error_message").hide();
+                    }
+                },
+                processData: false,
+                contentType: false,
+                error: function () {
+                    alert("Whoops - er is iets verkeerd gegaan!");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $("#html_upload").append("<input id='afbeelding_chooser' type='file' onChange='Upload();' accept='image/png,image/jpeg,image/jpg' />" +
+                "<div class='labelspacer'></div >" +
+                    "<div id='afbeelding'>" +
+                        "<img id='gekozen_afbeelding' src='images/unknown.png' />" +
+                    "</div>");
+        });
+
+    </script>
+</head>
+<body>
+    <div id="html_upload"></div>
+</body>
+</html>

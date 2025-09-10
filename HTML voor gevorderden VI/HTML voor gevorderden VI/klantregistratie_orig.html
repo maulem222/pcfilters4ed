@@ -1,0 +1,270 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klantregistratie</title>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Load Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            overflow: visible;
+        }
+
+        #container {
+            width: 100%;
+            height: auto;
+            justify-items: center;
+            border: 0px solid red;
+            margin-top: 50px;
+        }
+
+        #narrowcontainer {
+            width: 952px;
+        }
+
+        #centered {
+            width: 950px;
+            height: auto;
+            border: 1px solid blue;
+        }
+
+        #upper {
+            width: 950px;
+            height: 270px;
+            border: 1px solid green;
+            margin-bottom: 100px;
+        }
+
+        #lower {
+            width: 950px;
+            height: 800px;
+            border: 1px solid green;
+            margin-bottom: 20px;
+        }
+
+        .longbar {
+            width: 948px;
+            height: 70px;
+            border: 1px solid blue;
+            margin-bottom: 20px;
+        }
+
+        .halfbar {
+            width: 454px;
+            height: 68px;
+            float: left;
+            border: 1px solid green;
+        }
+
+        .quarterbar {
+            width: 207px;
+            height: 66px;
+            float: left;
+            border: 1px solid purple;
+        }
+
+        .spacebetw {
+            width: 38px;
+            height: 60px;
+            float: left;
+            border: 0px solid red;
+        }
+
+        .onespacer {
+            height: 1px;
+        }
+
+        .twospacer {
+            height: 2px;
+        }
+
+        .quarter {
+            width: 204px;
+        }
+
+        /* winkelmandje */
+
+        #cart-container {
+            float: right;
+            width: 35px;
+            position: relative;
+            top: -35px;
+            border: 0px solid green;
+        }
+
+        #itemCount {
+            position: absolute;
+            display: none;
+            top: -10px;
+            left: -10px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid grey;
+            background: white;
+            color: black;
+            text-align: center;
+            padding: 0;
+            line-height: 28px;
+            font-size: 16px;
+        }
+
+        .winkelwagen {
+            cursor: pointer;
+        }
+
+        #bccontainer {
+            width: 100%;
+            height: 20px;
+            border-bottom: 1px solid #e3e6e4;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .smallspacer {
+            height: 20px;
+        }
+    </style>
+    <script>
+        var itemCount = 0;
+        var guid;
+
+        $(document).ready(function () {
+
+            guid = getCookie('guid');
+            if (guid == null) { // geen guid aanwezig
+                document.cookie = 'itemCount=; max-age=0; path=/; domain=' + location.hostname; // haal ook de itemCount cookie weg
+            }
+            else { // guid bestaat wel
+                itemCount = getCookie('itemCount');
+                if (itemCount !== null) {
+                    if (itemCount > 0) {
+                        $('#itemCount').html(itemCount).css('display', 'block');
+                    }
+                    else {
+                        $('#itemCount').css('display', 'none');
+                    }
+                }
+                else { // itemCount cookie bestaat niet
+                    itemCount = 0;
+                }
+                // verleng zowel guid als itemCount cookie
+                setCookie('guid', guid, '14'); // verleng de guid cookie
+                setCookie('itemCount', itemCount, '14'); // verleng of maak de itemCount cookie
+            }
+        });
+
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+            else return null;
+        }
+
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                date.setHours(date.getHours() + 1);
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        $(document).on('click', '.winkelwagen', function (e) {
+            e.preventDefault();
+            location.href = "/winkelmandje.html";
+        });
+    </script>
+</head>
+<body>
+    <div id="container">
+        <div id="narrowcontainer">
+            <div id="cart-container">
+                <div id="cart">
+                    <img class="winkelwagen" src="/images/winkelwagentje.jpg" />
+                </div>
+                <span id="itemCount"></span>
+            </div>
+            <div id="bccontainer">
+                KLANTREGISTRATIE
+            </div>
+        </div>
+        <div class="smallspacer"></div>
+        <div id="centered">
+            <div id="upper"></div>
+            <div id="lower">
+                <div class="longbar">
+                    <div class="halfbar">
+                        <div class="quarterbar">
+                            <div class="form-group">
+                                <label for="fname">Uw voornaam:</label>
+                                <input v-model="fname" for="fname" type="text" class="form-control quarter" placeholder="Voornaam" autocomplete="given-name" required>
+                            </div>
+                        </div>
+                        <div class="spacebetw"></div>
+                        <div class="quarterbar">
+                            <div class="form-group">
+                                <label for="mname">Tussenvoegsel:</label>
+                                <input v-model="mname" for="mname" type="text" class="form-control quarter" placeholder="Tussenvoegsel" autocomplete="additional-name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="spacebetw"></div>
+                    <div class="halfbar">
+                        <div class="form-group">
+                            <div class="onespacer"></div>
+                            <label for="lname">Achternaam:</label>
+                            <input v-model="lname" for="lname" type="text" class="form-control" placeholder="Achternaam" autocomplete="family-name" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="longbar">
+                    <div class="halfbar">
+                        <div class="form-group">
+                            <div class="onespacer"></div>
+                            <label for="straatnaam">Straatnaam:</label>
+                            <input v-model="toevoeging" for="straatnaam" type="text" class="form-control" placeholder="Straatnaam" autocomplete="street-address" required>
+                        </div>
+                    </div>
+                    <div class="spacebetw"></div>
+                    <div class="halfbar">
+                        <div class="form-group">
+                            <div class="onespacer"></div>
+                            <label for="postal">Postcode:</label>
+                            <input v-model="postal" for="postal" type="text" class="form-control half" placeholder="Postcode" autocomplete="postal-code" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="longbar">
+                    <div class="halfbar">
+
+                    </div>
+                </div>
+                <div class="longbar">
+                    <div class="halfbar"></div>
+                </div>
+                <div class="longbar">
+                    <div class="halfbar"></div>
+                </div>
+                <div class="longbar">
+                    <div class="halfbar"></div>
+                </div>
+                <div class="longbar">
+                    <div class="halfbar"></div>
+                </div>
+                <div class="longbar"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

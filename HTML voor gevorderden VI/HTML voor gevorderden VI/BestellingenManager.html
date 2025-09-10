@@ -1,0 +1,373 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BestellingenManager - Orders</title>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Load Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- Axios library -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Vue datepicker -->
+    <script src="https://unpkg.com/vuejs-datepicker"></script>
+    <script src="https://unpkg.com/vuejs-datepicker/dist/locale/translations/nl.js"></script>
+    <!-- Moment.js -->
+    <script src="Scripts/moment-with-locales.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        #container {
+            width: 350px;
+            display: inline-block;
+        }
+
+        #header {
+            height: 80px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        #datepickers {
+            display: flex;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+
+        .datepicker {
+            width: 300px;
+            height: 70px;
+            border: 0px solid;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #fff;
+            color: black;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #eef;
+            cursor: pointer;
+        }
+
+        .even-row {
+            background-color: #f9f9f9;
+        }
+
+        .odd-row {
+            background-color: #ffffff;
+        }
+
+        /* vuejs-datepicker */
+
+        .my-datepicker {
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
+            background-color: #fdfdfd;
+            border-radius: 4px;
+            padding: 5px;
+            width: 250px;
+        }
+
+        .dp {
+            margin-top: 15px;
+        }
+
+        /* fake checkboxes */
+
+        .fake-checkbox {
+            width: 10px;
+            height: 10px;
+            border: 2px solid #999;
+            margin-bottom: 0px;
+            user-select: none;
+            cursor: pointer;
+            background-color: #eee;
+            display: inline-block;
+        }
+
+        label {
+            display: inline-block;
+        }
+
+        .fake-checkbox.checked {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+    <script>
+
+        $(document).ready(function () {
+            // Save scroll position before leaving the page
+            window.onunload = () => {
+                sessionStorage.setItem('scrollPos', window.scrollY);
+            };
+
+            // Restore scroll position on load
+            window.onload = () => {
+                const scrollPos = sessionStorage.getItem('scrollPos');
+                if (scrollPos !== null) {
+                    window.scrollTo(0, parseInt(scrollPos));
+                }
+            };
+        });
+
+    </script>
+</head>
+<body onunload="">
+    <div id="app">
+        <div id="header">
+            <h2>Orders</h2>
+            <h5>(klik op een rij om de bestellingen van de order te zien)</h5>
+            <hr />
+        </div>
+        <div id="datepickers">
+            <div class="datepicker">
+                <div class="dptext">
+                    <div class="fake-checkbox" id="cbverzend"
+                         v-bind:class="{ checked: checkA }"
+                         @click="handcheck('A')">
+                    </div>
+                    <label for="cbverzend">Selecteer op verzenddatum:</label>
+                </div>
+                <div class="dp">
+                    <vuejs-datepicker :format="customFormatter" id="verzenddatum" :input-class="'my-datepicker'" :language="nl" @selected="verzenddatumClicked" />
+                </div>
+            </div>
+            <div class="datepicker">
+                <div class="dptext">
+                    <div class="fake-checkbox" id="cbbezorg"
+                         v-bind:class="{ checked: checkB }"
+                         @click="handcheck('B')">
+                    </div>
+                    <label for="cbbezorg">Selecteer op bezorgdatum:</label>
+                </div>
+                <div class="dp">
+                    <vuejs-datepicker :format="customFormatter" id="bezorgdatum" :input-class="'my-datepicker'" :language="nl" @selected="bezorgdatumClicked" />
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Bestelnummer</th>
+                    <th>Verzenddatum</th>
+                    <th>Bezorgdatum</th>
+                    <th>Bezorgmethode</th>
+                    <th>Totaalbedrag</th>
+                    <th>Betaalmethode</th>
+                    <th>Betaald</th>
+                    <th>Pakbon</th>
+                    <th>Factuur</th>
+                    <th>Verzonden</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(order, index) in orders"
+                    :key="order.Id"
+                    :class="index % 2 === 0 ? 'even-row' : 'odd-row'"
+                    @click="gotoOrder(order)">
+                    <td>{{ order.Bestelnummer }}</td>
+                    <td>{{ order.Verzenddatum }}</td>
+                    <td>{{ order.Bezorgdatum }}</td>
+                    <td>{{ order.Bezorgmethode }}</td>
+                    <td>€ {{ parseFloat(order.Totaalbedrag).toFixed(2) }}</td>
+                    <td>{{ order.Betaalmethode }}</td>
+                    <td>{{ order.Betaald }}</td>
+                    <td>{{ order.Pakbon }}</td>
+                    <td>{{ order.Factuur }}</td>
+                    <td>{{ order.Verzonden }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        var vue_bestellingenmanager = new Vue({
+            el: '#app', //Attach to element id app
+            data() {
+                return {
+                    orders: [],
+                    verzenddatum: '',
+                    bezorgdatum: '',
+                    nl: vdp_translation_nl.js,
+                    checkA: false,
+                    checkB: false,
+                    SQL: "SELECT * FROM Bezorging_en_betaling WHERE NOT Betaalmethode='' ORDER BY Bestelnummer DESC",
+                    flag: false
+                }
+            },
+            components: {
+                vuejsDatepicker
+            },
+            mounted() {
+                const input = document.getElementById('verzenddatum');
+                input.value = "";
+                const input2 = document.getElementById('bezorgdatum');
+                input2.value = "";
+
+                const value = sessionStorage.getItem("verzenddatum");
+                if (value && value !== "null") {
+                    this.verzenddatum = sessionStorage.getItem("verzenddatum");
+                    input.value = this.verzenddatum;
+                    console.log("from session: " + this.verzenddatum);
+                }
+                const value2 = sessionStorage.getItem("bezorgdatum");
+                if (value2 && value2 !== "null") {
+                    this.bezorgdatum = sessionStorage.getItem("bezorgdatum");
+                    input2.value = this.bezorgdatum;
+                    console.log("from session: " + this.bezorgdatum);
+                }
+                const value3 = sessionStorage.getItem("checked");
+                if (value3 && value3 !== "null") {
+                    var checked = sessionStorage.getItem("checked");
+                    if (checked === 'A') {
+                        this.check('A');
+                    }
+                    if (checked === 'B') {
+                        this.check('B');
+                    }
+                }
+                const value4 = sessionStorage.getItem("sql");
+                if (value4 && value4 !== "null") {
+                    this.SQL = sessionStorage.getItem("sql");
+                }
+                this.getOrders();
+            },
+            methods: {
+                async getOrders() {
+                    try {
+                        const response = await axios.post('/OrderService.asmx/getOrders', {
+                            sql: this.SQL
+                        });
+                        if (response.data.d) {
+                            this.orders = JSON.parse(response.data.d)
+                        }
+                        console.log('Response:', response.data);
+                    } catch (error) {
+                        console.error('Error calling API:', error);
+                    }
+                },
+                gotoOrder(order) {
+                    console.log('Navigating to order:', order.Id);
+                    // You can integrate actual navigation or logic here
+                    const params = new URLSearchParams({
+                        bestelGuid: order.Bestelguid,
+                        klantId: order.KlantId,
+                        bestNr: order.Bestelnummer
+                    }).toString();
+
+                    window.location.href = `BestellingenManager2.html?${params}`;
+                },
+                verzenddatumClicked(date) {
+                    this.check('A');
+                    sessionStorage.setItem("checked", "A");
+                    console.log(`Selected ${this.customFormatter(date)}`);
+                    this.verzenddatum = this.customFormatter(date);
+                    this.maakSQL("verzenddatum");
+                    sessionStorage.setItem("verzenddatum", this.verzenddatum);
+                    sessionStorage.setItem("sql", this.SQL);
+                },
+                bezorgdatumClicked(date) {
+                    this.check('B');
+                    sessionStorage.setItem("checked", "B");
+                    console.log(`Selected ${this.customFormatter(date)}`);
+                    this.bezorgdatum = this.customFormatter(date);
+                    this.maakSQL("bezorgdatum");
+                    sessionStorage.setItem("bezorgdatum", this.bezorgdatum);
+                    sessionStorage.setItem("sql", this.SQL);
+                },
+                maakSQL(datum) {
+                    if (datum === "verzenddatum") {
+                        this.SQL = "SELECT * FROM Bezorging_en_betaling WHERE NOT Betaalmethode='' AND Verzenddatum='" +
+                            this.verzenddatum + "' ORDER BY Bestelnummer DESC"
+                    }
+                    if (datum === "bezorgdatum") {
+                        this.SQL = "SELECT * FROM Bezorging_en_betaling WHERE NOT Betaalmethode='' AND Bezorgdatum='" +
+                            this.bezorgdatum + "' ORDER BY Bestelnummer DESC"
+                    }
+                    this.getOrders();
+                },
+                // voor programmatische check
+                check(which) {
+                    if (which === 'A') {
+                        this.checkA = true;
+                        this.checkB = false;
+                    }
+                    if (which === 'B') {
+                        this.checkA = false;
+                        this.checkB = true;
+                    }
+                },
+                // handmatige check/uncheck
+                handcheck(which) {
+                    this.flag = true;
+                    if (which === 'A' && this.checkA) {
+                        this.checkA = false;
+                        this.undo();
+                        this.flag = false;
+                    }
+                    if (which === 'B' && this.checkB) {
+                        this.checkB = false;
+                        this.undo();
+                        this.flag = false;
+                    }
+                    if (which === 'A' && !this.checkA) {
+                        if (this.flag === true) {
+                            this.checkA = true;
+                            this.checkB = false;
+                            this.maakSQL("verzenddatum");
+                        }
+                        this.flag = false;
+                    }
+                    if (which === 'B' && !this.checkB) {
+                        if (this.flag === true) {
+                            this.checkA = false;
+                            this.checkB = true;
+                            this.maakSQL("bezorgdatum");
+                        }
+                        this.flag = false;
+                    }
+                },
+                undo() {
+                    this.SQL = "SELECT * FROM Bezorging_en_betaling WHERE NOT Betaalmethode='' ORDER BY Bestelnummer DESC";
+                    this.getOrders();
+                    sessionStorage.setItem("checked", null);
+                    sessionStorage.setItem("sql", null);
+                    sessionStorage.setItem("verzenddatum", null);
+                    sessionStorage.setItem("bezorgdatum", null);
+                    this.verzenddatum = "";
+                    this.bezorgdatum = "";
+                    const input = document.getElementById('verzenddatum');
+                    input.value = "";
+                    const input2 = document.getElementById('bezorgdatum');
+                    input2.value = "";
+                },
+                // datumformaat voor de datepickers
+                customFormatter(date) {
+                    return moment(date).locale('nl').format('dddd DD MMMM');
+                }
+            } // end methods
+        }); // end vue
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<script src="Scripts/moment-with-locales.min.js"></script>
+    <link href="Content/jquery-ui.css" rel="stylesheet" />
+    <script src="Scripts/jquery-ui.js"></script>
+    <script src="Scripts/datepicker-nl.js"></script>
+
+var vandaagnaam = moment().lang("Nl").format('dddd'); // deprecated
+
+var vandaag = moment().locale('nl').format('YYYY-MM-DD'); // use instead
+
+<input id="datepicker1" type="text" placeholder="nieuwste datum" data-mini="true" />
+
+        $(document).ready(function () {
+
+
+            // Opm.: datepicker jquery liep niet, jquery ui ontbrak
+            $.datepicker.setDefaults($.datepicker.regional["nl"]);
+            $("#datepicker1").datepicker({
+                beforeShowDay: function (date) {
+                    //var datestring = jQuery.datepicker.formatDate('yy-mm-dd', date);
+                    var day = date.getDay();
+                    var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+                    var isDisabled = ($.inArray(string, vakantiedagen) != -1);
+
+                    //day != 0 disables all Sundays
+                    return [day != 0 && !isDisabled];
+                    //return [vakantiedagen.indexOf(datestring) == -1]
+                }
+            });
+
+
+        var datum_reverse;
+        var dateText;
+        var datum;
+        var dag;
+        var dag_aanhef;
+
+            $("#datepicker1").change(function () {
+                dateText = $('#datepicker1').val();
+                datum = dateText;
+                var dateAr = datum.split('-');
+                var newDate = dateAr[1] + '/' + dateAr[0] + '/' + dateAr[2];
+                datum_reverse = dateAr[2] + '-' + dateAr[1] + '-' + dateAr[0];
+                var d = new Date(newDate);
+                dag = weekday[d.getDay()];
+
+                if (moment(datum, 'DD-MM-YYYY', true).isValid()) {
+                    datepicker1_avail = true;
+                }
+                else {
+                    datepicker2_avail = false;
+                }
+            });
+	});
+
+
+        var weekday = new Array(7);
+        weekday[0] = "Zondag";
+        weekday[1] = "Maandag";
+        weekday[2] = "Dinsdag";
+        weekday[3] = "Woensdag";
+        weekday[4] = "Donderdag";
+        weekday[5] = "Vrijdag";
+        weekday[6] = "Zaterdag";
+
+
+            var vandaag = moment().format('DD-MM-YYYY');
+            var morgen = moment().add(1, 'days').format('DD-MM-YYYY');
+            var maandgeleden = moment().subtract(1, 'months').format('DD-MM-YYYY');

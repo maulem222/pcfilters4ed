@@ -1,0 +1,571 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Voeg categorieën toe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <style>
+        #linkswindow {
+            width: 25%;
+            height: 90vh;
+            float: left;
+            padding: 20px;
+            border: 1px solid;
+        }
+
+        #breadcrumb {
+            height: 70px;
+            margin: 20px auto 10px auto;
+            border: 1px solid;
+        }
+
+        #links {
+            position: relative;
+            height: calc(80% - 40px);
+            overflow: auto;
+            margin: 10px auto 10px auto;
+            border: 1px solid;
+        }
+
+        #buttoncontainer {
+            position: relative;
+            height: 30px;
+            overflow: auto;
+            margin: 0px auto 10px auto;
+            border: 1px solid;
+        }
+
+        #cattoevoegen {
+            position: absolute;
+            left: 5px;
+            bottom: 5px;
+        }
+        
+        #editwindow {
+            width: 65%;
+            height: 90vh;
+            float: left;
+            padding: 20px;
+            border: 1px solid;
+        }
+
+        #editor {
+            width: 95%;
+            height: 90%;
+            margin: 20px auto;
+            border: 1px solid;
+            padding: 20px;
+        }
+
+        #nieuwecatcont {
+            height: auto;
+            overflow: auto;
+            border: 1px solid;
+            padding: 10px;
+        }
+
+        #nieuwecat {
+            width: 200px;
+        }
+
+        #editcat {
+            width: 200px;
+            clear: both;
+        }
+
+        #edittekst {
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .invulerror, .invulerror2 {
+            font-size: 12px;
+            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: red;
+        }
+
+        .uitleg {
+            font-size: 12px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: mediumblue;
+        }
+        
+        .childcont {
+            clear: both;
+        }
+
+        .childlink {
+            float: left;
+            width: 33%;
+        }
+
+        .delchild, .edit {
+            color: green;
+        }
+
+        .crumb {
+            float: left;
+            width: auto;
+            overflow: auto;
+        }
+
+        .separator {
+            float: left;
+            width: 5px;
+            padding-left: 5px;
+            padding-right: 10px;
+        }
+
+        .smallspacer {
+            height: 20px;
+        }
+
+        #afbeelding_chooser {
+            display: block;
+            padding: 10px 70px 10px 13px !important;
+            width: 250px;
+            height: 50px;
+            border: 1px solid #e3e3e3;
+            border-radius: 3px;
+            background-color: #fff;
+            color: gray;
+            font-size: 15px;
+            font-family: Arial;
+            line-height: 16px !important;
+            /* this is must */ -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        #gekozen_afbeelding {
+            width: 270px;
+            height: 200px;
+        }
+    </style>
+    <script>
+        var parentid;
+        var childid;
+        var bcarray = [];
+        var editor_nieuwecat = false;
+        var nieuwecategorie;
+        var gewijzigdecategorie;
+        var afbeelding = null;
+
+        $(document).ready(function () {
+            $("#nieuwecatcont").hide();
+            $("#editcont").hide();
+
+            parentid = 0;
+            if (bcarray.length == 0) {
+                //alert("bcarray leeg");
+                bcarray.push(parentid);
+            }
+            BuildCrumb();
+            getChildren();
+
+            $("#cattoevoegen").click(function () {
+                if (editor_nieuwecat == false) {
+                    $("#editcont").hide();
+                    $("#nieuwecatcont").show();
+                }
+                editor_nieuwecat = true;
+            });
+
+            $("#wijzigcategorie").click(function () {
+                $(".invulerror2").empty();
+
+                if (($("#editcat").val().length == 0) || (afbeelding == null)) {
+                    $(".invulerror2").append("categorienaam invullen en een afbeelding kiezen s.v.p.");
+                }
+                else {
+                    gewijzigdecategorie = $("#editcat").val();
+                    UPDATECat();
+                    // niet het formulier resetten
+                }
+            });
+
+            $("#voegnieuwecattoe").click(function (e) {
+                e.preventDefault();
+                $(".invulerror").empty();
+
+                if ($("#nieuwecat").val().length == 0) {
+                    $(".invulerror").append("categorie invullen s.v.p.");
+                }
+                else {
+                    nieuwecategorie = $("#nieuwecat").val();
+                    INSERTCat();
+                    $('#nieuwecatform')[0].reset();
+                }
+            });
+        });
+
+        function Upload() {
+            var formData = new FormData();
+            formData.append('file', $('#afbeelding_chooser')[0].files[0]);
+
+            $.ajax({
+                type: 'post',
+                url: 'fileUploader.ashx',
+                data: formData,
+                success: function (status) {
+                    if (status != 'error') {
+                        var my_path = "afbeeldingen/" + status;
+                        $("#gekozen_afbeelding").attr("src", my_path);
+                        afbeelding = my_path;
+                    }
+                },
+                processData: false,
+                contentType: false,
+                error: function () {
+                    alert("Whoops - er is iets verkeerd gegaan!");
+                }
+            });
+        }
+
+        function getCategoriegeg() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/getCategoriegeg',
+                data: "{'childid':'" + childid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    // zet de gegevens in de containers
+                    var categorienaam = response.d.Categorienaam;
+                    afbeelding = response.d.Overzichtsafb;
+                    $("#editcat").val(categorienaam);
+                    if (afbeelding == "") {
+                        $("#gekozen_afbeelding").attr("src", "images/kies_een_afbeelding.jpg");
+                    }
+                    else {
+                        $("#gekozen_afbeelding").attr("src", afbeelding);
+                    }
+                },
+
+                error: function (response) {
+                    alert("getCategoriegeg error");
+                }
+            });
+        }
+
+        function INSERTCat() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/INSERTCat',
+                data: "{'parentid':'" + parentid + "','nieuwecategorie':'" + nieuwecategorie + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    getChildren();
+                },
+
+                error: function (response) {
+                    alert("INSERTCat error");
+                }
+            });
+        }
+
+        function UPDATECat() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/UPDATECat',
+                data: "{'gewijzigdecategorie':'" + gewijzigdecategorie + "','overzichtsafbeelding':'" + afbeelding + "','childid':'" + childid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    getChildren();
+                },
+
+                error: function (response) {
+                    alert("UPDATECat error");
+                }
+            });
+        }
+
+        $(document).on('click', 'a.child', function (e) {
+
+            var id = $(this).attr("Id");
+            var action = $(this).attr("Action");
+            if (action == "Childclicked") {
+                //alert(action);
+                bcarray.push(id); // child id wordt nu parent id
+                BuildCrumb();
+                parentid = id;
+                getChildren();
+            }
+        });
+
+        $(document).on('click', 'a.delchild', function (e) {
+
+            var id = $(this).attr("Id");
+            // dialog: weet u zeker dat u categorie .. wilt verwijderen? Ja/Nee
+            var r = confirm("Deze categorie en alle subcategorieën zullen worden verwijderd. Dit kan niet ongedaan worden gemaakt. Wilt u doorgaan?");
+            if (r == true) {
+                VerwijderSubCats(id);
+                getChildren();
+            } else {
+                // doe niets
+            }
+        });
+
+        $(document).on('click', 'a.edit', function (e) {
+
+            childid = $(this).attr("Id");
+            $("#nieuwecatcont").hide();
+            editor_nieuwecat = false;
+            // reset eerst het editformulier
+            $('#editform')[0].reset();
+            $("#gekozen_afbeelding").attr("src", "images/kies_een_afbeelding.jpg");
+            afbeelding = null;
+            // toon een leeg editform
+            $("#editcont").show();
+
+            // TODO: haal de categorienaam en de afbeelding op uit de tabel en toon deze
+            getCategoriegeg();
+        });
+
+        $(document).on('click', 'a.parent', function (e) {
+
+            parentid = $(this).attr("Id");
+            var action = $(this).attr("Action");
+            var clickedlevel = $(this).attr("Level");
+            if (action == "Parentclicked") {
+                CleanArray(clickedlevel);
+                BuildCrumb();
+                getChildren();
+            }
+        });
+
+        function BuildCrumb() {
+
+            $("#breadcrumb").empty();
+
+            $("#breadcrumb").append("<div class='crumb'><a class='parent' href='#' Id='0'" +
+                " Action='Parentclicked' Level='0'>zerolevel</a></div>");
+            var i;
+            var level = 1;
+            for (i = 1; i < bcarray.length; ++i) {
+                var id = bcarray[i];
+                getCrumb(id, level);
+                level++;
+            }
+        }
+
+        function CleanArray(clickedlevel) {
+            var end = bcarray.length; // zeg 4
+            var start = clickedlevel; // zeg 1, dus element 2
+            // times moet uitkomen op 2 zodat er 2x gepopt wordt
+            var times = end - start - 1;
+            for (i = 0; i < times; ++i) {
+                bcarray.pop(); // verwijder het laatste element van de array, doe dit 2x
+            }
+        }
+
+        function getChildren() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/GetCategories',
+                data: "{'parentid':'" + parentid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    $("#links").empty();
+
+                    var childrenlijst = response.d
+                    $.each(childrenlijst, function (index, child) {
+                        $("#links").append("<div class='childcont'><div class='childlink'><a href='#' class='child' Id='" +
+                            child.Id + "' Action='Childclicked'>" + child.Categorienaam + "</a></div>" +
+                            "<div class='childlink'><a href='#' class='delchild' Id='" +
+                            child.Id + "' Action='DelChildclicked'>verwijder</a></div>" +
+                            "<div class='childlink'><a href='#' class='edit' Id='" +
+                            child.Id + "' Action='Editclicked'>bewerken</a></div></div>");
+                    });
+                },
+
+                error: function (response) {
+                    alert("GetCategories error");
+                }
+            });
+
+        }
+
+        function getCrumb(id, level) {
+
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/GetCrumb',
+                data: "{'id':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    $("#breadcrumb").append("<div class='separator'>></div>");
+
+                    var crumb = response.d;
+                    $("#breadcrumb").append("<div class='crumb'><a href='#' class='parent' Id='" +
+                        crumb.Id + "' Action='Parentclicked' Level='" + level + "'>" + crumb.Categorienaam + "</a></div>");
+
+                },
+
+                error: function (response) {
+                    alert("GetCrumb error");
+                }
+            });
+
+        }
+
+        function VerwijderSubCats(id) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/SelectCatsWithParent',
+                data: "{'id':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (response.d) {
+                        var catlijst = response.d
+                        $.each(catlijst, function (index, cat) {
+                            VerwijderSubCats(cat.Id);
+                        });
+                    }
+                    DeleteCatWithId(id);
+                    DeleteBreadcrumbWithId(id);
+                    DeleteHeaderImageWithId(id);
+                    DeleteEigenschappenWithId(id);
+                },
+
+                error: function (response) {
+                    alert("SelectCatsWithParent error");
+                }
+            });
+        }
+
+        function DeleteCatWithId(id) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/DeleteCatWithId',
+                data: "{'id':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                },
+
+                error: function (response) {
+                    alert("DeleteCatWithId error");
+                }
+            });
+        }
+
+        function DeleteBreadcrumbWithId(id) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'BreadcrumbService.asmx/DeleteBreadcrumbWithId',
+                data: "{'Catid':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                },
+
+                error: function (response) {
+                    alert("DeleteBreadcrumbWithId error");
+                }
+            });
+        }
+
+        function DeleteHeaderImageWithId(id) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'ImageService.asmx/DeleteHeaderImageWithId',
+                data: "{'Catid':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                },
+
+                error: function (response) {
+                    alert("DeleteHeaderImageWithId error");
+                }
+            });
+        }
+
+        function DeleteEigenschappenWithId(id) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'EigenschappenService.asmx/DeleteEigenschappenWithId',
+                data: "{'Catid':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                },
+
+                error: function (response) {
+                    alert("DeleteEigenschappenWithId error");
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <div id="linkswindow">
+        <div id="breadcrumb"></div>
+        <div id="links"></div>
+        <div id="buttoncontainer">
+            <button id="cattoevoegen">Voeg categorie toe</button>
+        </div>
+    </div>
+    <div id="editwindow">
+        <div id="editor">
+            <div id="nieuwecatcont">
+                <form id="nieuwecatform">
+                    <div id="nieuwecattekst">Nieuwe categorie:</div>
+                    <input id="nieuwecat" type="text" />
+                    <button id="voegnieuwecattoe">Voeg toe</button>
+                    <div class="invulerror"></div>
+                </form>
+            </div>
+            <div id="editcont">
+                <div class="uitleg">In dit formulier kunt u opgeven welke overzichtsafbeelding u wilt gebruiken voor deze categorie.
+                Deze zal dan verschijnen in de catalogus, samen met de naam van de categorie. U kunt hier ook de naam van de categorie wijzigen.</div>
+                <div class="smallspacer"></div>
+                <form id="editform">
+                    <div id="edittekst">Categorienaam:</div>
+                    <input id="editcat" type="text" />
+                    <div class="smallspacer"></div>
+                    <div id="edittekst">Kies een afbeelding:</div>
+                    <input id="afbeelding_chooser" type="file" onChange="Upload();" accept="image/png,image/jpeg,image/jpg" />
+                    <div class="smallspacer"></div>
+                    <div id="afbeelding">
+                        <img id="gekozen_afbeelding" src="images/kies_een_afbeelding.jpg" />
+                    </div>
+                    <div class="invulerror2"></div>
+                    <button id="wijzigcategorie">Wijzig</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

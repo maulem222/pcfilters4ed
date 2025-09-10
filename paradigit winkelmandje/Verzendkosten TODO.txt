@@ -1,0 +1,24 @@
+OK - Voeg veld Gewicht toe aan tabel Poefs
+OK - voer gewichten in: 2,25 - 3,50 - 4,25
+OK - maak tabel Verzendkosten
+OK - velden Id, MinGewicht, MaxGewicht, Tarief
+OK - voer enkele tariefgroepen in
+OK - ga naar winkelmandje.html
+OK - in de v-for een onzichtbare div maken met addGewicht(bestelling)
+OK - een methode addGewicht() maken in Vue
+OK - deze rekent uit: bestelling.Gewicht * bestelling.Aantal
+OK - telt het resultaat op bij een state variabele Totaalgewicht
+JS - na de v-for een zichtbare div maken met getVerzendkosten()
+JS - een methode getVerzendkosten() maken in Vue
+JS - deze methode doet een fetch die de tariefgroepen teruggeeft
+JS - nu wordt de resultaatarray gelezen via een for
+JS - if (MinGewicht < this.Totaalgewicht < MaxGewicht) {
+	zet var Tarief op tarief dat bij deze tariefgroep hoort
+}
+JS - Vue retourneert het Tarief aan getVerzendkosten()
+
+Verder todo:
+
+OK - poefs.html INSERT voor bestelling aanpassen voor Gewicht
+OK - poefs.html ajax call aanpassen voor Gewicht
+OK - details.html ajax call aanpassen voor Gewicht

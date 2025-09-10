@@ -1,0 +1,12 @@
+<script>
+    // Get the query string from the URL
+    const params = new URLSearchParams(window.location.search);
+
+    // Read specific parameters
+    const name = params.get("name");
+    const age = params.get("age");
+
+    // Display them on the page
+    document.write(`<p>Name: ${name}</p>`);
+    document.write(`<p>Age: ${age}</p>`);
+</script>

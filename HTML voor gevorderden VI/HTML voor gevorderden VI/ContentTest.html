@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Voeg eigenschappen toe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        #linkswindow {
+            width: 25%;
+            min-height: 90vh;
+            height: auto;
+            float: left;
+            padding: 20px;
+            border: 1px solid;
+        }
+
+        #breadcrumb {
+            height: 70px;
+            margin: 20px auto 10px auto;
+            border: 1px solid;
+        }
+
+        #links {
+            position: relative;
+            height: auto;
+            overflow: auto;
+            margin: 10px auto 10px auto;
+            padding-bottom: 2px;
+            padding-left: 2px;
+            padding-top: 2px;
+            border: 1px solid;
+        }
+
+        #editwindow {
+            width: 65%;
+            height: 90vh;
+            float: left;
+            padding: 20px;
+            border: 1px solid;
+        }
+
+        #editor {
+            width: 95%;
+            height: 90%;
+            margin: 20px auto;
+            border: 1px solid;
+            padding: 20px;
+        }
+
+        .check {
+            float: left;
+        }
+
+        #edittekst, label {
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            clear: both;
+        }
+
+        #edittekst2 {
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            float: left;
+            margin-left: 10px;
+        }
+
+        .slider {
+            float: left;
+            width: 50px;
+        }
+
+        .uitleg {
+            font-size: 12px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: dodgerblue;
+        }
+
+        .childcont .childlink a {
+            text-decoration: none;
+            color: black;
+            font-family: Arial;
+            font-size: 12px;
+        }
+
+        .menulink {
+            background-color: lightgray;
+            padding: 4px 10px 4px 10px;
+        }
+
+        .childlink {
+            float: left;
+            width: auto;
+            margin-right: 2px;
+            border: 1px solid white;
+        }
+
+        .delchild, .edit {
+            color: green;
+        }
+
+        .crumb {
+            float: left;
+            width: auto;
+            overflow: auto;
+        }
+
+        .separator {
+            float: left;
+            width: 5px;
+            padding-left: 5px;
+            padding-right: 10px;
+        }
+
+        .smallspacer {
+            height: 20px;
+        }
+
+        .content {
+            display: none;
+            background-color: green;
+            overflow: hidden;
+        }
+
+        .plus {
+            cursor: pointer;
+        }
+
+        .chooser > h5 > a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @media only screen and (min-width: 0px) and (max-width: 1030px) {
+            #eigleft {
+                margin-right: 2.2%;
+            }
+        }
+
+        @media only screen and (min-width: 1030px) and (max-width: 1155px) {
+            #eigleft {
+                margin-right: 2.4%;
+            }
+        }
+
+        @media only screen and (min-width: 1155px) and (max-width: 1355px) {
+            #eigleft {
+                margin-right: 2.6%;
+            }
+        }
+
+        @media only screen and (min-width: 1355px) and (max-width: 1630px) {
+            #eigleft {
+                margin-right: 2.8%;
+            }
+        }
+    </style>
+    <script>
+        var parentid;
+        var childid;
+        var catid;
+        var eigid;
+        var bcarray = [];
+        var slider = false;
+        var prijsveld = false;
+        var statdyn = "static";
+        var eigenschap;
+        var filterelement;
+        var eig;
+        var min;
+        var max;
+        var step;
+        var waarde;
+        var waardeid;
+
+        $(document).ready(function () {
+            generateFilters();
+        });
+
+        $(document).on('click', '.chooser h5', function (e) {
+            //Inner
+            var content = $(this).next(); // kies de op <h5></h5> volgende tag, dat is dus <div class="content"> waarbinnen zich de checkboxlijst bevindt
+
+            if (content.is(":visible")) //indien <div class="content"> zichtbaar is, dus expanded
+            {
+                content.slideUp(); // collapse <div class="content">
+                $(this).find('span').html('+'); // zoek de span en zet er een + teken neer
+            }
+            else //indien <div class="content"> onzichtbaar is, dus collapsed
+            {
+                content.slideDown(); // expandeer <div class="content">
+                $(this).find('span').html('-'); // zoek de span en zet er een - teken neer
+            }
+        });
+
+
+        function generateFilters() {
+            var array = [];
+            array.push("<div class='chooser'><h5><span class='plus'>+</span><a>Merk</a></h5>" +
+                "<div class='content'><div class='list-group'>");
+
+
+            array.push("<div class='list-group-item checkbox'>" +
+                "<label><input type='checkbox' class='clickclass' value='OPPO'>OPPO</label></div>");
+            array.push("<div class='list-group-item checkbox'>" +
+                "<label><input type='checkbox' class='clickclass' value='Samsung'>Samsung</label></div>");
+            array.push("<div class='list-group-item checkbox'>" +
+                "<label><input type='checkbox' class='clickclass' value='Nokia'>Nokia</label></div>");
+            array.push("</div></div></div>");
+            $("#Filters").append(array.join(''));
+        }
+
+    </script>
+</head>
+<body>
+    <div id="linkswindow">
+        <div id="breadcrumb"></div>
+        <div id="links"></div>
+    </div>
+    <div id="editwindow">
+        <div id="editor">
+            <div id="Filters">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+poefs.html
+
+OK - tabel Bestellingen maken met velden Id, Pid, Prijs, Produktnaam, Produktafbeelding, Aantal, Produktlink, Bestelguid, KlantId, Tabelnaam
+OK - tabel alvast uitbreiden met velden Factuur, Bestelling_bevestigd, Datum_Besteld, Klaargezet, Ingepakt, Verzonden, Datum_Verzonden
+
+OK - bij het klikken op Plaats in Winkelmandje
+OK - document on click .winkelm
+OK - indien guid cookie niet bestaat, guid aanmaken
+OK - guid in guid cookie opslaan
+OK - daarna itemCount cookie maken en op 1 zetten
+OK - itemCount instellen op waarde 1
+OK - indien guid cookie wel bestaat
+OK - itemCount cookie ophalen, ophogen met 1 en weer opslaan
+OK - ook opslaan in var itemCount
+OK - itemCount wordt overnieuw getoond met display block
+OK - a.d.h.v. pid de data ophalen met getProductData
+OK - maak een webmethode Bestel met de volgende params
+: pid, prijs, produktnaam, produktafbeelding, aantal, produktlink, bestelguid, tabelnaam
+OK - in de webmethode wordt eerst een query gedaan op pid, tabelnaam en bestelguid
+OK - als er al records zijn dt.Count > 0
+OK - dan wordt mbv een DataReader het aantal opgehaald (en het Id)
+OK - bij het aantal wordt aantal opgeteld
+OK - daarna wordt middels een SQL UPDATE van het record met Id het aantal gewijzigd
+OK - zijn er nog geen records dus dt.Count = 0
+OK - dan wordt geINSERT met de volgende waarden
+OK - Pid, Prijs, Produktnaam, Produktafbeelding, Aantal, Produktlink, Bestelguid, Tabelnaam
+
+OK - in document ready wordt de guid cookie opgehaald
+OK - indien cookie null ook de itemCount cookie weghalen met document.cookie = 'itemCount=;max-age=0'
+OK - indien niet null ingesteld in var itemCount, en hoger dan 0 getoond met display block
+
+
+winkelmandje.html
+
+- tabel Betaling maken met velden Betaalmethode, Bezorgoptie, KlantId, BestelGuid
+- als er na evt. inschrijven ingelogd wordt, komt het KlantId beschikbaar
+OZ - zijn de bezorgkosten uitgerekend, dan dienen deze te worden geINSERT waar Guid
+
+JOINS
+
+SELECT Products.productname AS productname, Products.picture AS picture, Products.price AS price, Bestellingen.aantal AS aantal, Bestellingen.id AS id' +
+                ' FROM Bestellingen LEFT JOIN Products ON Bestellingen.produktid=Products.id WHERE Bestellingen.guid=$1
+
+

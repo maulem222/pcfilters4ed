@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Get Full Directory Path</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script type="text/javascript">
+        var bronbestand;
+        var doelpad;
+
+        $(document).ready(function () {
+            cookie = getCookie('bronbestand');
+
+            if (cookie == null) {
+                // do cookie doesn't exist stuff;
+            }
+            else {
+                // do cookie exists stuff
+                bronbestand = getCookie('bronbestand');
+                doelpad = getCookie('doelpad');
+                $("#sourcePath").val(bronbestand);
+                $("#destinationPath").val(doelpad);
+            }
+
+            $("#deletebutton").click(function () {
+
+                var destfile = $("#destinationPath").val();
+                var parts = destfile.split('\\');
+                var output = parts.join('\\\\');
+                //alert(output);
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'FileService.asmx/DeleteFile',
+                    data: "{'destfile':'" + output + "'}",
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    async: false,
+                    success: function (response) {
+                        alert("Bestand gewist");
+                    },
+
+                    error: function (response) {
+                        alert("DeleteFile error");
+                    }
+                });
+            });
+
+
+            function splitLast(str, substring) {
+                const index = str.lastIndexOf(substring);
+                return str.slice(0, index);
+            }
+
+            function SetCookie(sourcefile, destpath) {
+                var time = 3600 * 1000 * 24 * 365 * 10; // 10 jaar vanaf nu
+                document.cookie = 'bronbestand=' + sourcefile + '; max-age=' + time;
+                document.cookie = 'doelpad=' + destpath + '; max-age=' + time;
+            }
+
+            function getCookie(name) {
+                var value = "; " + document.cookie;
+                var parts = value.split("; " + name + "=");
+                if (parts.length == 2) return parts.pop().split(";").shift();
+                else return null;
+            }
+
+            $("#checkbutton").click(function () {
+                var sourcefile = $("#sourcePath").val();
+
+                var sourcefile = $("#sourcePath").val();
+                var parts = sourcefile.split('\\');
+                var output1 = parts.join('\\\\');
+
+                var destfile = $("#destinationPath").val();
+                var destpath = splitLast(destfile, "\\");
+
+                SetCookie(sourcefile, destpath); // remember the values
+
+                var parts = destpath.split('\\');
+                var output2 = parts.join('\\\\');
+                //alert(output);
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'FileService.asmx/Check',
+                    data: "{'sourcefile':'" + output1 + "','destdir':'" + output2 + "'}",
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    async: false,
+                    success: function (response) {
+                        var sourceexists = response.d.sourceexists;
+                        var destexists = response.d.destexists;
+
+                        if ((sourceexists == "true") && (destexists == "true")) {
+                            $("#message").text("Bronbestand en doelpad bestaan beide. Klik op Copy.");
+                            $("#message").css("color", "green");
+                        }
+                        if ((sourceexists == "false") && (destexists == "true")) {
+                            $("#message").text("Bronbestand bestaat niet. Voer een geldig bronbestand/pad in.");
+                            $("#message").css("color", "red");
+                        }
+                        if ((sourceexists == "true") && (destexists == "false")) {
+                            $("#message").text("Doelpad bestaat niet. Voer een geldig doelpad in.");
+                            $("#message").css("color", "red");
+                        }
+                        if ((sourceexists == "false") && (destexists == "false")) {
+                            $("#message").text("Bronbestand/pad en doelpad bestaan niet. Voer geldige waarden in.");
+                            $("#message").css("color", "red");
+                        }
+                    },
+                    error: function (response) {
+                        alert("Check error");
+                    }
+                });
+            });
+        });
+    </script>
+    <style>
+        .myInput {
+            width: 500px;
+            height: 40px;
+            border-radius: 5px;
+            border: 1px solid;
+        }
+
+        .topspacer {
+            height: 100px;
+        }
+
+        .text {
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .button {
+            margin-top: 10px;
+            margin-left: 450px;
+        }
+    </style>
+</head>
+<body>
+    <div class="topspacer"></div>
+    <div class="row">
+        <div class="col-lg-2">
+
+        </div>
+        <div class="col-lg-4 text">
+            Geef het volledige pad op van het bronbestand, bijv. Sjabloon.html:
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+
+        </div>
+        <div class="col-lg-4">
+            <input type="text" id="sourcePath" class="myInput" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+
+        </div>
+        <div class="col-lg-4 text">
+            Geef het volledige pad op van het doelbestand, incl. de gewenste bestandsnaam:
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+
+        </div>
+        <div class="col-lg-4">
+            <input type="text" id="destinationPath" class="myInput" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+            
+        </div>
+        <div class="col-lg-4">
+            <div id="message"></div>
+            <button class="button" id="deletebutton">Delete</button>
+            <button class="button" id="checkbutton">Check</button>
+        </div>
+    </div>
+</body>
+</html>

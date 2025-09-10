@@ -1,0 +1,1112 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Voeg eigenschappen toe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <!--jQuery-ui for range slider-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        #linkswindow {
+            width: 25%;
+            min-height: 90vh;
+            height: auto;
+            float: left;
+            padding: 20px;
+            border: 1px solid;
+        }
+
+        #breadcrumb {
+            height: 70px;
+            margin: 20px auto 10px auto;
+            border: 1px solid;
+        }
+
+        #links {
+            position: relative;
+            height: auto;
+            overflow: auto;
+            margin: 10px auto 10px auto;
+            padding-bottom: 2px;
+            padding-left: 2px;
+            padding-top: 2px;
+            border: 1px solid;
+        }
+
+        #editwindow {
+            width: 65%;
+            height: 90vh;
+            float: left;
+            padding: 20px;
+            border: 1px solid;
+        }
+
+        #editor {
+            width: 95%;
+            height: 90%;
+            margin: 20px auto;
+            border: 1px solid;
+            padding: 20px;
+            overflow: scroll;
+        }
+        
+        #editproduktnaam {
+            width: 350px;
+            clear: both;
+        }
+
+        #leftarea {
+            float: left;
+        }
+
+        #rightarea {
+            float: left;
+            margin-left: 50px;
+        }
+
+        .edittekst {
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            clear: both;
+        }
+
+        .edittekst2 {
+            margin-right: 5px;
+            margin-top: 2px;
+            float: left;
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .edittekst3 {
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            clear: both;
+            cursor: pointer;
+        }
+
+        #buttvoerprodomschrafbin, #toonoverigeprodgeg {
+            float: left;
+        }
+
+        #eerstcatiderror {
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .slider {
+            float: left;
+            width: 50px;
+        }
+
+        .duplicaaterror, .invulerror, .invulerror2 {
+            font-size: 12px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: red;
+            clear: both;
+        }
+
+        .invoersucces, .invoersucces2 {
+            font-size: 12px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: green;
+            clear: both;
+        }
+
+        .uitleg {
+            font-size: 12px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: dodgerblue;
+        }
+
+        .childcont .childlink a {
+            text-decoration: none;
+            color: black;
+            font-family: Arial;
+            font-size: 12px;
+        }
+
+        .eigcont .eiglink a, .waardecont .waardelink a {
+            text-decoration: none;
+            color: black;
+            font-family: Arial;
+            font-size: 12px;
+        }
+
+        .eiglink, .waardelink {
+            border: 1px solid white;
+        }
+
+        .menulink {
+            background-color: lightgray;
+            padding: 4px 10px 4px 10px;
+        }
+
+        .childlink {
+            float: left;
+            width: auto;
+            margin-right: 2px;
+            border: 1px solid white;
+        }
+
+        .delchild, .edit {
+            color: green;
+        }
+
+        .crumb {
+            float: left;
+            width: auto;
+            overflow: auto;
+        }
+
+        .separator {
+            float: left;
+            width: 5px;
+            padding-left: 5px;
+            padding-right: 10px;
+        }
+
+        .smallspacer {
+            height: 20px;
+            clear: both;
+        }
+
+        .content {
+            display: none;
+            overflow: hidden;
+        }
+
+        .plus {
+            cursor: pointer;
+        }
+
+        .minus {
+            cursor: pointer;
+        }
+
+        .chooser > h5 > a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .floater > h5 > a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .amountcont {
+            margin-left: 0px;
+        }
+
+        .slidercont {
+            margin-left: 10px;
+            margin-bottom: 35px;
+        }
+
+        .floater {
+            float: left;
+        }
+
+        .floater2 {
+            padding-top: 8px;
+            float: left;
+        }
+
+        .borderless {
+            border: 0px;
+        }
+
+        .smallspacer5 {
+            height: 5px;
+            clear: both;
+        }
+
+        .mediumspacer {
+            height: 15px;
+            clear: both;
+        }
+
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+            /* Style the buttons inside the tab */
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
+                font-size: 17px;
+            }
+
+                /* Change background color of buttons on hover */
+                .tab button:hover {
+                    background-color: #ddd;
+                }
+
+                /* Create an active/current tablink class */
+                .tab button.active {
+                    background-color: #ccc;
+                }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+
+        @media only screen and (min-width: 0px) and (max-width: 1030px) {
+            #eigleft {
+                margin-right: 2.2%;
+            }
+        }
+
+        @media only screen and (min-width: 1030px) and (max-width: 1155px) {
+            #eigleft {
+                margin-right: 2.4%;
+            }
+        }
+
+        @media only screen and (min-width: 1155px) and (max-width: 1355px) {
+            #eigleft {
+                margin-right: 2.6%;
+            }
+        }
+
+        @media only screen and (min-width: 1355px) and (max-width: 1630px) {
+            #eigleft {
+                margin-right: 2.8%;
+            }
+        }
+    </style>
+    <script>
+        var parentid;
+        var childid;
+        var catid;
+        var eigid;
+        var bcarray = [];
+        var afbeelding = null;
+        var slider = false;
+        var prijsveld = false;
+        var statdyn = "static";
+        var eigenschap;
+        var filterelement;
+        var eig;
+        var produktnaam;
+        var produktomschrijving;
+        var newID;
+        var origCatid;
+        var prijssliderid;
+        var waarde;
+        var min;
+        var max;
+        var symb;
+
+        $(document).ready(function () {
+
+            $("#editorprodukten").hide();
+            $("#editoredit").hide();
+            $("#voegtoeinit").hide();
+            $("#voegtoestatic").hide();
+            $("#voegtoedynamic").hide();
+
+            $(".invulerror").hide();
+            $(".invulerror2").hide();
+            $(".duplicaaterror").hide();
+            $(".invoersucces").hide();
+            $(".invoersucces2").hide();
+
+            $("#eerstcatiderror").show();
+
+            parentid = 0;
+            if (bcarray.length == 0) {
+                //alert("bcarray leeg");
+                bcarray.push(parentid);
+            }
+            BuildCrumb();
+
+            // Haal een evt. sessiewaarde newID op
+            GetSession_ID();
+
+            getChildren();
+
+            $("#buttvoerproduktin").click(function () {
+                if ($("#editproduktnaam").val().length == 0) {
+                    $(".invulerror").append("Produktnaam invullen s.v.p.");
+                    $(".invulerror").show();
+                }
+                else {
+                    produktnaam = $("#editproduktnaam").val();
+                    INSERTProduktnaam();
+                }
+            });
+
+            $("#buttvoerprodomschrafbin").click(function () {
+                $(".invulerror2").empty();
+
+                if (($("#editprodomschr").val().length == 0) || (afbeelding == null)) {
+                    $(".invulerror2").append("produktomschrijving invullen en een afbeelding kiezen s.v.p.");
+                    $(".invulerror2").show();
+                }
+                else {
+                    produktomschrijving = $("#editprodomschr").val();
+                    produktomschrijving.nl2br();
+                    UPDATEProdgeg();
+                }
+            });
+
+            $("#toonoverigeprodgeg").click(function () {
+                // Toon nu ook de div voegtoedynamic
+                $("#voegtoedynamic").show();
+                // TODO: toon button om overige produktgegevens te tonen
+                generateFilters();
+                // scroll het window tot beneden
+                $("#editor").animate({ scrollTop: $("#editor")[0].scrollHeight }, 1000);
+            });
+
+            $("#deleteall").click(function () {
+                VerwijderAlleProdukten();
+            });
+
+            //$("#Filters div").on("click", ".clickclass", function () {
+            //    alert($(this).attr(id));
+            //});
+        });
+
+        String.prototype.nl2br = function () {
+            return this.replace(/\n/g, "<br />");
+        }
+
+        function VerwijderAlleProdukten() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'ProduktService.asmx/VerwijderAlleProdukten',
+                data: "{}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                },
+
+                error: function (response) {
+                    alert("VerwijderAlleProdukten error");
+                }
+            });
+        }
+
+        function INSERTProduktnaam() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'ProduktService.asmx/InsertProdukt',
+                data: "{'Produktnaam':'" + produktnaam + "','Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (response.d == "") {
+                        $(".invulerror").hide();
+                        $(".invoersucces").hide();
+                        $(".duplicaaterror").empty();
+                        $(".duplicaaterror").append("Produktnaam is reeds in gebruik");
+                        $(".duplicaaterror").show();
+                        // reset voegtoestatic formulier
+                        $('#editorvoegtoestaticform').trigger("reset");
+                        $("#gekozen_afbeelding").attr("src", "images/kies_een_afbeelding.jpg");
+                        $(".invoersucces2").empty();
+                        // en verberg dit formulier
+                        $("#voegtoestatic").hide();
+                    }
+                    else {
+                        newID = response.d;
+                        SetSession_ID();
+                        SetSession_Catid();
+                        $(".invulerror").hide();
+                        $(".duplicaaterror").hide();
+                        $(".invoersucces").empty();
+                        $(".invoersucces").append("Produktnaam succesvol ingevoerd");
+                        $(".invoersucces").show();
+                        // Toon nu ook de div voegtoestatic voor de prodomschr/afbeelding
+                        $("#voegtoestatic").show();
+                    }
+                },
+
+                error: function (response) {
+                    alert("InsertProdukt error");
+                }
+            });
+        }
+
+        function UPDATEProdgeg() {
+            
+            $.ajax({
+
+                type: 'POST',
+                url: 'ProduktService.asmx/UPDATEProdgeg',
+                data: "{'Id':'" + newID + "','Produktomschrijving':" + JSON.stringify(produktomschrijving) + ",'Produktafbeelding':'" + afbeelding + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    $(".invulerror2").hide();
+                    $(".invoersucces2").empty();
+                    $(".invoersucces2").append("Produktgegevens succesvol ingevoerd");
+                    $(".invoersucces2").show();
+                },
+
+                error: function (response) {
+                    alert("UPDATEProdgeg error");
+                }
+            });
+        }
+
+
+        function SetSession_Catid() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'SessionService.asmx/SetSession_Catid',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                },
+
+                error: function (response) {
+                    alert("SetSession_Catid error");
+                }
+            });
+        }
+
+        function GetSession_Catid() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'SessionService.asmx/GetSession_Catid',
+                data: "{}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (response.d.Catidset == "Ja") {
+                        origCatid = response.d.Catid;
+                    }
+                    else {
+                        origCatid = null;
+                    }
+                },
+
+                error: function (response) {
+                    alert("GetSession_ID error");
+                }
+            });
+        }
+
+        function SetSession_ID() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'SessionService.asmx/SetSession_ID',
+                data: "{'newID':'" + newID + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                },
+
+                error: function (response) {
+                    alert("SetSession_ID error");
+                }
+            });
+        }
+
+        function GetSession_ID() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'SessionService.asmx/GetSession_ID',
+                data: "{}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (response.d.IDset == "Ja") {
+                        newID = response.d.ID;
+                    }
+                    else {
+                        newID = null;
+                    }
+                },
+
+                error: function (response) {
+                    alert("GetSession_ID error");
+                }
+            });
+        }
+
+        function openVoegProduktToe(event) {
+            var i, tabcontent, tablinks;
+
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById("editorprodukten").style.display = "none";
+            document.getElementById("editoredit").style.display = "none";
+            document.getElementById("editorvoegtoe").style.display = "block";
+            event.currentTarget.className += " active";
+        }
+
+        function Upload() {
+            var formData = new FormData();
+            formData.append('file', $('#afbeelding_chooser')[0].files[0]);
+
+            $.ajax({
+                type: 'post',
+                url: 'fileUploader.ashx',
+                data: formData,
+                success: function (status) {
+                    if (status != 'error') {
+                        var my_path = "afbeeldingen/" + status;
+                        $("#gekozen_afbeelding").attr("src", my_path);
+                        afbeelding = my_path;
+                    }
+                },
+                processData: false,
+                contentType: false,
+                error: function () {
+                    alert("Whoops - er is iets verkeerd gegaan!");
+                }
+            });
+        }
+
+        $(document).on('click', '.chooser h5', function (e) {
+            //Inner
+            var content = $(this).next(); // kies de op <h5></h5> volgende tag, dat is dus <div class="content"> waarbinnen zich de checkboxlijst bevindt
+
+            if (content.is(":visible")) //indien <div class="content"> zichtbaar is, dus expanded
+            {
+                content.slideUp(); // collapse <div class="content">
+                $(this).find('span').html('+'); // zoek de span en zet er een + teken neer
+            }
+            else //indien <div class="content"> onzichtbaar is, dus collapsed
+            {
+                content.slideDown(); // expandeer <div class="content">
+                $(this).find('span').html('-'); // zoek de span en zet er een - teken neer
+            }
+        });
+
+        $(document).on('click', 'a.child', function (e) {
+
+            var id = $(this).attr("Id");
+            var action = $(this).attr("Action");
+            if (action == "Childclicked") {
+                bcarray.push(id); // child id wordt nu parent id
+                parentid = id;
+                catid = id;
+                getChildren($(this), id);
+            }
+        });
+
+        $(document).on('click', 'a.parent', function (e) {
+
+            $("#Filters").empty();
+            parentid = $(this).attr("Id");
+            catid = parentid;
+            var action = $(this).attr("Action");
+            var clickedlevel = $(this).attr("Level");
+            if (action == "Parentclicked") {
+                CleanArray(clickedlevel);
+                BuildCrumb();
+                getChildren();
+            }
+        });
+
+        $(document).on('click', '#Filters div div .clickclass', function (e) {
+
+            checkedState = $(this).attr('checked');
+            $(this).parent('div').parent('div').children().children('.clickclass:checked').each(function () {
+                $(this).attr('checked', false);
+            });
+            $(this).attr('checked', checkedState);
+
+            //alert($(this).attr("id"));
+        });
+
+        $(document).on('click', '#Filters .edittekst3', function (e) {
+
+            $header = $(this);
+            // zoek het volgende element
+            $content = $header.next();
+                
+            if ($content.is(":visible")) //indien <div class="content"> zichtbaar is, dus expanded
+            {
+                // slide de content omhoog
+                $content.slideUp("slow");
+                // doe niets
+            }
+            else //indien <div class="content"> onzichtbaar is, dus collapsed
+            {
+                // slide de content omlaag
+                $content.slideDown("slow");
+                // scroll het window naar beneden om de content te tonen
+                $("#editor").animate({ scrollTop: $("#editor")[0].scrollHeight }, 1000);
+            }
+        });
+
+        function BuildCrumb() {
+
+            $("#breadcrumb").empty();
+
+            $("#breadcrumb").append("<div class='crumb'><a class='parent' href='#' Id='0'" +
+                " Action='Parentclicked' Level='0'>zerolevel</a></div>");
+            var i;
+            var level = 1;
+            for (i = 1; i < bcarray.length; ++i) {
+                var id = bcarray[i];
+                getCrumb(id, level);
+                level++;
+            }
+        }
+
+        function CleanArray(clickedlevel) {
+            var end = bcarray.length; // zeg 5
+            var start = clickedlevel; // zeg 2, dus element 3
+            // times moet uitkomen op 2 zodat er 2x gepopt wordt
+            var times = end - start - 1;
+            for (i = 0; i < times; ++i) {
+                bcarray.pop(); // verwijder het laatste element van de array, doe dit 2x
+            }
+        }
+
+        function getChildren(thisObj, id) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/GetCategories',
+                data: "{'parentid':'" + parentid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var childrenlijst = response.d
+
+                    if (childrenlijst.length > 0) {
+                        $("#links").empty();
+                        $.each(childrenlijst, function (index, child) {
+                            $("#links").append("<div class='childcont'><div class='childlink'><a href='#' class='child' Id='" +
+                                child.Id + "' Action='Childclicked'><div class='menulink'>" + child.Categorienaam + "</div></a></div>" +
+                                "</div>");
+                        });
+                        BuildCrumb();
+                        $("#voegtoeinit").hide();
+                        $("#voegtoestatic").hide();
+                    }
+                    else {
+                        bcarray.pop(); // haal nieuwe parent weer weg
+                        BuildCrumb();
+                        // haal alle gekleurde borders weg
+                        $(".childlink").css('border-color', 'white');
+                        // omlijn het aangeklikte child
+                        thisObj.parent().css('border', '1px solid blue');
+                        $("#eerstcatiderror").hide();
+                        $("#voegtoeinit").show();
+                        // verberg evt. oude meldingen
+                        $(".duplicaaterror").empty();
+                        // verberg eerst de produktnaam en voegtoestatic
+                        $("#editproduktnaam").val('');
+                        $("#voegtoestatic").hide();
+
+                        // haal het origCatid
+                        GetSession_Catid();
+                        // indien newID is niet null, en het gekozen catid is gelijk aan het originele, toon de produktnaam in het invoerveld en toon voegtoestatic
+                        if (newID != null) {
+                            if (catid == origCatid) {
+                                ToonProduktnaam();
+                                // verberg oude meldingen
+                                $(".invoersucces2").empty();
+                                $("#voegtoestatic").show();
+                                // haal prodomschr en prodafb a.d.h.v. newID
+                                HaalOmschrAfb();
+                            }
+                        }
+                    }
+                },
+
+                error: function (response) {
+                    alert("GetCategories error");
+                }
+            });
+
+        }
+
+        function ToonProduktnaam() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'ProduktService.asmx/GetProduktnaam',
+                data: "{'newID':'" + newID + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    produktnaam = response.d.Produktnaam;
+                    $("#editproduktnaam").val('');
+                    $("#editproduktnaam").val(produktnaam);
+                },
+
+                error: function (response) {
+                    alert("GetProduktnaam error");
+                }
+            });
+        }
+
+        function HaalOmschrAfb() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'ProduktService.asmx/GetOmschrAfb',
+                data: "{'newID':'" + newID + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    var prodomschr = response.d.ProdOmschr;
+                    var prodafb = response.d.ProdAfb;
+                    $("#editprodomschr").val('');
+                    $("#editprodomschr").val(prodomschr);
+                    $("#gekozen_afbeelding").attr("src", prodafb);
+                    afbeelding = prodafb;
+                },
+
+                error: function (response) {
+                    alert("GetProduktnaam error");
+                }
+            });
+        }
+
+        function getCrumb(id, level) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/GetCrumb',
+                data: "{'id':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    $("#breadcrumb").append("<div class='separator'>></div>");
+
+                    var crumb = response.d;
+                    $("#breadcrumb").append("<div class='crumb'><a href='#' class='parent' Id='" +
+                        crumb.Id + "' Action='Parentclicked' Level='" + level + "'>" + crumb.Categorienaam + "</a></div>");
+
+                },
+
+                error: function (response) {
+                    alert("GetCrumb error");
+                }
+            });
+
+        }
+
+        function generateFilters() {
+
+            $("#Filters").empty();
+
+            // eerste AJAX call, deze is om de prijsslider op te halen, zodat deze als eerste verschijnt
+            $.ajax({
+
+                type: 'POST',
+                url: 'FilterService.asmx/GetSliderPrijs',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    var data = response.d
+                    if (data != "") {
+                        prijssliderid = response.d.Id;
+                        waarde = response.d.Waarde;
+                        $("#Filters").append("<div class='edittekst2'>Prijs: €</div><input type='text' id='" + prijssliderid + "' value='" + waarde + "'><br>");
+                    }
+                    else { // waarderecord bestaat niet
+                        $.ajax({
+
+                            type: 'POST',
+                            url: 'FilterService.asmx/GetSliderPrijsId',
+                            data: "{'Catid':'" + catid + "'}",
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            async: false,
+                            success: function (response) {
+                                var data = response.d
+                                if (data != "") { // primaire sliderrecord bestaat
+                                    prijssliderid = response.d.Id;
+                                    $("#Filters").append("<div class='edittekst2'>Prijs: €</div><input type='text' id='" + prijssliderid + "'><br>");
+                                }
+                                else {
+
+                                }
+                            },
+
+                            error: function (response) {
+                                alert("GetSliderPrijsId error");
+                            }
+                        });
+                    }
+                },
+
+                error: function (response) {
+                    alert("GetSliderPrijs error");
+                }
+            });
+            // tweede AJAX call, voor de Eigenschappen
+            $.ajax({
+
+                type: 'POST',
+                url: 'FilterService.asmx/GetEigenschappen',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    var eigenschappenlijst = response.d
+
+                    if (eigenschappenlijst.length > 0) {
+
+                        $.each(eigenschappenlijst, function (index, eig) {
+                            eigenschap = eig.Eigenschap;
+                            // derde AJAX call, voor de filters
+                            $.ajax({
+
+                                type: 'POST',
+                                url: 'FilterService.asmx/GetFilterElement',
+                                data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "'}",
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                async: false,
+                                success: function (response) {
+                                    var filterelement = response.d.FilterElement;
+
+                                    if (filterelement == "checkbox") {
+                                        $.ajax({
+
+                                            type: 'POST',
+                                            url: 'FilterService.asmx/GetIdEnWaarde',
+                                            data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "'}",
+                                            contentType: 'application/json; charset=utf-8',
+                                            dataType: 'json',
+                                            async: false,
+                                            success: function (response) {
+
+                                                var waardenarray = [];
+                                                var waardenlijst = response.d;
+                                                $.each(waardenlijst, function (index, waarde) {
+                                                    waardenarray.push(waarde.Id);
+                                                });
+                                                waardenarray.join(',');
+                                                $.ajax({
+
+                                                    type: 'POST',
+                                                    url: 'ProduktEigenschappenService.asmx/CheckVoorkomenEigIds',
+                                                    data: "{'Produktid':'" + newID + "','ArrayVanEigIds':" + JSON.stringify(waardenarray) + "}",
+                                                    contentType: 'application/json; charset=utf-8',
+                                                    dataType: 'json',
+                                                    async: false,
+                                                    success: function (response) {
+                                                        var eigenschapswaardenlijst = response.d
+                                                        var array = [];
+
+                                                        if (eigenschapswaardenlijst.length > 0) {
+                                                             // voeg de header Eigenschap toe aan #Filters
+                                                            //array.push("<div class='edittekst2'>" + eigenschap + "</div><br>");
+                                                            array.push("<div class='edittekst3'>" + eigenschap + "</div><div class='list-group'>");
+                                                            $.each(eigenschapswaardenlijst, function (index, eigwaarde) {
+                                                                if (eigwaarde.Voorkomen == "Ja") {
+                                                                    array.push("<div class='list-group-item'><input type='checkbox' class='clickclass' id='" + eigwaarde.Id + "' checked='checked'>" + " " + "<label for='" + eigwaarde.Id + "'>" + eigwaarde.Waarde + "</label></div>");
+                                                                }
+                                                                if (eigwaarde.Voorkomen == "Nee") {
+                                                                    array.push("<div class='list-group-item'><input type='checkbox' class='clickclass' id='" + eigwaarde.Id + "'>" + " " + "<label for='" + eigwaarde.Id + "'>" + eigwaarde.Waarde + "</label></div>");
+                                                                }
+                                                            });
+                                                            array.push("</div>");
+                                                            $("#Filters").append(array.join(''));
+                                                        }
+                                                    },
+
+                                                    error: function (response) {
+                                                        alert("CheckVoorkomenEigIds error");
+                                                    }
+                                                });
+                                            },
+
+                                            error: function (response) {
+                                                alert("GetWaarden error");
+                                            }
+                                        });
+                                    }
+                                    if (filterelement == "slider") {
+                                        // GetSlider ajax call om de slidergegevens op te halen (min en max) en het id
+                                        $.ajax({
+
+                                            type: 'POST',
+                                            url: 'FilterService.asmx/GetSlider',
+                                            data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "','FilterElement':'" + filterelement + "'}",
+                                            contentType: 'application/json; charset=utf-8',
+                                            dataType: 'json',
+                                            async: false,
+                                            success: function (response) {
+                                                var id = response.d.Id;
+                                                var min = response.d.Min;
+                                                var max = response.d.Max;
+                                                var symb = response.d.Symbool;
+                                                var eig = eigenschap;
+                                            },
+
+                                            error: function (response) {
+                                                alert("GetSlider error");
+                                            }
+                                        });
+                                    }
+                                },
+
+                                error: function (response) {
+                                    alert("GetFilterElement error");
+                                }
+                            });
+                        });
+                    }
+                },
+
+                error: function (response) {
+                    alert("GetEigenschappen error");
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <div id="linkswindow">
+        <div id="breadcrumb"></div>
+        <div id="links"></div>
+    </div>
+    <div id="editwindow">
+        <div class="tab">
+            <button class="tablinks" onclick="openProdukten(event)">Produkten</button>
+            <button class="tablinks active" onclick="openVoegProduktToe(event)">Voeg produkt toe</button>
+            <button class="tablinks" onclick="openBewerkProdukt(event)">Bewerk produkt</button>
+            <button id="deleteall">Verwijder alle produkten</button>
+        </div>
+        <div id="editor">
+            <div id="editorprodukten">
+                <div class="uitleg">
+
+                </div>
+                <div class="smallspacer"></div>
+                <form id="editorproduktenform">
+
+                </form>
+            </div>
+            <div id="editorvoegtoe">
+                <div class="uitleg">
+                    Deze editor is bedoeld om produkten in te voeren. Eerst dient de produktnaam te worden ingegeven. Daarna krijgt u de
+                    gelegenheid om statische produkteigenschappen in te voeren. Deze eigenschappen zijn voor ieder produkt gelijk, zoals
+                    produktomschrijving en produktafbeelding. Na het vastleggen van de statische produkteigenschappen wordt u in
+                    de gelegenheid gesteld waarden op te geven voor de dynamische produkteigenschappen. De dynamische produkteigenschappen
+                    worden bepaald door de bij de produktcategorie opgegeven filters (eigenschappen).
+                </div>
+                <div class="smallspacer"></div>
+                    <div id="voegtoeinit">
+                        <div class="edittekst">
+                            Voer een naam in voor het produkt:
+                        </div>
+                        <div class="smallspacer"></div>
+                        <form id="editorvoegtoeinitform">
+                            <input type="text" id="editproduktnaam"/>
+                            <button id="buttvoerproduktin">Voer produktnaam in</button>
+                            <div class="smallspacer"></div>
+                            <div class="invulerror"></div>
+                            <div class="duplicaaterror"></div>
+                            <div class="invoersucces"></div>
+                        </form>
+                    </div>
+                    <div id="eerstcatiderror">
+                        De produktnaam kan pas worden ingevoerd indien er een produktcategorie bekend is. Kiest u
+                        daarom in het linkervenster een eindcategorie (categorie zonder subcategorieën), herkenbaar aan de blauwe omkadering.
+                    </div>
+                    <div id="voegtoestatic">
+                        <hr />
+                        <div class="edittekst">
+                            Geef een produktomschrijving op en kies een produktafbeelding.
+                        </div>
+                        <div class="smallspacer"></div>
+                        <form id="editorvoegtoestaticform">
+                            <div id="leftarea">
+                                <div class="edittekst">Produktomschrijving:</div>
+                                <div class="smallspacer"></div>
+                                <textarea id="editprodomschr" rows="8" cols="50"></textarea>
+                            </div>
+                            <div id="rightarea">
+                                <div class="edittekst">Kies een afbeelding:</div>
+                                <div class="smallspacer"></div>
+                                <input id="afbeelding_chooser" type="file" onChange="Upload();" accept="image/png,image/jpeg,image/jpg" />
+                                <div class="smallspacer"></div>
+                                <div id="afbeelding">
+                                    <img id="gekozen_afbeelding" src="images/kies_een_afbeelding.jpg" />
+                                </div>
+                            </div>
+                            <div class="smallspacer"></div>
+                            <div class="invulerror2"></div>
+                            <div class="invoersucces2"></div>
+                            <button id="buttvoerprodomschrafbin">Voeg toe aan produkt</button>
+                            <button id="toonoverigeprodgeg">Toon overige produktgegevens</button>
+                        </form>
+                    </div>
+                    <div id="voegtoedynamic">
+                        <div class="smallspacer"></div>
+                        <div class="uitleg">
+                            De volgende produktgegevens zijn niet algemeen en worden bepaald door de in de eigenschappeneditor vastgelegde filters (eigenschappen).
+                            Voor slidereigenschappen geldt dat u een waarde moet invoeren en op vernieuwen moet klikken. Checkboxeigenschappen kunnen simpelweg
+                            worden gevinkt of niet gevinkt om de waarde vast te leggen.
+                        </div>
+                        <div class="smallspacer"></div>
+                        <form id="editorvoegtoedynamicform">
+                            <div id="Filters">
+                            </div>
+                        </form>
+                    </div>
+            </div>
+            <div id="editoredit">
+                <div class="uitleg">
+
+                </div>
+                <div class="smallspacer"></div>
+                <form id="editoreditform">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

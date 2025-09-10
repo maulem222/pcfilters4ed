@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!-- Load JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Load Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+        var catid = 34;
+
+        $(document).ready(function () {
+
+            vue_choices.SetCatId(catid);
+            getData();
+        });
+
+
+        $(document).on('click', '.winkelm', function (e) {
+            var id = $(this).attr('id');
+            alert(id);
+        });
+
+        function getData() {
+            var SQL = "SELECT * FROM testtabel";
+
+            fetch('/ProduktService.asmx/getProducts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sql: SQL })
+            })
+                .then(response => {
+                    // Parse the JSON response
+                    return response.json();
+                })
+                .then(data => {
+                    //console.clear();
+                    //console.log(data.d);
+                    vue_choices.SetProducts(data.d); // call Vue method to set data
+                })
+                .catch(error => {
+                    // Handle any errors that occurred during the fetch
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+    </script>
+    <style>
+        .demoDiv {
+            display: inline-block;
+            width: 49%;
+            vertical-align: top;
+        }
+
+        /* product view */
+
+        .product { /* .product is een algemene container voor alledrie de elementen */
+            float: left; /* zet afbeelding, naam/features en prijs/buttoncontainer naast elkaar */
+            border: 0px solid red;
+            height: 170px; /* zorg voor een vaste hoogte */
+        }
+
+        .image {
+            width: 25%; /* de breedte is een percentage van de totale breedte van de prodcontainer */
+        }
+
+        .name {
+            font-family: 'Franklin Gothic Book';
+            font-size: 25px;
+            color: darkblue;
+            width: 45%; /* ook hier een procentuele breedte */
+        }
+
+        .price {
+            width: 25%; /* ook hier een procentuele breedte */
+            position: relative;
+            font-size: 25px;
+            border: 0px solid green;
+        }
+
+        .europrice { /* dit vakje bevat de prijs zelf en valt binnen de prijscontainer */
+            position: absolute; /* .price is position relative, dan kan .europrice absoluut worden gepositioneerd daarbinnen */
+            right: -30px;
+            bottom: 55px;
+        }
+
+        .butt { /* dit vakje bevat de bestelknop en valt eveneens binnen de prijscontainer */
+            position: absolute; /* .price is position relative, dan kan .butt absoluut worden gepositioneerd daarbinnen */
+            right: 35px;
+            bottom: 5px;
+            width: 120px;
+            height: 40px;
+            border: 0px solid green;
+        }
+
+        .picture {
+            width: 150px;
+        }
+
+        .prodcont {
+            width: 100%; /* de prodcontainer bevat alledrie de .product divs en omvat 100% van de produktcontainer */
+            height: 180px;
+            display: block; /* display block om de hele rij af te zonderen van de volgende rijen */
+            border-bottom: 1px solid #e3e6e4; /* toon onder de rij alleen de bottom border, dat is een dunne grijze lijn */
+            margin-bottom: 15px; /* laat wat afstand tot de eronder staande prodcontainer */
+        }
+
+        .features {
+            font-family: 'Franklin Gothic Book';
+            font-size: 15px;
+            color: #999ba1;
+        }
+
+        /* product details links */
+
+        .nounderline {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+            .nounderline:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+    <h1>JQuery and Vue</h1>
+    <!-- Div where Vue runs -->
+    <div id="app" class="demoDiv">
+        <div v-for="product in products">
+            <div class='prodcont'>
+                <a class='nounderline' :href="`/wonen/stoelen/poefs/details.html?table=testtabel&pid=${product.Id}&prodname=${product.Produktnaam}&catid=${this.catid}`">
+                    <div class='product image'>
+                        <img class='picture' :src="`${product.Produktafbeelding}`" />
+                    </div>
+                </a>
+                <div class='product name'>
+                    <a class='nounderline' :href="`/wonen/stoelen/poefs/details.html?table=testtabel&pid=${product.Id}&prodname=${product.Produktnaam}&catid=${this.catid}`">{{ product.Produktnaam }}</a>
+                    <div class='features' :id="`${product.Id}`"></div>
+                </div>
+                <div class='product price'>
+                    <div class='butt'><img class='winkelm' :id="`${product.Id}`" :naam="`${product.Produktnaam}`" src='/images/plaatsinwinkelmandje.jpg' /></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var vue_choices = new Vue({
+            el: '#app', //Attach to element id app
+            data: {
+                products: [],
+                catid: 0
+            },
+
+            methods: {
+                SetProducts(prod) {
+                    this.products = JSON.parse(prod);
+                    console.log("products: " + this.products);
+                },
+                SetCatId(catid) {
+                    this.catid = catid;
+                }
+            }, // end methods
+        }) // end vue
+    </script>
+</body>
+</html>

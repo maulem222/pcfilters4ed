@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>OD test</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+
+        .image {
+            width: 100%;
+        }
+
+        /* responsive video */
+
+        @media only screen and (min-width: 1200px) {
+
+            .responsive-video {
+                position: relative;
+                padding-bottom: 56.25%; /* 16:9 aspect ratio */
+                height: 0;
+                overflow: hidden;
+                max-width: 100%;
+            }
+
+            .responsive-video iframe {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+            }
+        }
+
+        @media only screen and (min-width: 740px) and (max-width: 1199px) {
+            .image {
+                width: 50%;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .video {
+                width: 700px;
+                height: 350px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .responsive-video iframe {
+                width: 700px;
+                height: 350px;
+            }
+        }
+
+        @media only screen and (min-width: 0px) and (max-width: 739px) {
+
+            .video {
+                width: 500px;
+                height: 250px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .responsive-video iframe {
+                width: 500px;
+                height: 250px;
+            }
+        }
+
+        .margin {
+            margin-bottom: 50px;
+        }
+
+        /* Default: full width on small screens */
+        .container {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Custom: 75% width on medium screens and up */
+        @media (min-width: 1341px) {
+            .container {
+                width: 75%;
+                max-width: 75%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 margin">
+
+                <div class="responsive-video video">
+                    <iframe src="https://www.youtube.com/embed/ICLTZ6HKyb0" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="col-lg-6 margin">
+                <p style="text-align: justify;"><span style="font-size: 14pt;">🪑 <strong>Poefs bij Goossens Wonen: stijlvol, veelzijdig en comfortabel</strong></span></p>
+                <p style="text-align: justify;"><span style="font-size: 14pt;">Poefs zijn allang niet meer slechts decoratieve accessoires. Bij <button type="button" data-url="https://www.goossenswonen.nl/wonen-stoelen-poefs">Goossens Wonen</button> vind je een uitgebreide collectie poefjes die functionaliteit combineren met design. Of je nu op zoek bent naar een extra zitplek, een voetenbankje of een speels accent in je interieur&mdash;de poef is een echte multitasker.</span></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

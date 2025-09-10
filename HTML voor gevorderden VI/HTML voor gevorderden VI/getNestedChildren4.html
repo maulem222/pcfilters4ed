@@ -1,0 +1,546 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        ul {
+            list-style-type: none;
+        }
+
+        .link {
+            font-size: 18px;
+            text-decoration: none;
+            color: black;
+        }
+
+        #upperspace {
+            top: 0;
+            height: 200px;
+            width: 400px;
+            border: 1px solid gray;
+        }
+
+        body select {
+            display: block;
+            padding: 10px 70px 10px 13px !important;
+            width: 399px;
+            height: auto !important;
+            border: 1px solid grey;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            /* background: url("https://i.ibb.co/b7xjLrB/selectbox-arrow.png") right center no-repeat; */
+            background-color: #fff;
+            color: grey;
+            font-size: 15px;
+            font-family: Arial;
+            line-height: 16px !important;
+            /* this is must */ -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: linear-gradient(45deg, transparent 50%, #808080 50%), linear-gradient(135deg, #808080 50%, transparent 50%), linear-gradient(to right, #808080, #808080);
+            background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
+            background-size: 5px 5px, 5px 5px, 1px 1.5em;
+            background-repeat: no-repeat;
+        }
+
+        /* for IE and Edge */
+        select::-ms-expand {
+            display: none;
+        }
+
+        select:disabled::-ms-expand {
+            background: #f60;
+        }
+
+        .smallspacer {
+            height: 5px;
+        }
+
+        .text {
+            font-family: Calibri;
+            font-size: 16px;
+            color: black;
+            padding: 5px;
+        }
+
+        #treeview {
+            position: relative;
+            height: auto;
+            width: 400px;
+            border: 1px solid gray;
+        }
+
+        #collapser {
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+        }
+
+            #collapser img {
+                width: 10px;
+                height: 10px;
+            }
+
+        #pathcont {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 400px;
+            height: 55px;
+            border: 1px solid gray;
+            border-bottom: 0px;
+        }
+
+        #buttcont {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            top: auto;
+            width: 400px;
+            height: 50px;
+            border: 1px solid gray;
+            border-top: 0px;
+        }
+
+        #pathtext {
+            width: 392px;
+            height: 40px;
+            border: 2px solid gray;
+            border-radius: 3px;
+            color: dimgrey;
+        }
+
+        .plus::before {
+            content: "\002B";
+            color: black;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .minus::before {
+            content: "\2212";
+            color: black;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .expandable {
+            max-height: 0;
+            transition: max-height 0s;
+            overflow: hidden;
+        }
+
+            .expandable.expanded {
+                max-height: 2000px; /* the divs will never get this big but this doesn't matter*/
+                transition: max-height 4s ease-out;
+                overflow: hidden;
+            }
+
+        /* CSS */
+        .button-14 {
+            background-image: linear-gradient(#f7f8fa,#e7e9ec);
+            border-color: #adb1b8 #a2a6ac #8d9096;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 3px;
+            box-shadow: rgba(255,255,255,.6) 0 1px 0 inset;
+            box-sizing: border-box;
+            color: #0f1111;
+            cursor: pointer;
+            font-family: "Amazon Ember",Arial,sans-serif;
+            font-size: 14px;
+            height: 29px;
+            font-size: 13px;
+            outline: 0;
+            overflow: hidden;
+            padding: 0 11px;
+            text-align: center;
+            text-decoration: none;
+            text-overflow: ellipsis;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            white-space: nowrap;
+            width: 80px;
+            height: 30px;
+            margin-right: 5px;
+            margin-top: 8px;
+        }
+
+            .button-14:active {
+                transform: scale(0.98);
+                /* Scaling button to 0.98 to its original size */
+                box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+                /* Lowering the shadow */
+            }
+
+        .errortext {
+            width: 320px;
+            color: red;
+            padding: 5px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        var patharr = [];
+        var tabel;
+        var id;
+        var catid;
+        var pad;
+        var SQL;
+
+        $(document).ready(function () {
+            getCategoriesSorted(); // lees de treeview in
+            getTabellen(); // zet alle tabellen uit de tabel Tabellen in de dropdown
+
+            $("#dd").on('change', function () { // maak een change handler voor de dropdown
+                tabel = $("select option:selected").text();
+                id = $("select option:selected").val();
+                if (!isNullOrEmpty(id)) { // indien niet de lege optie is gekozen
+                    getCatidandPath(); // haal a.d.h.v. id de eventueel bestaande Catid en Pad uit de tabel Tabellen
+                }
+            });
+        });
+
+        $(document).on('click', '#collapser', function (e) { // #collapser is het kleine dubbele grijze pijltje rechts van de treeview
+            collapse_treeview(); // klap de hele treeview in
+        });
+
+        $(document).on('click', '.button-14', function (e) {
+            $(".errortext").text('');
+            var table = tabel; // tabel is hopelijk ingesteld met dd on change (zie hier boven)
+            var path = $("#pathtext").val(); // pad is hopelijk ingesteld met getCatidandPath(), aangeroepen binnen dd on change
+
+            if (!isNullOrEmpty(table) && !isNullOrEmpty(path)) { // zijn zowel tabel als categorie gekozen
+                console.log('table and path');
+                pad = path;
+                Opslaan(); // sla catid en pad op in de tabel Tabellen
+                SQL = "SELECT * FROM " + table; // zet een globale SQL query, om tijdens LinkAdder() alle produkten uit de juiste tabel te halen
+                LinkAdder(); // voeg de ProduktLink toe voor alle records
+            }
+            if (!isNullOrEmpty(table) && isNullOrEmpty(path)) { // alleen tabel gekozen
+                console.log('table only');
+                $(".errortext").text('U dient een categorie te kiezen in de treeview!');
+            }
+            if (isNullOrEmpty(table) && !isNullOrEmpty(path)) { // alleen categorie-pad gekozen
+                console.log('path only');
+                $(".errortext").text('U dient een tabel te kiezen in de dropdown!');
+            }
+            if (isNullOrEmpty(table) && isNullOrEmpty(path)) { // geen tabel en ook geen categorie gekozen
+                console.log('table and path empty or null');
+                $(".errortext").text('U dient zowel een tabel als een categorie te kiezen!');
+            }
+        });
+
+        $(document).on('click', '.link', function (e) {
+
+            var id = $(this).attr('id');
+            catid = $(this).attr('id');
+
+            $("#pathtext").val('');
+
+            if ($(this).next('div').children("ul").children("li").length) {
+                // doe niets, er zijn nog children, dus toon geen pad
+            }
+            else {
+                // saturatie, geen children, dus pad kan worden getoond in textbox
+                patharr.length = 0;
+                // haal parents en sla die op in een array
+                getParents(id);
+                var patharr2 = patharr.reverse();
+                let patharr3 = patharr2.map(replaceInArray); // map werkt zich door alle array elementen
+                var path = patharr3.join('/');
+                var prefix = '/';
+                $("#pathtext").val(prefix + path);
+                console.log(prefix + path);
+                $(".link").css('background-color', 'white'); // zet van alle links de achtergrond in op wit
+                $(this).css('background-color', 'pink'); // stel de achtergrond van de geklikte link (categorie) in op roze
+            }
+
+        });
+
+        function isNullOrEmpty(str) {
+            var returnValue = false;
+            if (!str
+                || str == null
+                || str === 'null'
+                || str === ''
+                || str === '{}'
+                || str === 'undefined'
+                || str.length === 0) {
+                returnValue = true;
+            }
+            return returnValue;
+        }
+
+        var replaceInArray = function (str) {
+            return str.replace(/\s+/g, "-") // vervang whitespace in de categorienamen door - (een streepje)
+        }
+
+        const render = (arr, id) => { // deze functie maakt een aantal html elementen aan
+            const li = document.createElement('li'); // begin met een li
+            // zet binnen in de li de a met de categorienaam
+            li.innerHTML = "<a class='link' href='#' id='" + arr.find(e => e.Id === id).Id + "'>" + arr.find(e => e.Id === id).Catnaam + "</a>"
+            const div = document.createElement('div'); // maak een div
+            div.className = "expandable"; // geef die een classname
+            li.appendChild(div); // zet deze div binnen de li
+            const ul = document.createElement('ul'); // maak een ul
+            div.appendChild(ul); // zet de ul binnen de div expandable
+            arr.filter(e => e.ParentId === id).forEach(sub => { // zoek in de array naar de children
+                ul.appendChild(render(arr, sub.Id)); // zet de children binnen de ul, deze children zijn li's
+            });
+            return li; // want render retourneert li
+        }
+
+        function getCategoriesSorted() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: '/CategorieService.asmx/GetCategoriesSorted',
+                data: "{}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var arr = response.d;
+                    arr = $.parseJSON(arr);
+                    console.log(arr);
+
+                    // start het inlezen van de arr en appendChild en render
+                    arr.filter(e => e.ParentId === 0).forEach(main => document.querySelector('ul').appendChild(render(arr, main.Id)));
+
+                    // toggle de expanded class indien geklikt wordt op een link
+
+                    document.querySelectorAll(".link").forEach((item) => {
+                        item.addEventListener("click", (event) => {
+                            const divexp = event.target.nextElementSibling; // divexp is de div .expandable die volgt op de a.link
+                            //console.log(divexp);
+                            divexp.classList.toggle('expanded');
+                        });
+                    });
+
+                    // plus minus toevoegen
+
+                    $("li a").each(function () {
+                        const list = $(this).next('div').children("ul").children("li");
+                        //console.log(list);
+                        if (list.length) { // indien nog childnodes aanwezig zijn
+                            $(this).addClass("plus"); // zet dan een plusteken voor de link
+                        }
+                    });
+
+                    // plus en min wisselen na click
+
+                    $('li a').click(function () {
+                        const list = $(this).next('div').children("ul").children("li");
+                        if (list.length) { // indien nog childnodes aanwezig zijn
+                            if ($(this).hasClass('plus')) {
+                                $(this).removeClass('plus');
+                                $(this).addClass('minus');
+                            }
+                            else {
+                                $(this).removeClass('minus');
+                                $(this).addClass('plus');
+                            }
+                        }
+                    });
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        function getParents(id) {
+
+            $.ajax({
+                type: 'POST',
+                url: '/CategorieService.asmx/GetCrumbforPath',
+                data: "{'id':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var catnaam = response.d.catnaam;
+                    patharr.push(catnaam);
+                    var par = response.d.parentid;
+                    if (par > 0) {
+                        getParents(par);
+                    }
+                },
+
+                error: function (response) {
+                    alert("GetCrumbforPath error");
+                }
+            });
+        }
+
+        function getTabellen() {
+
+            $.ajax({
+                type: 'POST',
+                url: '/TableService.asmx/getTabellen',
+                data: "{}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var tabellenlijst = JSON.parse(response.d);
+
+                    console.log(tabellenlijst);
+
+                    $.each(tabellenlijst, function (index, tabel) { // voor elke tabel in de tabel Tabellen
+                        var table = tabel.Tabelnaam;
+                        var id = tabel.Id;
+
+                        var listItem = $("<option></option>").val(id).html(table); // stel de waarde en de tekst van het dropdown item in
+                        $("#dd").append(listItem); // voeg het item toe aan de dropdown
+                    });
+                },
+
+                error: function (response) {
+                    alert("getTabellen error");
+                }
+            });
+        }
+
+        function collapse_treeview() {
+            $(".expandable").each(function () {
+                const exp = $(this);
+                //console.log(exp);
+                exp.removeClass('expanded'); // haal de class expanded weg van alle .expandable divs zodat deze collapsen
+                const list = exp.children("ul").children("li");
+                if (list.length) { // indien nog childnodes aanwezig zijn
+                    if ($(this).prev().hasClass('plus')) { // .prev() betekent de a.link
+                        // doe niets, heeft al plus
+                    }
+                    else {
+                        $(this).prev().removeClass('minus');  // haal minus weg
+                        $(this).prev().addClass('plus'); // zet er een plus
+                    }
+                }
+                else { // geen childnodes, dus eindnode
+                    $(this).prev().css('background-color', 'white'); // haal het eventueel roze accent weg
+                }
+            });
+        }
+
+        function Opslaan() {
+            $.ajax({
+                type: 'POST',
+                url: '/TableService.asmx/UPDATETabellen',
+                data: "{'id':'" + id + "','catid':'" + catid + "','pad':'" + pad + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                },
+
+                error: function (response) {
+                    alert("UPDATETabellen error");
+                }
+            });
+        }
+
+        function LinkAdder() {
+            $.ajax({
+                type: 'POST',
+                url: '/ProduktService.asmx/getProducts',
+                data: "{'sql':'" + SQL + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var produktenlijst = JSON.parse(response.d);
+
+                    $.each(produktenlijst, function (index, produkt) {
+                        var pid = produkt.Id;
+                        var naam = produkt.Produktnaam;
+                        var produktlink = pad + "/details.html?table=" + tabel + "&pid=" + pid + "&prodname=" + naam + "&catid=" + catid;
+                        console.log(produktlink);
+                        var SQL = "UPDATE " + tabel + " SET ProduktLink=@prodlink WHERE Id=@id";
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '/ProduktService.asmx/setProduktLink',
+                            data: "{'id':'" + pid + "','produktlink':'" + produktlink + "','sql':'" + SQL + "'}",
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            async: false,
+                            success: function (response) {
+
+                            },
+
+                            error: function (response) {
+                                alert("setProduktLink error");
+                            }
+                        });
+                    });
+                },
+
+                error: function (response) {
+                    alert("getProducts error");
+                }
+            });
+        }
+
+        function getCatidandPath() {
+            $.ajax({
+                type: 'POST',
+                url: '/TableService.asmx/getCatidandPath',
+                data: "{'id':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (!isNullOrEmpty(response.d.catid) && !isNullOrEmpty(response.d.pad)) { // Catid en Pad zijn aanvankelijk nog niet ingevuld in de tabel Tabellen
+                        catid = response.d.catid;
+                        pad = response.d.pad;
+                        console.log("catid: " + catid + " pad: " + pad);
+                        $("#pathtext").val(pad);
+                    }
+                },
+
+                error: function (response) {
+                    alert("getCatidandPath error");
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <div id="upperspace">
+        <div class="text">Kies in de dropdown hier onder een tabel waar u produkten wilt invoeren:</div>
+        <div class="smallspacer"></div>
+        <select id="dd"><option selected='selected'></option></select>
+        <div class="smallspacer"></div>
+        <div class="text">
+            U dient een categorie-pad in te stellen. Dit verschijnt in het onderste vak. Klikt u hier onder in de treeview om de categorie te kiezen,
+            die bij deze groep produkten hoort. U kunt hiermee het categorie-pad ook wijzigen. Klikt u na het instellen op de knop Opslaan.
+        </div>
+    </div>
+    <div id="treeview">
+        <ul></ul>
+        <div id="collapser">
+            <img src="images/arrows-up.png" />
+        </div>
+    </div>
+    <div id="pathcont">
+        <input type="text" id="pathtext" readonly />
+    </div>
+    <div id="buttcont">
+        <div class="smallspacer"></div>
+        <div class="errortext"></div>
+        <button class="button-14" role="button">Opslaan</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script>
+        function getLocation(href) {
+            var l = document.createElement("a");
+            l.href = href;
+            return l;
+        };
+        var l = getLocation("http://localhost/wonen/stoelen/poefs.html");
+        var pathanddoc = l.pathname;
+        var path = pathanddoc.substring(0, pathanddoc.lastIndexOf('/') + 1);
+        alert(path);
+    </script>
+</head>
+<body>
+
+</body>
+</html>

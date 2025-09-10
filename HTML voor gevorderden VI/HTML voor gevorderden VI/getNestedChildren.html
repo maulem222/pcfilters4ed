@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        ul ul {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
+
+        #pathcont {
+            position: fixed;
+            bottom: 0;
+            width: 400px;
+            height: 40px;
+            border: 3px solid gray;
+            border-radius: 3px;
+        }
+
+        #pathtext {
+            position: fixed;
+            bottom: 0;
+            width: 400px;
+            height: 40px;
+            border: 2px solid gray;
+            border-radius: 3px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        var bericht;
+        var patharr = [];
+        var path;
+
+        $(document).ready(function () {
+            getCategoriesSorted();
+        });
+
+        $(document).on('click', '.link', function (e) {
+            var id = $(this).attr('id');
+
+            try {
+                hasSiblings(id).then((result) => {
+
+                    bericht = result.d.Bericht;
+                    console.log("Bericht: " + bericht);
+                    if (bericht === "siblings") {
+                        // doe niets
+                    }
+                    else {
+                        patharr.length = 0;
+                        // haal parents en sla die op in een array
+                        getParents(id);
+
+                        setTimeout(function () {
+                            var patharr2 = patharr.reverse();
+                            path = patharr2.join(' / ');
+                            var prefix = '/ ';
+                            $("#pathtext").val(prefix + path);
+                            console.log(prefix + path);
+                        }, 100);
+                    }
+                });
+            } catch (e) {
+                console.log(e);
+            }
+
+        });
+
+        const makeTree = (array, id, parentid, parentValue) =>
+            array
+                .filter(node => {
+                    return node[parentid] === parentValue;
+                })
+                .map(node => {
+                    node["items"] = makeTree(array, id, parentid, node[id]);
+                    return node;
+                });
+
+        const renderLevel = items => {
+            return $("<ul class='toggle'>").append(
+                items.map(item =>
+                    $("<li>")
+                        .html("<a class='link' href='#' id='" + item.Id + "'>" + item.Catnaam + "</a>")
+                        .append(renderLevel(item.items))
+                )
+            );
+        };
+
+
+
+        function getCategoriesSorted() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: '/CategorieService.asmx/GetCategoriesSorted',
+                data: "{}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var arr = response.d;
+                    arr = $.parseJSON(arr);
+                    console.log(arr);
+
+                    const tree = makeTree(arr, "Id", "ParentId", 0);
+                    $(() => {
+                        $("body").append(renderLevel(tree));
+                        $("body a").addClass('selected');
+
+                        const links = document.querySelectorAll('.selected');
+
+                        links.forEach(function (links) {
+                            links.addEventListener('click', function (e) {
+                                const el = e.target;
+                                //alert(el.innerHTML);
+                                const sibling = el.nextSibling;
+                                sibling.classList.toggle('show');
+                            });
+                        });
+
+                    });
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        function hasSiblings(id) {
+
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+
+                    type: 'POST',
+                    url: '/CategorieService.asmx/hasSiblings',
+                    data: "{'id':'" + id + "'}",
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (response) {
+                        resolve(response) // Resolve promise and when success
+                    },
+                    error: function (err) {
+                        reject(err) // Reject the promise and go to catch()
+                    }
+                });
+            });
+        }
+
+        function getParents(id) {
+
+            $.ajax({
+                type: 'POST',
+                url: '/CategorieService.asmx/GetCrumbforPath',
+                data: "{'id':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (response) {
+                    var catnaam = response.d.catnaam;
+                    patharr.push(catnaam);
+                    var par = response.d.parentid;
+                    if (par > 0) {
+                        getParents(par);
+                    }
+                },
+                error: function (err) {
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <input type="text" id="pathtext" />
+</body>
+</html>

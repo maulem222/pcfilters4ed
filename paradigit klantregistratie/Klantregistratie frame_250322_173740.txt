@@ -1,0 +1,6 @@
+﻿lange balk: 948px
+halve balk: 473px
+kwart balk: 235px
+
+hoogte balk: 70px
+tussenruimte: 20px

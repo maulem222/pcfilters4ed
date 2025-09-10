@@ -1,0 +1,23 @@
+OK - kopieer VoegEigToe naar VoegProduktToe
+OK - maak een linkswindow met alleen breadcrumb en links
+OK - en een editwindow met 3 tabs: produkten, Voeg produkt toe, Edit produkt
+OK - dan een div editorprodukten een div editorvoegtoe en een div editoredit
+OK - binnen editorvoegtoe weer 3 divs: voegtoeinit, voegtoestatic en voegtoedynamic
+OK - wordt er op de tab Voeg produkt toe geklikt dan wordt voegtoeinit getoond, mits het catid gezet is
+OK - is catid niet gezet, dan wordt daarover een melding getoond
+OK - tabel produkten maken met produktid, produktnaam, produktafb, produktomschr en catid (gelijk aan parentid)
+OK - voegtoeinit heeft alleen een edit voor produktnaam en voert deze in samen met het catid via een stored proc
+OK - zodra geklikt is op knop Voeg produkt toe
+OK - de sp retourneert het produktid en slaat dit op
+OK - daarna verschijnt voegtoestatic
+OK - voegtoestatic heeft invoervelden voor produktafbeelding, produktomschrijving
+OK - als newID gevonden is, ook voegtoestatic tonen
+OK - als op een ander child wordt geklikt, en het is een eindnode, dan produktnaam wissen
+OK - wordt op een andere parent geklikt, zowel voegtoeinit als voegtoestatic verbergen
+OK - wordt op Voeg velden toe geklikt, dan wordt het produktrecord ge-update voor deze velden
+OK - en verschijnt voegtoedynamic onder voegtoestatic
+OK - bij een nieuwe run niet vergeten het produktid te vernieuwen in de tabel produkteigenschappen
+- bij het selecteren van eigenschappen binnen VoegProduktToe-getFilters sorteren op checkbox/slider DESC
+- tabel Produkten veld parentid geven
+- indien Session_ID bestaat, Wijzig-knop tonen bij het invoeren van een andere produktnaam (dit kan ook bij Edit)
+- Wijzig procedure maken voor produktnaam

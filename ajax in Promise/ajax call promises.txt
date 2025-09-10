@@ -1,0 +1,25 @@
+        function requestParents(id) {
+
+            function getParents(id) {
+
+                // Do Ajax call, return its promise
+                return $.ajax({
+                    type: 'POST',
+                    url: '/CategorieService.asmx/GetCrumbforPath',
+                    data: "{'id':'" + id + "'}",
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                }).then(function (response) {
+
+                    var catnaam = response.d.catnaam;
+                    patharr.push(catnaam);
+                    var par = response.d.parentid;
+                    if (par > 0) {
+                        return getParents(par);
+                    }
+                });
+            }
+
+            // call the first request and return it's promise
+            return getParents(id);
+        }

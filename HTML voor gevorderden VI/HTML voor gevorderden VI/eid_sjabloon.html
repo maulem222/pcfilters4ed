@@ -1,0 +1,1484 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script src="/Scripts/moment-with-locales.min.js"></script>
+    <script src="/Scripts/vgnav.min.js"></script>
+    <link href="/Content/vgnav.css?version=1" rel="stylesheet" />
+    <link href="/Content/vgnav-theme.css" rel="stylesheet" />
+    <link href="/Content/style.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: Arial;
+            overflow: visible;
+        }
+
+        #left {
+            width: 20%;
+            float: left;
+        }
+
+        #right {
+            width: 20%;
+            float: right;
+        }
+
+        #container {
+            width: 75%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 0px;
+            height: auto;
+            border: 0px solid black;
+        }
+
+        #vegasmenu {
+            width: 75%;
+            height: 50px;
+        }
+
+        #filtercontainer {
+            float: left;
+            padding-left: 15px;
+            width: 235px;
+            border: 1px solid #e3e6e4;
+            border-radius: 4px;
+        }
+
+        #produktcontainer {
+            float: left;
+            width: calc(100% - 302px);
+            border: 0px solid black;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .cbcat, .slcat {
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        label {
+            font-family: sans-serif;
+            color: dimgray;
+        }
+
+        .spacer {
+            height: 10px;
+        }
+
+        .slider {
+            width: 180px;
+            margin-bottom: 5px;
+        }
+
+        .slvalcont {
+            width: 180px;
+            height: 25px;
+        }
+
+        .slidervalues {
+            width: 125px;
+            float: left;
+        }
+
+        .ibbutt {
+            float: right;
+        }
+
+        /* cat en sorteren */
+
+        #catensorteren {
+            width: 100%;
+            height: 40px;
+            border-bottom: 1px solid #e3e6e4;
+            margin-bottom: 15px;
+        }
+
+        #categorie {
+            float: left;
+            margin-left: 20px;
+            font-size: 30px;
+        }
+
+        #sorteren {
+            float: right;
+            width: 120px;
+            height: 20px;
+            border: 0px solid green;
+        }
+
+        /* pagination */
+
+        .current {
+            color: green;
+            text-decoration: underline;
+        }
+
+        #pagin li {
+            display: inline-block;
+            margin: 4px;
+        }
+
+        #pagin {
+            float: right;
+        }
+
+        .prev {
+            cursor: pointer;
+        }
+
+        .next {
+            cursor: pointer;
+        }
+
+        .last {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .first {
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        /* product view */
+
+        .product { /* .product is een algemene container voor alledrie de elementen */
+            float: left; /* zet afbeelding, naam/features en prijs/buttoncontainer naast elkaar */
+            border: 0px solid red;
+            height: 170px; /* zorg voor een vaste hoogte */
+        }
+
+        .image {
+            width: 25%; /* de breedte is een percentage van de totale breedte van de prodcontainer */
+        }
+
+        .name {
+            font-size: 25px;
+            color: darkblue;
+            width: 45%; /* ook hier een procentuele breedte */
+        }
+
+        .price {
+            width: 25%; /* ook hier een procentuele breedte */
+            position: relative;
+            font-size: 25px;
+            border: 0px solid green;
+        }
+
+        .europrice { /* dit vakje bevat de prijs zelf en valt binnen de prijscontainer */
+            position: absolute; /* .price is position relative, dan kan .europrice absoluut worden gepositioneerd daarbinnen */
+            right: -30px;
+            bottom: 55px;
+        }
+
+        .butt { /* dit vakje bevat de bestelknop en valt eveneens binnen de prijscontainer */
+            position: absolute; /* .price is position relative, dan kan .butt absoluut worden gepositioneerd daarbinnen */
+            right: 35px;
+            bottom: 5px;
+            width: 120px;
+            height: 40px;
+            border: 0px solid green;
+        }
+
+        .picture {
+            width: 150px;
+        }
+
+        .prodcont {
+            width: 100%; /* de prodcontainer bevat alledrie de .product divs en omvat 100% van de produktcontainer */
+            height: 180px;
+            display: block; /* display block om de hele rij af te zonderen van de volgende rijen */
+            border-bottom: 1px solid #e3e6e4; /* toon onder de rij alleen de bottom border, dat is een dunne grijze lijn */
+            margin-bottom: 15px; /* laat wat afstand tot de eronder staande prodcontainer */
+        }
+
+        .features {
+            font-size: 15px;
+            color: #999ba1;
+        }
+
+        /* breadcrumb */
+
+        .noaction {
+            text-decoration: none;
+            color: black;
+            pointer-events: none; /* voorkomt page reload bij het klikken op de lege link */
+            cursor: default;
+        }
+
+        .action {
+            text-decoration: none;
+            cursor: pointer;
+            color: blue;
+        }
+
+        .crumb {
+            float: left;
+            width: auto;
+            overflow: auto;
+        }
+
+        .separator {
+            float: left;
+            width: 5px;
+            padding-left: 5px;
+            padding-right: 10px;
+        }
+
+        #bccontainer {
+            width: 100%;
+            height: 40px;
+            border-bottom: 1px solid #e3e6e4;
+            margin-bottom: 15px;
+        }
+
+        /* headerafbeelding */
+
+        #imagecontainer {
+            width: 100%;
+            height: 300px;
+            border: 0px solid red;
+            /* background-image wordt programmatisch ingesteld */
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin-bottom: 15px;
+            margin-top: 50px;
+        }
+
+        /* product details links */
+
+        .nounderline {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+            .nounderline:hover {
+                text-decoration: underline;
+            }
+
+        /* winkelmandje */
+
+        #cart-container {
+            float: right;
+            width: 35px;
+            position: relative;
+            top: -35px;
+            border: 0px solid green;
+        }
+
+        #itemCount {
+            position: absolute;
+            display: none;
+            top: -10px;
+            left: -10px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid grey;
+            background: white;
+            color: black;
+            text-align: center;
+            line-height: 28px;
+            font-size: 16px;
+        }
+
+        .winkelwagen {
+            cursor: pointer;
+        }
+
+        /* vg-nav */
+
+        svg#ham-menue {
+            fill: white;
+            width: 50px;
+            height: 50px;
+            margin-left: 10px;
+            margin-right: 30px;
+        }
+
+        .line {
+            fill: none;
+            stroke: #333333;
+            stroke-width: 3;
+            transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1), stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .line1 {
+            stroke-dasharray: 60 207;
+            stroke-width: 3;
+        }
+
+        .line2 {
+            stroke-dasharray: 60 60;
+            stroke-width: 3;
+        }
+
+        .line3 {
+            stroke-dasharray: 60 207;
+            stroke-width: 3;
+        }
+
+        .vg-nav-hamburger.vg-sidebar-active .line1 {
+            stroke-dasharray: 90 207;
+            stroke-dashoffset: -134;
+            stroke-width: 3;
+        }
+
+        .vg-nav-hamburger.vg-sidebar-active .line2 {
+            stroke-dasharray: 1 60;
+            stroke-dashoffset: -30;
+            stroke-width: 3;
+        }
+
+        .vg-nav-hamburger.vg-sidebar-active .line3 {
+            stroke-dasharray: 90 207;
+            stroke-dashoffset: -134;
+            stroke-width: 3;
+        }
+
+        /* plaats in winkelm btn */
+
+        .btn {
+            margin-bottom: 0;
+            font-weight: normal;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            padding: 6px 12px;
+            line-height: 1.42857143;
+            border-radius: 4px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .btn {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-transition: background-color .08s linear, color .08s linear;
+            -moz-transition: background-color .08s linear, color .08s linear;
+            -o-transition: background-color .08s linear, color .08s linear;
+            transition: background-color .08s linear, color .08s linear;
+            position: relative;
+        }
+
+        .btn {
+            background-color: #2fb502;
+            box-shadow: inset 0 -2px 0 0 #279b00;
+            color: white;
+        }
+
+            .btn:hover {
+                background-color: #2EA802;
+            }
+
+        .btn {
+            overflow: visible;
+            width: 160px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .both {
+            border: 0px solid white;
+            height: auto;
+            width: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btntext {
+            font-family: "Open Sans", arial;
+            font-size: 13px;
+            display: inline-block;
+        }
+
+        .btnimage {
+            width: 26px;
+            height: 21px;
+            margin-left: 5px;
+            margin-top: -1px;
+            content: " ";
+            display: inline-block;
+        }
+
+        @media only screen and (min-width: 0px) and (max-width: 789px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container {
+                width: 100%; /* op mobiele breedte mag de parent container op volle breedte */
+            }
+
+            #vegasmenu {
+                width: 100%;
+            }
+
+            #filtercontainer {
+                float: none; /* verwijder de float zodat de filters op zichzelf komen te staan boven de produktenlijst */
+                margin-left: auto; /* centreer het hele filtervak */
+                margin-right: auto; /* centreer het hele filtervak */
+                margin-bottom: 50px;
+                width: 235px; /* geef een vaste breedte */
+            }
+
+            #produktcontainer {
+                float: none; /* verwijder de float zodat de produktcontainer op zichzelf komt te staan onder het filtervak */
+                margin-left: auto; /* produktcontainer centreren */
+                margin-right: auto;
+                border: 0px solid blue;
+                width: 90%; /* flexibele breedte */
+            }
+
+            .image {
+                width: 35%; /* image vak wat breder omdat het prijsvak wegens clear: both; naar de volgende rij verhuist */
+                border: 0px solid green;
+            }
+
+            .name {
+                width: 55%; /* naam/features vak wat breder omdat het prijsvak wegens clear: both; naar de volgende rij verhuist */
+                border: 0px solid green;
+            }
+
+            .price {
+                width: 20%;
+                clear: both; /* laat het prijsvak onder afb en naam/features op zichzelf staan */
+                border: 0px solid green;
+            }
+
+            .europrice {
+                position: absolute;
+                left: 20px;
+                top: 5px;
+            }
+
+            .butt {
+                position: absolute;
+                left: 20px;
+                top: 55px;
+                border: 0px solid green;
+            }
+
+            .prodcont {
+                height: 360px; /* maak prodcont 2x zo hoog omdat het prijsvak onder de twee andere vakken komt te staan */
+                display: block;
+                border-bottom: 1px solid #e3e6e4;
+                margin-bottom: 15px;
+            }
+        }
+
+        @media only screen and (min-width: 790px) and (max-width: 1010px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container {
+                width: 100%;
+            }
+
+            #vegasmenu {
+                width: 100%;
+            }
+
+            .image {
+                width: 35%;
+            }
+
+            .name {
+                width: 60%;
+            }
+
+            .price {
+                clear: both;
+            }
+
+            .europrice {
+                position: absolute;
+                left: 20px;
+                top: 5px;
+            }
+
+            .butt {
+                position: absolute;
+                left: 20px;
+                top: 55px;
+                border: 0px solid green;
+            }
+
+            .prodcont {
+                height: 360px;
+                display: block;
+                border-bottom: 1px solid #e3e6e4;
+                margin-bottom: 15px;
+            }
+        }
+
+        @media only screen and (min-width: 1011px) and (max-width: 1340px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container {
+                width: 100%;
+            }
+
+            #vegasmenu {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        const checkboxes = [];
+        const rangecheckboxes = [];
+        const sliders = [];
+        var checkOR;
+        var rangecheckOR;
+        const checkjoinedarr = [];
+        const rangecheckjoinedarr = [];
+        var slidersAND;
+        var checkjoinedAND;
+        var rangecheckjoinedAND;
+        var finalSQLarr = [];
+        var finalSQL;
+
+        var oplopend = true;
+        var aflopend = false;
+
+        var catid = ##CATID##;
+        var table = "##TABLE##";
+
+        //Pagination
+        var pageSize = 8;
+        var incremSlide = 5;
+        var slideSize = 5;
+        var startPage = 0;
+        var numberPage = 0;
+        var pageCount;
+        var totalSlidepPage;
+        var prev;
+        var next;
+
+        var itemCount = 0;
+        var guid;
+
+        var menuItems = [];
+
+        const slugify = str => str.trim().toLowerCase().replace(/\s+/g, "-");
+
+        const buildPath = (arr, id) => {
+            const path = [];
+            let current = arr.find(item => item.Id === id);
+            while (current) {
+                path.unshift(slugify(current.Catnaam));
+                current = arr.find(item => item.Id === current.ParentId);
+            }
+            return "/" + path.join("/") + "/" + path[path.length - 1] + ".html";
+        };
+
+        const buildMenu = (arr, parentId = 0, isRoot = true) => {
+            const children = arr.filter(item => item.ParentId === parentId);
+            if (!children.length) return "";
+
+            const ulClass = isRoot ? ' class="vg-nav-wrapper"' : "";
+            let html = `<ul${ulClass}>`;
+
+            for (let child of children) {
+                const hasChildren = arr.some(item => item.ParentId === child.Id);
+                const classAttr = hasChildren ? ' class="dropdown"' : "";
+                const href = hasChildren ? "#" : buildPath(arr, child.Id);
+
+                html += `<li${classAttr}><a href="${href}">${child.Catnaam}</a>`;
+                html += buildMenu(arr, child.Id, false);
+                html += `</li>`;
+            }
+
+            html += `</ul>`;
+            return html;
+        };
+
+        $(document).ready(function () {
+
+            // get menuItems
+            getMenuItems();
+            // Render the menu
+            const htmlMenu = buildMenu(menuItems);
+            document.querySelector(".vg-nav").innerHTML = htmlMenu;
+            enableNav(); // dropdown menu
+
+            //sessionStorage.clear();
+
+            var links = document.querySelectorAll(".vg-flip-list li a");
+            for (let i = 0; i < links.length; i++) {
+                console.log('hi i am vg-flip-list li a');
+                let link = links[i];
+                // Als de link text Back is wijzig dat dan in << Vorige
+                if (link.text === "Back") {
+                    link.text = "<< Vorige";
+                    link.style.fontSize = '15px';
+                    link.style.fontWeight = 'bold';
+                }
+            }
+
+            guid = getCookie('guid');
+            if (guid == null) { // geen guid aanwezig
+                document.cookie = 'itemCount=; max-age=0; path=/; domain=' + location.hostname; // haal ook itemCount cookie weg
+            }
+            else { // guid bestaat wel
+                itemCount = getCookie('itemCount');
+                if (itemCount !== null) {
+                    if (itemCount > 0) {
+                        $('#itemCount').html(itemCount).css('display', 'block');
+                    }
+                    else {
+                        $('#itemCount').css('display', 'none');
+                    }
+                }
+                else { // itemCount cookie bestaat niet
+                    itemCount = 0;
+                }
+                // verleng zowel guid als itemCount cookie
+                setCookie('guid', guid, '14'); // verleng de guid cookie
+                setCookie('itemCount', itemCount, '14'); // verleng of maak de itemCount cookie
+            }
+
+            //var loc = getLocation(location);
+            //var pathanddoc = loc.pathname;
+            //sessionStorage.setItem('location', pathanddoc);
+
+            finalSQL = "SELECT * FROM ##TABLE##";
+
+            // indien er geen prijssorteer sessiewaarde bestaat
+            if (sessionStorage.getItem('sorteer') == null) {
+                sessionStorage.setItem('sorteer', 'prijsoplopend'); // stel die dan in op oplopend
+            }
+
+            $("#sorteer").change(function () {
+
+                var index = finalSQL.indexOf(' ORDER BY Prijs'); // bepaal de plaats waar ORDER BY Prijs begint
+
+                if (index > 0) { // indien ' ORDER BY Prijs' werd aangetroffen
+                    finalSQL = finalSQL.substring(0, index); // haal het bestaande ' ORDER BY Prijs' weg uit finalSQL
+                }
+
+                //alert(finalSQL);
+
+                var value = $("#sorteer").val(); // staat de dropdown op oplopend of aflopend
+                var oplopend;
+
+                // zet dit als sessiewaarde
+                sessionStorage.setItem('sorteer', value);
+
+                if (value == "prijsoplopend") {
+                    oplopend = true;
+                }
+                else {
+                    oplopend = false;
+                }
+
+                if (oplopend == true) {
+                    finalSQL = finalSQL + " ORDER BY Prijs ASC"
+                }
+                else {
+                    finalSQL = finalSQL + " ORDER BY Prijs DESC"
+                }
+
+                //alert(finalSQL);
+                getData();
+            });
+
+            getData();
+            GetCrumbFromDB();
+            getHeaderimage();
+
+            ##SLIDERCODE##
+
+            setTimeout(function () { cb(); }, 100);
+
+        });
+
+        function enableNav() {
+            new VGNav({
+                sidebar: {
+                    placement: 'right'
+                },
+                expand: "md",
+                mobileTitle: "",
+                flip: true,
+                move: true,
+                hamburger: "<svg id=\"ham-menue\" viewBox=\"0 0 100 100\"><path class=\"line line1\" d=\"M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058\"></path><path class=\"line line2\" d=\"M 20,50 H 80\"></path><path class=\"line line3\" d=\"M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942\"></path></svg>"
+            });
+        }
+
+        function getMenuItems() {
+
+            $.ajax({
+                type: 'POST',
+                url: '/CategorieService.asmx/GetCategoriesSorted',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    menuItems = JSON.parse(response.d);
+                    console.log(menuItems);
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        function assembleOR(cat) { // 1x voor 1 parentdiv
+
+            checkOR = checkboxes?.join(' OR ');
+            if (checkOR) {
+                checkOR = "(" + checkOR + ")";
+                var i, string, len = checkjoinedarr.length;
+                for (i = 0; i < len; ++i) { // loop de hele array checkjoinedarr af
+                    string = checkjoinedarr[i];
+                    if (string?.includes("(" + cat + "=")) { // indien een of meerdere array elementen beginnen met (cat=
+                        checkjoinedarr.splice(i, 1); // verwijder dan deze array elementen
+                    }
+                }
+                checkjoinedarr.push(checkOR); // en push de elementen overnieuw
+            }
+            else { // geen checkOR, dus geen gegevens in checkboxes array, dus laatst aanwezige element moet weg uit checkjoinedarr
+                var i, string, len = checkjoinedarr.length;
+                for (i = 0; i < len; ++i) { // loop de hele array checkjoinedarr af
+                    string = checkjoinedarr[i];
+                    if (string?.includes("(" + cat + "=")) { // indien 1 array element begint met (cat=
+                        checkjoinedarr.splice(i, 1); // verwijder dan dit array element
+                    }
+                }
+            }
+            checkboxes.length = 0; // wis de checkboxes array na gebruik
+
+            rangecheckOR = rangecheckboxes?.join(' OR ');
+            if (rangecheckOR) {
+                rangecheckOR = "(" + rangecheckOR + ")";
+                var i, string, len = rangecheckjoinedarr.length;
+                for (i = 0; i < len; ++i) { // loop de hele array rangecheckjoinedarr af
+                    string = rangecheckjoinedarr[i];
+                    if (string?.includes("(" + cat + " BETWEEN")) { // indien een of meerdere array elementen beginnen met (cat BETWEEN
+                        rangecheckjoinedarr.splice(i, 1); // verwijder dan deze array elementen
+                    }
+                }
+                rangecheckjoinedarr.push(rangecheckOR); // en push de elementen overnieuw
+            }
+            else { // geen rangecheckOR, dus geen gegevens in rangecheckboxes array, dus laatst aanwezige element moet weg uit rangecheckjoinedarr
+                var i, string, len = rangecheckjoinedarr.length;
+                for (i = 0; i < len; ++i) { // loop de hele array rangecheckjoinedarr af
+                    string = rangecheckjoinedarr[i];
+                    if (string?.includes("(" + cat + " BETWEEN")) { // indien 1 array element begint met (cat BETWEEN
+                        rangecheckjoinedarr.splice(i, 1); // verwijder dan dit array element
+                    }
+                }
+            }
+            rangecheckboxes.length = 0; // wis de rangecheckboxes array na gebruik
+        }
+
+        function assembleAND() { // 1x voor alle parentdivs samen en voor elke sliderupdate
+
+            finalSQLarr.length = 0; // wis de final SQL array
+
+            if (sliders.length > 1) {
+                slidersAND = sliders.join(" AND ");
+                finalSQLarr.push(slidersAND);
+            }
+            if (sliders.length == 1) {
+                finalSQLarr.push(sliders.toString());
+            }
+            //
+            if (checkjoinedarr.length > 1) {
+                checkjoinedAND = checkjoinedarr.join(" AND ");
+                finalSQLarr.push(checkjoinedAND);
+            }
+            if (checkjoinedarr.length == 1) {
+                finalSQLarr.push(checkjoinedarr.toString());
+            }
+            //
+            if (rangecheckjoinedarr.length > 1) {
+                rangecheckjoinedAND = rangecheckjoinedarr.join(" AND ");
+                finalSQLarr.push(rangecheckjoinedAND);
+            }
+            if (rangecheckjoinedarr.length == 1) {
+                finalSQLarr.push(rangecheckjoinedarr.toString());
+            }
+
+            finalSQL = finalSQLarr.join(" AND ");
+            //console.log(finalSQL);
+
+            if (finalSQL == "") {
+                finalSQL = "SELECT * FROM ##TABLE##";
+            }
+            else {
+                var prefix = "SELECT * FROM ##TABLE## WHERE ";
+                finalSQL = prefix + finalSQL;
+            }
+
+            // sorteer op Prijs dropdown
+
+            var value = sessionStorage.getItem('sorteer');
+            console.log('prijssorteren: ' + value);
+
+            var oplopend;
+
+            $("#sorteer").val(value); // stel de dropdown in op de onthouden waarde
+
+            if (value == "prijsoplopend") {
+                oplopend = true;
+            }
+            else {
+                oplopend = false;
+            }
+
+            if (oplopend == true) {
+                finalSQL = finalSQL + " ORDER BY Prijs ASC"
+            }
+            else {
+                finalSQL = finalSQL + " ORDER BY Prijs DESC"
+            }
+
+            console.log(finalSQL);
+
+            getData();
+        }
+
+        function formatcomma(prijs) {
+            var res;
+
+            var index = prijs.toString().indexOf('.'); // bepaal de plaats van de punt in het bedrag
+
+            prijs = prijs.toFixed(2); // rond de decimale waarde af op twee cijfers achter de komma
+            var str = prijs.toString(); // converteer naar string
+            var numarray = str.split('.'); // split de waarde waar de punt staat (dit mag een komma zijn in de tabel!)
+            var a = new Array(); // declareer een array
+            a = numarray; // zet de waarden voor en na de punt in de array
+
+            if (index > 0) { // indien er een punt in het bedrag zit
+                res = a[0] + "," + a[1]; // vervang die door een komma
+            }
+            else {
+                res = a[0] + ",-"; // indien de prijs een geheel getal is, voeg ,- toe
+            }
+            return res;
+        }
+
+        function getValues(k) {
+            if (k == undefined) {
+                return false;
+            }
+            var v = sessionStorage.getItem(k);
+            if (v != null) {
+                return JSON.parse(v);
+            } else {
+                return -1;
+            }
+        }
+
+        function setValues(k, v) {
+            if (k == undefined || v == undefined) {
+                return false;
+            }
+            sessionStorage.setItem(k, JSON.stringify(v));
+        }
+
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                date.setHours(date.getHours() + 1);
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+            else return null;
+        }
+
+        function getData() {
+            $.ajax({
+                type: 'POST',
+                url: '/ProduktService.asmx/getProducts',
+                data: JSON.stringify({ sql: finalSQL }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    //console.clear();
+                    console.log(data.d);
+
+                    $('#produkten').empty();
+
+                    var data = JSON.parse(data.d);
+                    $.each(data, function (i) {
+                        var id = data[i].Id;
+                        var afb = data[i].Produktafbeelding;
+                        var naam = data[i].Produktnaam;
+                        var prijs = data[i].Prijs;
+
+                        var feat1 = data[i].Feature1;
+                        var feat2 = data[i].Feature2;
+                        var feat3 = data[i].Feature3;
+                        var feat4 = data[i].Feature4;
+                        var feat5 = data[i].Feature5;
+
+                        var loc = getLocation(location);
+                        var pathanddoc = loc.pathname;
+
+                        var path = pathanddoc.substring(0, pathanddoc.lastIndexOf('/') + 1);
+
+                        $('#produkten').append("<div class='prodcont'><a class='nounderline' href='" + path + "details.html?table=" + table +
+                            "&pid=" + id + "&prodname=" + naam + "&catid=" + catid + "'><div class='product image'><img class='picture' src='" + afb +
+                            "'/></div></a><div class='product name'><a class='nounderline' href='" + path + "details.html?table=" + table +
+                            "&pid=" + id + "&prodname=" + naam + "&catid=" + catid + "'>" + naam + "</a><div class='features' id='" + id +
+                            "'></div></div><div class='product price'><div class='europrice'>&euro; " + formatcomma(prijs) +
+                            "</div><div class='butt'><div class='btn winkelm' Id=" + id + " Naam='" + naam + "'><div class='both'>" +
+                            "<span class='btntext'>Plaats in winkelmandje</span><img class='btnimage' src='/images/icon-winkelwagen-btn.png' />" +
+                            "</div></div></div></div>");
+
+                        if ((feat1 !== "") || (feat2 !== "") || (feat3 !== "") || (feat4 !== "") || (feat5 !== "")) {
+                            $("#" + id).append("<ul>");
+                        }
+                        if (feat1 !== "") {
+                            $("#" + id).append("<li>" + feat1 + "</li>");
+                        }
+                        if (feat2 !== "") {
+                            $("#" + id).append("<li>" + feat2 + "</li>");
+                        }
+                        if (feat3 !== "") {
+                            $("#" + id).append("<li>" + feat3 + "</li>");
+                        }
+                        if (feat4 !== "") {
+                            $("#" + id).append("<li>" + feat4 + "</li>");
+                        }
+                        if (feat5 !== "") {
+                            $("#" + id).append("<li>" + feat5 + "</li>");
+                        }
+                        if ((feat1 !== "") || (feat2 !== "") || (feat3 !== "") || (feat4 !== "") || (feat5 !== "")) {
+                            $("#" + id).append("</ul>");
+                        }
+                    });
+                    addPagination();
+                },
+
+                //error: function (response) {
+                //    alert("getData error");
+                //}
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        function GetCrumbFromDB() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: '/BreadcrumbService.asmx/ReadBCfromDB',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (response.d.Crumb == null) {
+                        // doe niets
+                    }
+                    else {
+                        var crumb = response.d.Crumb;
+                        $("#bccontainer").empty();
+                        $("#bccontainer").append(crumb);
+
+                        var links = document.querySelectorAll('#bccontainer .crumb'); // alle crumb's
+                        var crumbtext = links[links.length - 1].textContent; // pak de laatste crumb
+
+                        /* append to categorie en title */
+                        $("#categorie").append(crumbtext);
+                        $(document).prop('title', crumbtext);
+                        /* einde */
+                    }
+                },
+
+                error: function (response) {
+                    alert("ReadBCfromDB error");
+                }
+            });
+        }
+
+        function getLocation(href) {
+            var l = document.createElement("a");
+            l.href = href;
+            return l;
+        };
+
+        function getHeaderimage() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: '/ImageService.asmx/getHeaderImage',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var imagepath = response.d.ImagePath;
+                    if (imagepath !== null) {
+                        $("#imagecontainer").css('background-image', 'url(' + imagepath + ')');
+                    }
+                },
+
+                error: function (response) {
+                    alert("getHeaderImage error");
+                }
+            });
+        }
+
+        function addPagination() {
+            $("#produkten").append("<div id='pagin'></div>");
+            $("#produkten").append("<br/>");
+            $("#produkten").append("<br/>");
+
+            // reset de pagination na een nieuwe filterkeuze anders blijft soms een lege slide zichtbaar met alleen prev/next
+            startPage = 0;
+            incremSlide = 5;
+            numberPage = 0;
+
+            prev = $("<li/>").addClass("prev").html("Prev").click(function () {
+                startPage -= 5;
+                incremSlide -= 5;
+                numberPage--;
+                slide();
+                console.log('numberPage: ' + numberPage);
+                sessionStorage.setItem('numberPage', numberPage); // sla het nieuwe slidenummer op
+            });
+
+            prev.hide();
+
+            next = $("<li/>").addClass("next").html("Next").click(function () {
+                startPage += 5;
+                incremSlide += 5;
+                numberPage++;
+                slide();
+                console.log('numberPage: ' + numberPage);
+                sessionStorage.setItem('numberPage', numberPage); // sla het nieuwe slidenummer op
+            });
+
+            pageCount = $(".prodcont").length / pageSize;
+
+            console.log('total number of products: ' + $(".prodcont").length);
+
+            totalSlidepPage = Math.floor(pageCount / slideSize);
+
+            if (Number.isSafeInteger(pageCount / slideSize)) {  // indien alle pages precies passen binnen 1 of meer slides
+                totalSlidepPage = totalSlidepPage - 1;          // (bijv. een pageCount van 10 of 5) verlaag dan
+                // totalSlidepPage met 1, anders is er een next teveel
+            }
+
+            // (1)
+            if (sessionStorage.getItem('numberPage') !== null) { // er is eerder van slide veranderd door een click op Prev of Next
+                var nmbrpage = sessionStorage.getItem('numberPage'); // zet deze slide in de variabele nmbrpage
+                console.log('nmbrpage: ' + nmbrpage + " totalSlidepPage: " + totalSlidepPage);
+                if (nmbrpage > totalSlidepPage) { // indien de actieve slide (numberPage) ineens groter is dan het totaal aan slides met produkten, bijv. na filteren
+                    console.log('Clearing session data...');
+                    sessionStorage.removeItem('pagenumber'); // clear de sessie variabelen zodat de opgeslagen slide niet meer kan worden teruggezet in (2), want die slide toont
+                    sessionStorage.removeItem('numberPage'); // geen produkten meer
+                }
+                else if (nmbrpage == totalSlidepPage) {
+                    if (totalSlidepPage == 0) {
+                        console.log('Clearing session data...');
+                        sessionStorage.removeItem('pagenumber'); // clear de sessie variabelen zodat de opgeslagen slide niet meer kan worden teruggezet in (2), want die slide toont
+                        sessionStorage.removeItem('numberPage'); // geen produkten meer
+                    }
+                    else {
+                        // doe niets
+                    }
+                }
+            }
+
+            for (var i = 0; i < pageCount; i++) {
+                $("#pagin").append('<li><a href="#">' + (i + 1) + '</a></li> ');
+                //if (i > pageSize) {
+                //    $("#pagin li").eq(i).hide();
+                //}
+            }
+
+            $("#pagin").prepend(prev).append(next);
+
+            //$("#pagin li").first().find("a").addClass("current");
+
+            var pg = 0;
+            // (2)
+            if (sessionStorage.getItem('pagenumber') !== null) {
+                if (sessionStorage.getItem('filtering') == null) { // filteren staat uit
+                    pg = sessionStorage.getItem('pagenumber');
+                    // zet opgeslagen paginanummer inhoud terug want anders gaat die verloren na page reload
+                    showPage(pg);
+                    // voeg de class .currrent toe aan het geklikte paginanummer element
+                    $("#pagin li a").eq(pg - 1).addClass("current");
+
+                    // zet opgeslagen slidepage terug want anders gaat die verloren na page reload
+                    var slidenmb = sessionStorage.getItem('numberPage'); // haal numberPage (slidenummer) op dat eerder door wel of niet Prev/Next klikken is bereikt
+                    for (let i = 0; i < slidenmb; i++) {
+                        $("#pagin li.next").click(); // hoog programmatisch de slidepage op door op Next te klikken
+                    }
+                } else { // filteren staat aan dus wijzig niet meer naar een hogere slide, want de produktset is veranderd
+                    sessionStorage.removeItem('filtering');
+                    showPage(1); // toon gewoon de eerste produktpagina
+                }
+            } else {
+                showPage(1);
+            }
+
+            // (3)
+            const allli = document.querySelectorAll("#pagin li"); // neem alle li's binnen de div #pagin
+            var allpages = allli.length - 2; // aantal list items exclusief Prev en Next
+            console.log('there are ' + allpages + ' pages');
+            if (pg > allpages) { // als pg (een eerder geklikt pagenumber) uit sessie afkomstig is kan het het aantal pages van een nieuwe filterselectie (allpages) overtreffen!
+                $(".current").click(); // klik dan het eerste element van de li's (eerste pagina) zodat er produkten getoond worden, anders blijven die onzichtbaar
+            }
+
+            //$("#pagin li a").eq(0).addClass("current");
+            slide();
+        }
+
+        function slide() {
+            $("#pagin li").hide();
+
+            //console.log('numberPage: ' + numberPage + ' totalSlidepPage: ' + totalSlidepPage);
+
+            for (t = startPage; t < incremSlide; t++) {
+                $("#pagin li").eq(t + 1).show();
+            }
+            // totalSlidepPage geeft aan hoeveel slides er zijn (te beginnen met slide 0), een slide is een geheel van 5 of minder pages
+            // numberPage is het nummer van de slide, de eerste slide heeft nummer 0
+            // indien geldt dat numberPage == totalSlidepPage dan zijn we op de laatste slide
+
+            if ((startPage == 0) && (numberPage == totalSlidepPage)) {  // geen verdere slides meer, hide next
+                next.hide();                                            // eerste pagina, dus hide prev
+                prev.hide();
+            }
+            if ((startPage == 0) && (numberPage !== totalSlidepPage)) { // we zijn nog niet op de laatste slide, show next
+                next.show();                                            // eerste pagina, dus hide prev
+                prev.hide();
+            }
+            if ((startPage !== 0) && (numberPage == totalSlidepPage)) { // geen verdere slides meer, hide next
+                next.hide();                                             // niet de eerste pagina, dus show prev
+                prev.show();
+            }
+            if ((startPage !== 0) && (numberPage !== totalSlidepPage)) { // we zijn nog niet op de laatste slide, show next
+                next.show();                                             // niet de eerste pagina, dus show prev
+                prev.show();
+            }
+
+            if ($(".prodcont").length == 0) {
+                next.hide();
+            }
+        }
+
+        function showPage(page) {
+            $(".prodcont").hide();
+            $(".prodcont").each(function (n) {
+                if (n >= pageSize * (page - 1) && n < pageSize * page)
+                    $(this).show();
+            });
+        }
+
+        $(document).on('click', '#pagin li a', function (e) {
+            e.preventDefault();
+            $("#pagin li a").removeClass("current");
+            $(this).addClass("current");
+            var pagenumber = parseInt($(this).text());
+            sessionStorage.setItem('pagenumber', pagenumber);
+            showPage(pagenumber);
+        });
+
+        $(document).on('click', '.winkelm', function (e) {
+            e.preventDefault();
+
+            guid = getCookie('guid');
+            if (guid == null) { // geen guid aanwezig
+                //guid = uuidv4(); // maak een guid
+                generateguid(); // nieuwe routine met check op bestaande guid
+                setCookie('guid', guid, '14');
+                itemCount = 1; // er is maar 1 item besteld en itemCount bestaat nog niet dus itemCount wordt op 1 ingesteld
+                setCookie('itemCount', itemCount, '14'); // zet de itemCount cookie
+            }
+            else { // guid bestaat wel
+                itemCount = getCookie('itemCount'); // haal de itemCount cookie en zet hem in itemCount
+                itemCount++; // hoog itemCount op met 1
+                setCookie('itemCount', itemCount, '14'); // zet de itemCount cookie
+            }
+            $('#itemCount').html(itemCount).css('display', 'block'); // toon itemCount in het rondje
+
+            var pid = $(this).attr('Id'); // het Id attribute werd gezet in $('#produkten').append() in getData()
+            //alert(pid);
+            var SQL = "SELECT * FROM " + table + " WHERE Id=" + pid;
+            getProductData(SQL);
+        });
+
+        function generateguid() {
+            guid = uuidv4();
+
+            if (Guidexists()) {
+                generateguid();
+                console.log("uuidv4 generated...");
+            }
+        }
+
+        function uuidv4() {
+            return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+                (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+            );
+        }
+
+        function Guidexists() {
+            var guidbestaat;
+
+            $.ajax({
+                type: 'POST',
+                url: '/BestellingenService.asmx/DoesGuidExist',
+                data: JSON.stringify({ guid: guid }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    console.log(data.d);
+                    if (data.d == "EXISTS") {
+                        guidbestaat = true;
+                        console.log("existing guid...");
+                    }
+                    if (data.d == "NOTEXISTS") {
+                        guidbestaat = false;
+                        console.log("non-existing guid, inserted.");
+                    }
+
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+
+            return guidbestaat;
+        }
+
+        function getProductData(SQL) {
+            $.ajax({
+                type: 'POST',
+                url: '/ProduktService.asmx/getProduct',
+                data: JSON.stringify({ sql: SQL }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    //console.clear();
+                    console.log(data.d);
+
+                    var data = JSON.parse(data.d);
+                    $.each(data, function (i) {
+                        var pid = data[i].Id;
+                        var produktafbeelding = data[i].Produktafbeelding;
+                        var produktnaam = data[i].Produktnaam;
+                        var prijs = data[i].Prijs;
+                        var aantal = 1;
+                        var gewicht = data[i].Gewicht;
+                        var produktlink = data[i].ProduktLink;
+                        var bestelguid = guid;
+                        var tabelnaam = table;
+                        Bestel(pid, prijs, produktnaam, produktafbeelding, aantal, gewicht, produktlink, bestelguid, tabelnaam);
+                    });
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        function Bestel(pid, prijs, produktnaam, produktafbeelding, aantal, gewicht, produktlink, bestelguid, tabelnaam) {
+
+            var data = {};
+            data.pid = pid;
+            data.prijs = prijs;
+            data.produktnaam = produktnaam;
+            data.produktafbeelding = produktafbeelding;
+            data.aantal = aantal;
+            data.gewicht = gewicht;
+            data.produktlink = produktlink;
+            data.bestelguid = bestelguid;
+            data.tabelnaam = tabelnaam;
+            data.besteldatum = moment().locale('nl').format('YYYY-MM-DD');
+
+            $.ajax({
+                type: 'POST',
+                url: '/BestellingenService.asmx/BestelProdukt',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+
+
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        $(document).on('click', '.winkelwagen', function (e) {
+            e.preventDefault();
+            location.href = "/winkelmandje.html";
+        });
+
+        $(document).on('click', '.cb', function (e) {
+            sessionStorage.setItem('filtering', 1);
+            checkboxes.length = 0;
+            rangecheckboxes.length = 0;
+            $(".parentdiv").each(function () {
+                var cat = $(this).children('.cbcat').first().text();
+                if (cat.split(' ').length == 2) { // indien de kolomnaam uit twee woorden bestaat
+                    cat = "[" + cat + "]"; // zet er dan vierkante haken omheen
+                }
+                var type = $(this).children('.type').attr('type');
+                var cbs = $(this).children('.cbs').first();
+                cbs.find("input:checked").each(function () {
+                    if (type == 'cb') {
+                        var concat;
+                        var value = $(this).attr('id');
+                        a = $.isNumeric(value); // test of de checkboxwaarden numeriek zijn
+                        if (a) { // zo ja, laat de aanhalingstekens om de waarde weg
+                            concat = "(" + cat + "=" + value + ")";
+                        }
+                        else { // zo nee, plaats aanhalingstekens om de waarden
+                            concat = "(" + cat + "=" + "'" + value + "')";
+                        }
+                        checkboxes.push(concat);
+                    }
+                    if (type == 'rangecb') {
+                        var low = $(this).attr('low');
+                        var high = $(this).attr('high');
+                        var concat = "(" + cat + " BETWEEN " + low + " AND " + high + ")"; // range checkboxwaarden zijn altijd numeriek
+                        rangecheckboxes.push(concat);
+                    }
+                });
+                assembleOR(cat);
+            });
+            assembleAND();
+        });
+
+        function cb() {
+            checkboxes.length = 0;
+            rangecheckboxes.length = 0;
+            $(".parentdiv").each(function () {
+                var cat = $(this).children('.cbcat').first().text();
+                if (cat.split(' ').length == 2) { // indien de kolomnaam uit twee woorden bestaat
+                    cat = "[" + cat + "]"; // zet er dan vierkante haken omheen
+                }
+                var type = $(this).children('.type').attr('type');
+                var cbs = $(this).children('.cbs').first();
+                cbs.find("input:checked").each(function () {
+                    if (type == 'cb') {
+                        var concat;
+                        var value = $(this).attr('id');
+                        a = $.isNumeric(value); // test of de checkboxwaarden numeriek zijn
+                        if (a) { // zo ja, laat de aanhalingstekens om de waarde weg
+                            concat = "(" + cat + "=" + value + ")";
+                        }
+                        else { // zo nee, plaats aanhalingstekens om de waarden
+                            concat = "(" + cat + "=" + "'" + value + "')";
+                        }
+                        checkboxes.push(concat);
+                    }
+                    if (type == 'rangecb') {
+                        var low = $(this).attr('low');
+                        var high = $(this).attr('high');
+                        var concat = "(" + cat + " BETWEEN " + low + " AND " + high + ")"; // range checkboxwaarden zijn altijd numeriek
+                        rangecheckboxes.push(concat);
+                    }
+                });
+                assembleOR(cat);
+            });
+            assembleAND();
+        }
+    </script>
+</head>
+<body onunload="">
+    <div id="left"></div>
+    <div id="right"></div>
+    <div id="container">
+        <div id="vegasmenu">
+            <nav class="vg-nav">
+
+            </nav>
+        </div>
+        <div id="cart-container">
+            <div id="cart">
+                <img class="winkelwagen" src="/images/winkelwagentje.jpg" />
+            </div>
+            <span id="itemCount"></span>
+        </div>
+        <div id="imagecontainer">
+        </div>
+        <div id="bccontainer">
+        </div>
+        <div id="filtercontainer">
+            ##HTML##
+        </div>
+        <div id="produktcontainer">
+            <div id="catensorteren">
+                <div id="categorie">
+
+                </div>
+                <div id="sorteren">
+                    <select style="outline:none" name="sorteer" id="sorteer">
+                        <option value="prijsoplopend">Prijs (oplopend)</option>
+                        <option value="prijsaflopend">Prijs (aflopend)</option>
+                    </select>
+                </div>
+            </div>
+            <div id="produkten"></div>
+        </div>
+    </div>
+</body>
+</html>

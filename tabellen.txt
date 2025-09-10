@@ -1,0 +1,12 @@
+er zijn 4 tabellen
+kruistabel voor categorie-nesting
+produkttabel voor koppeling aan kruistabel
+met een parent id
+en enkele velden voor variabele inhoud zoals produktnaam, prijs, omschrijving e.d.
+een produkteigenschappentabel
+met meerdere entries voor 1 produkt
+met eigenschap id's
+en een eigenschappentabel
+met meerdere entries per eigenschap
+voor de verschillende waarden
+en een categorie-id

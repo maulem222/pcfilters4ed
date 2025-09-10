@@ -1,0 +1,82 @@
+[WebMethod]
+[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+public string GetCustomerById(int Id)
+{
+    string connectionString = "your_connection_string_here";
+    string query = "SELECT Naam, Adres, Postcode, Woonplaats, Email, Wachtwoord, Telefoonnummer FROM Klanten WHERE Id = @Id";
+
+    using (SqlConnection connection = new SqlConnection(connectionString))
+    {
+        SqlCommand command = new SqlCommand(query, connection);
+        command.Parameters.AddWithValue("@Id", Id);
+        connection.Open();
+        SqlDataReader reader = command.ExecuteReader();
+
+        if (reader.Read())
+        {
+            var customer = new
+            {
+                Naam = reader["Naam"].ToString(),
+                Adres = reader["Adres"].ToString(),
+                Postcode = reader["Postcode"].ToString(),
+                Woonplaats = reader["Woonplaats"].ToString(),
+                Email = reader["Email"].ToString(),
+                Wachtwoord = reader["Wachtwoord"].ToString(),
+                Telefoonnummer = reader["Telefoonnummer"].ToString()
+            };
+
+            return new JavaScriptSerializer().Serialize(customer);
+        }
+    }
+
+    return "{}"; // Return an empty JSON object if no record is found
+}
+
+
+
+new Vue({
+  el: "#app",
+  data: {
+    id: "", // Input field for customer ID
+    customer: {
+      naam: "",
+      adres: "",
+      postcode: "",
+      woonplaats: "",
+      email: "",
+      wachtwoord: "",
+      telefoonnummer: ""
+    }
+  },
+  methods: {
+    getCustomerData() {
+      axios.post("http://yourserver/ServiceName.asmx/GetCustomerById", { Id: this.id })
+        .then(response => {
+          let data = response.data.d; // ASMX responses are wrapped in 'd'
+          if (data && data.Naam) {
+            this.customer = data; // Bind response to Vue data object
+          } else {
+            alert("Customer not found!");
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching customer data:", error);
+        });
+    }
+  }
+});
+
+
+
+<div id="app">
+  <input type="number" v-model="id" placeholder="Enter customer ID" />
+  <button @click="getCustomerData">Fetch Customer Data</button>
+
+  <p>Name: {{ customer.naam }}</p>
+  <p>Address: {{ customer.adres }}</p>
+  <p>Postcode: {{ customer.postcode }}</p>
+  <p>City: {{ customer.woonplaats }}</p>
+  <p>Email: {{ customer.email }}</p>
+  <p>Password: {{ customer.wachtwoord }}</p>
+  <p>Phone: {{ customer.telefoonnummer }}</p>
+</div>

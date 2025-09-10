@@ -1,0 +1,37 @@
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\ApplicationInsights.config
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\HTML voor gevorderden VI.dll.config
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\HTML voor gevorderden VI.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\HTML voor gevorderden VI.pdb
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Antlr3.Runtime.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\AspNet.ScriptManager.bootstrap.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\AspNet.ScriptManager.jQuery.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AI.Web.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.ApplicationInsights.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AspNet.FriendlyUrls.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.ScriptManager.MSAjax.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.ScriptManager.WebForms.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Newtonsoft.Json.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\System.Web.Optimization.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\WebGrease.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\System.Web.Optimization.xml
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Antlr3.Runtime.pdb
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AspNet.FriendlyUrls.xml
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Newtonsoft.Json.xml
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.ApplicationInsights.xml
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\bin\Microsoft.AI.Web.xml
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\obj\Release\HTML voor gevorderden VI.csprojResolveAssemblyReference.cache
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\obj\Release\HTML voor gevorderden VI.csproj.CoreCompileInputs.cache
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\obj\Release\HTML voor gevorderden VI.dll
+C:\Users\Maurice\Documents\HTML voor gevorderden VI - catalogus - rev1\HTML voor gevorderden VI\HTML voor gevorderden VI\obj\Release\HTML voor gevorderden VI.pdb

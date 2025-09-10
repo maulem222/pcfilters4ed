@@ -1,0 +1,25 @@
+CREATE PROCEDURE [dbo].[UpdateBeschikbare_tijden]
+	  @datum nvarchar(10),
+	  @ther nvarchar(20),
+	  @tijdstippen nvarchar(400),
+	  @kla nvarchar(MAX),
+	  @beh nvarchar(100),
+	  @status nvarchar(50),
+	  @userid int,
+	  @bedr nvarchar(10),
+	  @guid nvarchar(50),
+	  @id_alt int,
+	  @altnaam nvarchar(55)
+AS  
+BEGIN 
+	BEGIN TRAN
+ 
+ 		IF NOT EXISTS (SELECT * FROM Beschikbare_tijden 
+		with (UPDLOCK, ROWLOCK, HOLDLOCK)
+		WHERE Tijdstip IN (select theColumn FROM dbo.fun_CSV_to_Table(@tijdstippen)) AND Therapeut=@ther AND Datum=@datum AND Status=@status) 
+		UPDATE Beschikbare_tijden SET 
+		Klachten=@kla, Behandeling=@beh, Status=@status, UserId=@userid, Bedrag=@bedr, Guid=@guid, Id_alt=@id_alt, Altnaam=@altnaam
+		WHERE Datum=@datum AND Tijdstip IN (select theColumn FROM dbo.fun_CSV_to_Table(@tijdstippen)) AND Therapeut=@ther
+
+	COMMIT TRAN
+END

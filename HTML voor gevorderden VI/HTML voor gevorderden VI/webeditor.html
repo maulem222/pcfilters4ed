@@ -1,0 +1,739 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bootstrap Blocks Layout Editor</title>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- TinyMCE -->
+    <script src="https://cdn.tiny.cloud/1/xrztq8msefchvjimdew5rzt7lekwcy7sdrc1x1jtd3mdjbak/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 20px;
+            font-family: sans-serif;
+        }
+
+        .container_ {
+            display: flex;
+            height: 90vh;
+            border: 1px solid #ccc;
+        }
+
+        .left-pane {
+            width: 33.33%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .left-section {
+            border: 1px solid #333;
+            padding: 10px;
+            overflow: auto;
+        }
+
+        .bootstrap {
+            min-height: 200px;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .heading {
+            display: block;
+            float: left;
+            font-size: 18px;
+        }
+
+        .butt {
+            float: right;
+        }
+
+        .text {
+            margin-top: 10px;
+            font-size: 15px;
+            clear: both;
+        }
+
+        .margin {
+            margin-bottom: 50px;
+        }
+
+        .right-pane {
+            width: 66.66%;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #aaa;
+            margin-bottom: 10px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid #aaa;
+            border-bottom: none;
+            background-color: #f0f0f0;
+        }
+
+            .tab.active {
+                background-color: white;
+                font-weight: bold;
+            }
+
+        .tab-content {
+            flex: 1;
+            border: 1px solid #aaa;
+            padding: 10px;
+            overflow: auto;
+        }
+
+        #htmlInput {
+
+        }
+
+        #htmlTab {
+            display: block;
+        }
+
+        #webTab {
+            display: none;
+        }
+
+        #imageinput {
+            width: 400px;
+            min-height: 30px;
+            height: auto;
+            border: 1px solid;
+        }
+
+        #videoinput {
+            width: 400px;
+        }
+
+        .imagebutt {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .image {
+            width: 100%;
+        }
+
+        /* responsive container width */
+
+        /* Default: full width on small screens */
+        .container {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Custom: 75% width on medium screens and up */
+        @media (min-width: 1341px) {
+            .container {
+                width: 75%;
+                max-width: 75%;
+            }
+        }
+
+        /* responsive video */
+
+        @media only screen and (min-width: 1200px) {
+
+            .responsive-video {
+                position: relative;
+                padding-bottom: 56.25%; /* 16:9 aspect ratio */
+                height: 0;
+                overflow: hidden;
+                max-width: 100%;
+            }
+
+                .responsive-video iframe {
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                }
+        }
+
+        @media only screen and (min-width: 740px) and (max-width: 1199px) {
+            .image {
+                width: 50%;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .video {
+                width: 700px;
+                height: 350px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .responsive-video iframe {
+                width: 700px;
+                height: 350px;
+            }
+        }
+
+        @media only screen and (min-width: 0px) and (max-width: 739px) {
+
+            .video {
+                width: 500px;
+                height: 250px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .responsive-video iframe {
+                width: 500px;
+                height: 250px;
+            }
+        }
+    </style>
+    <script>
+        var htmlfromdb;
+        var od_id;
+        var path;
+
+        $(document).ready(function () {
+
+            const urlParams = new URLSearchParams(window.location.search);
+            od_id = urlParams.get('id');
+            path = urlParams.get('path');
+            $("#currentpath").text(path);
+
+            gethtmlContent();
+
+            tinymce.init({
+                selector: '#editable-content',
+                setup: function (editor) {
+                    editor.on('keyup', function (e) {
+                        console.log('The editor content has changed.');
+                        //var justHtmlContent = document.getElementById('justHtml');
+                        //var justHtml = editor.getContent();
+                        //justHtmlContent.innerText = justHtml;
+                    });
+                },
+                plugins: [
+                    // Core editing features
+                    'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+                ],
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography uploadcare | align | charmap | removeformat',
+                menubar: false,
+                height: 300,
+                tinycomments_mode: 'embedded',
+                tinycomments_author: 'Author name',
+                mergetags_list: [
+                    { value: 'First.Name', title: 'First Name' },
+                    { value: 'Email', title: 'Email' },
+                ],
+                ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+                uploadcare_public_key: 'e099efa269afaae40d41',
+            });
+
+        });
+
+        function gethtmlContent() {
+            $.ajax({
+                type: 'POST',
+                url: '/HTMLService.asmx/GetHTML',
+                data: "{'od_id':'" + od_id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    htmlfromdb = response.d.html;
+                    console.log("htmlfromdb: " + htmlfromdb);
+                    const textarea = document.getElementById('htmlInput');
+                    textarea.value = htmlfromdb;
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        function sethtmlContent(html) {
+
+            $.ajax({
+                type: 'POST',
+                url: '/HTMLService.asmx/InsORUpdHTML',
+                //data: "{'od_id':'" + od_id + "','html':'" + html + "'}",
+                data: JSON.stringify({ od_id: od_id, html: html }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+
+        function selectLocalImage() {
+            //const input = document.getElementById('imageinput');
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.click();
+
+            input.onchange = () => {
+                const file = input.files[0];
+
+                if (/^image\//.test(file.type)) {
+                    saveImage(file);
+                } else {
+                    console.warn('You can only upload images.');
+                }
+            };
+        }
+
+        function saveImage(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            $.ajax({
+                url: '/ImageUploadHandler.ashx', // The path to your ASHX handler
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // If the upload is successful, insert the image into the editor
+                    if (response && response.url) {
+                        const input = document.getElementById('imageinput');
+                        input.innerText = response.url;
+                    }
+                },
+                error: function () {
+                    console.error('Image upload failed.');
+                }
+            });
+        }
+
+        function insertImageTag() {
+            const textarea = document.getElementById('htmlInput');
+            const imageDiv = document.getElementById('imageinput');
+
+            if (!textarea || !imageDiv) return;
+
+            const imageSrc = imageDiv.textContent.trim(); // Get the image URL or path
+            if (!imageSrc) return;
+
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<img src="${imageSrc}" alt="" class='image'>`;
+
+            textarea.value = textBefore + snippet + textAfter;
+
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function insertVideoTag() {
+            const textarea = document.getElementById('htmlInput');
+            const videoInput = document.getElementById('videoinput');
+
+            if (!textarea || !videoInput) return;
+
+            const videoURL = videoInput.value.trim();
+            if (!videoURL) {
+                alert("Please enter a YouTube video URL.");
+                return;
+            }
+
+            const match = videoURL.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+            if (!match) {
+                alert("Invalid YouTube URL format.");
+                return;
+            }
+
+            const videoID = match[1];
+
+            const embedHTML = `
+                <div class="responsive-video video">
+                  <iframe src="https://www.youtube.com/embed/${videoID}" frameborder="0" allowfullscreen></iframe>
+                </div>`;
+
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            textarea.value = textBefore + embedHTML + textAfter;
+
+            const newCursorPos = cursorPos + embedHTML.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+
+
+        function showTab(tabName) {
+            // Show the correct tab content
+            document.getElementById('htmlTab').style.display = tabName === 'html' ? 'block' : 'none';
+            document.getElementById('webTab').style.display = tabName === 'web' ? 'block' : 'none';
+
+            if (tabName === 'web') {
+                const textarea = document.getElementById('htmlInput');
+                const html = textarea.value;
+                const web = document.getElementById('webTab');
+                web.innerHTML = html;
+                //alert(html);
+                sethtmlContent(html);
+            }
+
+            // Update tab styling
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.textContent.trim().toLowerCase() === tabName) {
+                    tab.classList.add('active');
+                }
+            });
+        }
+
+        function insertcontainer() {
+            const textarea = document.getElementById('htmlInput');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="container">\n\n</div>`;
+
+            // Insert the snippet at the cursor position
+            textarea.value = textBefore + snippet + textAfter;
+
+            // Move cursor to just after the inserted snippet
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function insert1_2() {
+            const textarea = document.getElementById('htmlInput');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="row">\n\t<div class="col-lg-4 margin">\n\n\t</div>\n\t<div class="col-lg-8 margin">\n\n\t</div>\n</div>`;
+
+            // Insert the snippet at the cursor position
+            textarea.value = textBefore + snippet + textAfter;
+
+            // Move cursor to just after the inserted snippet
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function insert1p_2p() {
+            const textarea = document.getElementById('htmlInput');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="row">\n\t<div class="col-lg-4 col-lg-push-8 margin">\n\n\t</div>\n\t<div class="col-lg-8 col-lg-pull-4 margin">\n\n\t</div>\n</div>`;
+
+            // Insert the snippet at the cursor position
+            textarea.value = textBefore + snippet + textAfter;
+
+            // Move cursor to just after the inserted snippet
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function insert2_1() {
+            const textarea = document.getElementById('htmlInput');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="row">\n    <div class="col-lg-8 margin">\n\n    </div>\n    <div class="col-lg-4 margin">\n\n    </div>\n</div>`;
+
+            // Insert the snippet at the cursor position
+            textarea.value = textBefore + snippet + textAfter;
+
+            // Move cursor to just after the inserted snippet
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function insert2p_1p() {
+            const textarea = document.getElementById('htmlInput');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="row">\n    <div class="col-lg-8 col-lg-push-4 margin">\n\n    </div>\n    <div class="col-lg-4 col-lg-pull-8 margin">\n\n    </div>\n</div>`;
+
+            textarea.value = textBefore + snippet + textAfter;
+
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+
+        function insert1_3() {
+            const textarea = document.getElementById('htmlInput');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="row">\n    <div class="col-lg-3 margin">\n\n    </div>\n    <div class="col-lg-9 margin">\n\n    </div>\n</div>`;
+
+            textarea.value = textBefore + snippet + textAfter;
+
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function insert1p_3p() {
+            const textarea = document.getElementById('htmlInput');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="row">\n    <div class="col-lg-3 col-lg-push-9 margin">\n\n    </div>\n    <div class="col-lg-9 col-lg-pull-3 margin">\n\n    </div>\n</div>`;
+
+            textarea.value = textBefore + snippet + textAfter;
+
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function insert3_1() {
+            const textarea = document.getElementById('htmlInput');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="row">\n    <div class="col-lg-9 margin">\n\n    </div>\n    <div class="col-lg-3 margin">\n\n    </div>\n</div>`;
+
+            textarea.value = textBefore + snippet + textAfter;
+
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function insert3p_1p() {
+            const textarea = document.getElementById('htmlInput');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="row">\n    <div class="col-lg-9 col-lg-push-3 margin">\n\n    </div>\n    <div class="col-lg-3 col-lg-pull-9 margin">\n\n    </div>\n</div>`;
+
+            textarea.value = textBefore + snippet + textAfter;
+
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function insert1_1_1_1() {
+            const textarea = document.getElementById('htmlInput');
+            if (!textarea) return;
+
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="row">\n    <div class="col-lg-3 margin">\n\n    </div>\n    <div class="col-lg-3 margin">\n\n    </div>\n    <div class="col-lg-3 margin">\n\n    </div>\n    <div class="col-lg-3 margin">\n\n    </div>\n</div>`;
+
+            textarea.value = textBefore + snippet + textAfter;
+
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function insert1_1_1() {
+            const textarea = document.getElementById('htmlInput');
+            if (!textarea) return;
+
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="row">\n    <div class="col-lg-4 margin">\n\n    </div>\n    <div class="col-lg-4 margin">\n\n    </div>\n    <div class="col-lg-4 margin">\n\n    </div>\n</div>`;
+
+            textarea.value = textBefore + snippet + textAfter;
+
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function insert1_1() {
+            const textarea = document.getElementById('htmlInput');
+            if (!textarea) return;
+
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="row">\n    <div class="col-lg-6 margin">\n\n    </div>\n    <div class="col-lg-6 margin">\n\n    </div>\n</div>`;
+
+            textarea.value = textBefore + snippet + textAfter;
+
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function insert1() {
+            const textarea = document.getElementById('htmlInput');
+            if (!textarea) return;
+
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const snippet = `<div class="row">\n    <div class="col-lg-12 margin">\n\n    </div>\n</div>`;
+
+            textarea.value = textBefore + snippet + textAfter;
+
+            const newCursorPos = cursorPos + snippet.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+
+
+        // tinymce text insert
+        function insertText() {
+            const textarea = document.getElementById('htmlInput');
+
+            // Get content from TinyMCE editor instance
+            const htmlToInsert = tinymce.get('editable-content')?.getContent();
+
+            if (!textarea || !htmlToInsert) return;
+
+            console.log(htmlToInsert);
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            // Insert the HTML content at the cursor position
+            textarea.value = textBefore + htmlToInsert + textAfter;
+
+            // Move cursor to just after the inserted content
+            const newCursorPos = cursorPos + htmlToInsert.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }
+
+        function importText() {
+            const textarea = document.getElementById('htmlInput');
+            const editor = tinymce.get('editable-content'); // Make sure this ID matches your TinyMCE editor
+
+            if (!textarea || !editor) return;
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedHTML = textarea.value.substring(start, end);
+
+            if (selectedHTML.trim()) {
+                editor.setContent(selectedHTML);
+            } else {
+                //alert('Please select some HTML in the textarea first.');
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+
+    <div class="container_">
+        <!-- Left Pane -->
+        <div class="left-pane">
+            <div class="left-section bootstrap">
+                <div class="heading">Bootstrap-elements</div>
+                <div class="text">
+                    <button onclick="insertcontainer()">container</button>
+                    <hr />
+                    <button onclick="insert1_2()">1 - 2</button>
+                    <button onclick="insert1p_2p()">1p - 2p</button> -- 
+                    <button onclick="insert2_1()">2 - 1</button>
+                    <button onclick="insert2p_1p()">2p - 1p</button> -- 
+                    <button onclick="insert1_3()">1 - 3</button>
+                    <button onclick="insert1p_3p()">1p - 3p</button> -- 
+                    <button onclick="insert3_1()">3 - 1</button>
+                    <button onclick="insert3p_1p()">3p - 1p</button>
+                    <hr />
+                    <button onclick="insert1_1_1_1()">1 - 1 - 1 - 1</button> -- 
+                    <button onclick="insert1_1_1()">1 - 1 - 1</button> -- 
+                    <button onclick="insert1_1()">1 - 1</button> -- 
+                    <button onclick="insert1()">1</button>
+                </div>
+            </div>
+            <div class="left-section content">
+                <div class="heading">Content-elements</div><div class="butt"><button onclick="insertText()">Insert tekst</button></div><div class="butt"><button onclick="importText()">Import tekst</button></div>
+                <div class="text">
+                    <div id="editable-content"></div>
+                </div>
+                <div class="text">
+                    Kies een afbeelding:
+                    <div class="imagebutt">
+                        <div id="imageinput" onclick="selectLocalImage()"></div>
+                        <button onclick="insertImageTag()">Insert Image</button>
+                    </div>
+                </div>
+                <div class="text">
+                    Voer een video-url in:
+                    <div class="imagebutt">
+                        <input type="text" id="videoinput" placeholder="Plak YouTube URL hier" />
+                        <button onclick="insertVideoTag()">Insert Video</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Pane -->
+        <div class="right-pane">
+            <div id="currentpath" style="float: right; margin-bottom: 5px;"></div>
+            <div class="tabs">
+                <div class="tab active" onclick="showTab('html')">HTML</div>
+                <div class="tab" onclick="showTab('web')">Web</div>
+            </div>
+            <div id="htmlTab" class="tab-content">
+                <textarea id="htmlInput" style="width: 100%; height: 100%; border: 1px solid #333;"></textarea>
+            </div>
+
+            <div id="webTab" class="tab-content">
+                <div id="previewFrame" style="width: 100%; height: 100%; border: 1px solid #333;"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

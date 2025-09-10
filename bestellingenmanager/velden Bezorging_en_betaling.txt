@@ -1,0 +1,1 @@
+Bestelnummer, Verzenddatum, Bezorgdatum, Bezorgmethode, Totaalbedrag, Betaalmethode, Betaald, Pakbon, Verzonden

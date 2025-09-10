@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Vgas menu</title>
+    <script src="/Scripts/vgnav.min.js"></script>
+    <link href="/Content/vgnav.css?version=1" rel="stylesheet" />
+    <link href="/Content/vgnav-theme.css" rel="stylesheet" />
+    <link href="/Content/style.css" rel="stylesheet" />
+    <style>
+        #container {
+            width: 75%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 0px;
+            height: auto;
+            border: 0px solid black;
+        }
+
+        #vegasmenu {
+            width: 75%;
+            height: 50px;
+        }
+
+        /* vg-nav */
+
+        svg#ham-menue {
+            fill: white;
+            width: 50px;
+            height: 50px;
+            margin-left: 10px;
+            margin-right: 30px;
+        }
+
+        .line {
+            fill: none;
+            stroke: #333333;
+            stroke-width: 3;
+            transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1), stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .line1 {
+            stroke-dasharray: 60 207;
+            stroke-width: 3;
+        }
+
+        .line2 {
+            stroke-dasharray: 60 60;
+            stroke-width: 3;
+        }
+
+        .line3 {
+            stroke-dasharray: 60 207;
+            stroke-width: 3;
+        }
+
+        .vg-nav-hamburger.vg-sidebar-active .line1 {
+            stroke-dasharray: 90 207;
+            stroke-dashoffset: -134;
+            stroke-width: 3;
+        }
+
+        .vg-nav-hamburger.vg-sidebar-active .line2 {
+            stroke-dasharray: 1 60;
+            stroke-dashoffset: -30;
+            stroke-width: 3;
+        }
+
+        .vg-nav-hamburger.vg-sidebar-active .line3 {
+            stroke-dasharray: 90 207;
+            stroke-dashoffset: -134;
+            stroke-width: 3;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+
+
+        var menuItems = [];
+
+        const slugify = str => str.trim().toLowerCase().replace(/\s+/g, "-");
+
+        const buildPath = (arr, id) => {
+            const path = [];
+            let current = arr.find(item => item.Id === id);
+            while (current) {
+                path.unshift(slugify(current.Catnaam));
+                current = arr.find(item => item.Id === current.ParentId);
+            }
+            return "/" + path.join("/") + "/" + path[path.length - 1] + ".html";
+        };
+
+        const buildMenu = (arr, parentId = 0, isRoot = true) => {
+            const children = arr.filter(item => item.ParentId === parentId);
+            if (!children.length) return "";
+
+            const ulClass = isRoot ? ' class="vg-nav-wrapper"' : "";
+            let html = `<ul${ulClass}>`;
+
+            for (let child of children) {
+                const hasChildren = arr.some(item => item.ParentId === child.Id);
+                const classAttr = hasChildren ? ' class="dropdown"' : "";
+                const href = hasChildren ? "#" : buildPath(arr, child.Id);
+
+                html += `<li${classAttr}><a href="${href}">${child.Catnaam}</a>`;
+                html += buildMenu(arr, child.Id, false);
+                html += `</li>`;
+            }
+
+            html += `</ul>`;
+            return html;
+        };
+
+
+
+        $(document).ready(function () {
+
+            // get menuItems
+            getMenuItems();
+            // Render the menu
+            const htmlMenu = buildMenu(menuItems);
+            document.querySelector(".vg-nav").innerHTML = htmlMenu;
+            enableNav();
+
+            var links = document.querySelectorAll(".vg-flip-list li a");
+            for (let i = 0; i < links.length; i++) {
+                console.log('hi i am vg-flip-list li a');
+                let link = links[i];
+                link.style.fontSize = '20px';
+                link.style.fontWeight = 'bold';
+                link.style.textDecoration = 'none';
+                // Als de link text Back is wijzig dat dan in << Vorige
+                if (link.text === "Back") {
+                    link.style.fontSize = '15px';
+                    link.text = "<< Vorige";
+                }
+            }
+        });
+
+        function enableNav() {
+            new VGNav({
+                sidebar: {
+                    placement: 'right'
+                },
+                expand: "md",
+                mobileTitle: "",
+                flip: true,
+                move: true,
+                hamburger: "<svg id=\"ham-menue\" viewBox=\"0 0 100 100\"><path class=\"line line1\" d=\"M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058\"></path><path class=\"line line2\" d=\"M 20,50 H 80\"></path><path class=\"line line3\" d=\"M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942\"></path></svg>"
+            });
+        }
+
+        function getMenuItems() {
+
+            $.ajax({
+                type: 'POST',
+                url: '/CategorieService.asmx/GetCategoriesSorted',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    menuItems = JSON.parse(response.d);
+                    console.log(menuItems);
+                },
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <div id="left"></div>
+    <div id="right"></div>
+    <div id="container">
+        <div id="vegasmenu">
+            <nav class="vg-nav">
+
+            </nav>
+        </div>
+    </div>
+</body>
+</html>

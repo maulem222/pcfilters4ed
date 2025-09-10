@@ -1,0 +1,21 @@
+id  produktid eigenschapid
+
+1	1	15
+2	1	17
+3	1	19
+4	2	12
+5	2	14
+6	2	19
+7	3	9
+8	3	11
+9	3	12
+
+gekozen zijn eigenschapid's 14, 15 en 19
+
+De query luidt dan:
+
+SELECT DISTINCT produktid
+FROM produkteigenschappen
+WHERE eigenschapid IN (14,15,19)
+
+retourneert produktid's 1 en 2

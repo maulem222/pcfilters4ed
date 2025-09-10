@@ -1,0 +1,979 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            overflow: visible;
+        }
+
+        #left {
+            width: 20%;
+            float: left;
+        }
+
+        #right {
+            width: 20%;
+            float: right;
+        }
+
+        #container {
+            width: 75%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 50px;
+            height: auto;
+            border: 0px solid black;
+        }
+
+        #filtercontainer {
+            float: left;
+            padding-left: 15px;
+            width: 235px;
+            border: 1px solid #e3e6e4;
+            border-radius: 4px;
+        }
+
+        #produktcontainer {
+            float: left;
+            width: calc(100% - 302px);
+            border: 0px solid black;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .cbcat, .slcat {
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        label {
+            font-family: sans-serif;
+            color: dimgray;
+        }
+
+        .spacer {
+            height: 10px;
+        }
+
+        .slider {
+            width: 180px;
+            margin-bottom: 5px;
+        }
+
+        .slvalcont {
+            width: 180px;
+            height: 25px;
+        }
+
+        .slidervalues {
+            width: 125px;
+            float: left;
+        }
+
+        .ibbutt {
+            float: right;
+        }
+
+        /* cat en sorteren */
+
+        #catensorteren {
+            width: 100%;
+            height: 40px;
+            border-bottom: 1px solid #e3e6e4;
+            margin-bottom: 15px;
+        }
+
+        #categorie {
+            float: left;
+            margin-left: 20px;
+            font-size: 30px;
+        }
+
+        #sorteren {
+            float: right;
+            width: 120px;
+            height: 20px;
+            border: 0px solid green;
+        }
+
+        /* pagination */
+
+        .current {
+            color: green;
+        }
+
+        #pagin li {
+            display: inline-block;
+        }
+
+        #pagin {
+            float: right;
+        }
+
+        .prev {
+            cursor: pointer;
+        }
+
+        .next {
+            cursor: pointer;
+        }
+
+        .last {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .first {
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        /* product view */
+
+        .product { /* .product is een algemene container voor alledrie de elementen */
+            float: left; /* zet afbeelding, naam/features en prijs/buttoncontainer naast elkaar */
+            border: 0px solid red;
+            height: 170px; /* zorg voor een vaste hoogte */
+        }
+
+        .image {
+            width: 25%; /* de breedte is een percentage van de totale breedte van de prodcontainer */
+        }
+
+        .name {
+            font-family: 'Franklin Gothic Book';
+            font-size: 25px;
+            color: darkblue;
+            width: 45%; /* ook hier een procentuele breedte */
+        }
+
+        .price {
+            width: 25%; /* ook hier een procentuele breedte */
+            position: relative;
+            font-size: 25px;
+            border: 0px solid green;
+        }
+
+        .europrice { /* dit vakje bevat de prijs zelf en valt binnen de prijscontainer */
+            position: absolute; /* .price is position relative, dan kan .europrice absoluut worden gepositioneerd daarbinnen */
+            right: -30px;
+            bottom: 55px;
+        }
+
+        .butt { /* dit vakje bevat de bestelknop en valt eveneens binnen de prijscontainer */
+            position: absolute; /* .price is position relative, dan kan .butt absoluut worden gepositioneerd daarbinnen */
+            right: 35px;
+            bottom: 5px;
+            width: 120px;
+            height: 40px;
+            border: 0px solid green;
+        }
+
+        .picture {
+            width: 150px;
+        }
+
+        .prodcont {
+            width: 100%; /* de prodcontainer bevat alledrie de .product divs en omvat 100% van de produktcontainer */
+            height: 180px;
+            display: block; /* display block om de hele rij af te zonderen van de volgende rijen */
+            border-bottom: 1px solid #e3e6e4; /* toon onder de rij alleen de bottom border, dat is een dunne grijze lijn */
+            margin-bottom: 15px; /* laat wat afstand tot de eronder staande prodcontainer */
+        }
+
+        .features {
+            font-family: 'Franklin Gothic Book';
+            font-size: 15px;
+            color: #999ba1;
+        }
+
+        /* breadcrumb */
+
+        .noaction {
+            text-decoration: none;
+            color: black;
+            pointer-events: none; /* voorkomt page reload bij het klikken op de lege link */
+            cursor: default;
+        }
+
+        .action {
+            text-decoration: none;
+            cursor: pointer;
+            color: blue;
+        }
+
+        .crumb {
+            float: left;
+            width: auto;
+            overflow: auto;
+        }
+
+        .separator {
+            float: left;
+            width: 5px;
+            padding-left: 5px;
+            padding-right: 10px;
+        }
+
+        #bccontainer {
+            width: 100%;
+            height: 40px;
+            border-bottom: 1px solid #e3e6e4;
+            margin-bottom: 15px;
+        }
+
+        /* headerafbeelding */
+
+        #imagecontainer {
+            width: 100%;
+            height: 300px;
+            border: 0px solid red;
+            /* background-image wordt programmatisch ingesteld */
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin-bottom: 15px;
+        }
+
+        /* product details links */
+
+        .nounderline {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+            .nounderline:hover {
+                text-decoration: underline;
+            }
+
+        /* winkelmandje */
+
+        #cart-container {
+            float: right;
+            width: 35px;
+            position: relative;
+            top: -35px;
+            border: 0px solid green;
+        }
+
+        #itemCount {
+            position: absolute;
+            display: none;
+            top: -10px;
+            left: -10px;
+            width: 24px;
+            height: 20px;
+            padding-top: 4px;
+            border-radius: 50%;
+            border: 1px solid grey;
+            background: white;
+            color: black;
+            text-align: center;
+        }
+
+        @media only screen and (min-width: 0px) and (max-width: 789px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container {
+                width: 100%; /* op mobiele breedte mag de parent container op volle breedte */
+            }
+
+            #filtercontainer {
+                float: none; /* verwijder de float zodat de filters op zichzelf komen te staan boven de produktenlijst */
+                margin-left: auto; /* centreer het hele filtervak */
+                margin-right: auto; /* centreer het hele filtervak */
+                margin-bottom: 50px;
+                width: 235px; /* geef een vaste breedte */
+            }
+
+            #produktcontainer {
+                float: none; /* verwijder de float zodat de produktcontainer op zichzelf komt te staan onder het filtervak */
+                margin-left: auto; /* produktcontainer centreren */
+                margin-right: auto;
+                border: 0px solid blue;
+                width: 90%; /* flexibele breedte */
+            }
+
+            .image {
+                width: 35%; /* image vak wat breder omdat het prijsvak wegens clear: both; naar de volgende rij verhuist */
+                border: 0px solid green;
+            }
+
+            .name {
+                width: 55%; /* naam/features vak wat breder omdat het prijsvak wegens clear: both; naar de volgende rij verhuist */
+                border: 0px solid green;
+            }
+
+            .price {
+                width: 20%;
+                clear: both; /* laat het prijsvak onder afb en naam/features op zichzelf staan */
+                border: 0px solid green;
+            }
+
+            .europrice {
+                position: absolute;
+                left: 20px;
+                top: 5px;
+            }
+
+            .butt {
+                position: absolute;
+                left: 20px;
+                top: 55px;
+                border: 0px solid green;
+            }
+
+            .prodcont {
+                height: 360px; /* maak prodcont 2x zo hoog omdat het prijsvak onder de twee andere vakken komt te staan */
+                display: block;
+                border-bottom: 1px solid #e3e6e4;
+                margin-bottom: 15px;
+            }
+        }
+
+        @media only screen and (min-width: 790px) and (max-width: 1010px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container {
+                width: 100%;
+            }
+
+            .image {
+                width: 35%;
+            }
+
+            .name {
+                width: 60%;
+            }
+
+            .price {
+                clear: both;
+            }
+
+            .europrice {
+                position: absolute;
+                left: 20px;
+                top: 5px;
+            }
+
+            .butt {
+                position: absolute;
+                left: 20px;
+                top: 55px;
+                border: 0px solid green;
+            }
+
+            .prodcont {
+                height: 360px;
+                display: block;
+                border-bottom: 1px solid #e3e6e4;
+                margin-bottom: 15px;
+            }
+        }
+
+        @media only screen and (min-width: 1011px) and (max-width: 1340px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        const checkboxes = [];
+        const rangecheckboxes = [];
+        const sliders = [];
+        var checkOR;
+        var rangecheckOR;
+        const checkjoinedarr = [];
+        const rangecheckjoinedarr = [];
+        var slidersAND;
+        var checkjoinedAND;
+        var rangecheckjoinedAND;
+        var finalSQLarr = [];
+        var finalSQL;
+
+        var oplopend = true;
+        var aflopend = false;
+
+        var catid = ##CATID##;
+        var table = "##TABLE##";
+
+        //Pagination
+        var pageSize = 4;
+        var incremSlide = 5;
+        var startPage = 0;
+        var numberPage = 0;
+        var pageCount;
+        var totalSlidepPage;
+        var prev;
+        var next;
+
+        var itemCount = 0;
+
+
+        $(document).ready(function () {
+
+            itemCount = getCookie('itemcount');
+            if (itemCount !== null) {
+                if (itemCount > 0) {
+                    $('#itemCount').html(itemCount).css('display', 'block');
+                }
+                else {
+                    $('#itemCount').css('display', 'none');
+                }
+            }
+
+            var loc = getLocation(location);
+            var pathanddoc = loc.pathname;
+            sessionStorage.setItem('location', pathanddoc);
+
+            finalSQL = "SELECT * FROM ##TABLE##";
+
+            $("#sorteer").change(function () {
+
+                var index = finalSQL.indexOf(' ORDER BY Prijs'); // bepaal de plaats waar ORDER BY Prijs begint
+
+                if (index > 0) { // indien ' ORDER BY Prijs' werd aangetroffen
+                    finalSQL = finalSQL.substring(0, index); // haal het bestaande ' ORDER BY Prijs' weg uit finalSQL
+                }
+
+                //alert(finalSQL);
+
+                var value = $("#sorteer").val(); // staat de dropdown op oplopend of aflopend
+                if (value == "prijsoplopend") {
+                    oplopend = true;
+                    aflopend = false;
+                }
+                else {
+                    oplopend = false;
+                    aflopend = true;
+                }
+
+                if (oplopend == true) {
+                    finalSQL = finalSQL + " ORDER BY Prijs ASC"
+                }
+                else {
+                    finalSQL = finalSQL + " ORDER BY Prijs DESC"
+                }
+
+                //alert(finalSQL);
+                getData();
+            });
+
+            getData();
+            GetCrumbFromDB();
+            getHeaderimage();
+
+            ##SLIDERCODE##
+
+            setTimeout(function () { cb(); }, 100);
+
+        });
+
+        function assembleOR(cat) { // 1x voor 1 parentdiv
+
+            checkOR = checkboxes?.join(' OR ');
+            if (checkOR) {
+                checkOR = "(" + checkOR + ")";
+                var i, string, len = checkjoinedarr.length;
+                for (i = 0; i < len; ++i) { // loop de hele array checkjoinedarr af
+                    string = checkjoinedarr[i];
+                    if (string?.includes("(" + cat + "=")) { // indien een of meerdere array elementen beginnen met (cat=
+                        checkjoinedarr.splice(i, 1); // verwijder dan deze array elementen
+                    }
+                }
+                checkjoinedarr.push(checkOR); // en push de elementen overnieuw
+            }
+            else { // geen checkOR, dus geen gegevens in checkboxes array, dus laatst aanwezige element moet weg uit checkjoinedarr
+                var i, string, len = checkjoinedarr.length;
+                for (i = 0; i < len; ++i) { // loop de hele array checkjoinedarr af
+                    string = checkjoinedarr[i];
+                    if (string?.includes("(" + cat + "=")) { // indien 1 array element begint met (cat=
+                        checkjoinedarr.splice(i, 1); // verwijder dan dit array element
+                    }
+                }
+            }
+            checkboxes.length = 0; // wis de checkboxes array na gebruik
+
+            rangecheckOR = rangecheckboxes?.join(' OR ');
+            if (rangecheckOR) {
+                rangecheckOR = "(" + rangecheckOR + ")";
+                var i, string, len = rangecheckjoinedarr.length;
+                for (i = 0; i < len; ++i) { // loop de hele array rangecheckjoinedarr af
+                    string = rangecheckjoinedarr[i];
+                    if (string?.includes("(" + cat + " BETWEEN")) { // indien een of meerdere array elementen beginnen met (cat BETWEEN
+                        rangecheckjoinedarr.splice(i, 1); // verwijder dan deze array elementen
+                    }
+                }
+                rangecheckjoinedarr.push(rangecheckOR); // en push de elementen overnieuw
+            }
+            else { // geen rangecheckOR, dus geen gegevens in rangecheckboxes array, dus laatst aanwezige element moet weg uit rangecheckjoinedarr
+                var i, string, len = rangecheckjoinedarr.length;
+                for (i = 0; i < len; ++i) { // loop de hele array rangecheckjoinedarr af
+                    string = rangecheckjoinedarr[i];
+                    if (string?.includes("(" + cat + " BETWEEN")) { // indien 1 array element begint met (cat BETWEEN
+                        rangecheckjoinedarr.splice(i, 1); // verwijder dan dit array element
+                    }
+                }
+            }
+            rangecheckboxes.length = 0; // wis de rangecheckboxes array na gebruik
+        }
+
+        function assembleAND() { // 1x voor alle parentdivs samen en voor elke sliderupdate
+
+            finalSQLarr.length = 0; // wis de final SQL array
+
+            if (sliders.length > 1) {
+                slidersAND = sliders.join(" AND ");
+                finalSQLarr.push(slidersAND);
+            }
+            if (sliders.length == 1) {
+                finalSQLarr.push(sliders.toString());
+            }
+            //
+            if (checkjoinedarr.length > 1) {
+                checkjoinedAND = checkjoinedarr.join(" AND ");
+                finalSQLarr.push(checkjoinedAND);
+            }
+            if (checkjoinedarr.length == 1) {
+                finalSQLarr.push(checkjoinedarr.toString());
+            }
+            //
+            if (rangecheckjoinedarr.length > 1) {
+                rangecheckjoinedAND = rangecheckjoinedarr.join(" AND ");
+                finalSQLarr.push(rangecheckjoinedAND);
+            }
+            if (rangecheckjoinedarr.length == 1) {
+                finalSQLarr.push(rangecheckjoinedarr.toString());
+            }
+
+            finalSQL = finalSQLarr.join(" AND ");
+            //console.log(finalSQL);
+
+            if (finalSQL == "") {
+                finalSQL = "SELECT * FROM ##TABLE##";
+            }
+            else {
+                var prefix = "SELECT * FROM ##TABLE## WHERE ";
+                finalSQL = prefix + finalSQL;
+            }
+
+            if (oplopend == true) {
+                finalSQL = finalSQL + " ORDER BY Prijs ASC"
+            }
+            else {
+                finalSQL = finalSQL + " ORDER BY Prijs DESC"
+            }
+
+            console.log(finalSQL);
+
+            getData();
+        }
+
+        function formatcomma(prijs) {
+            var res;
+
+            var index = prijs.toString().indexOf('.'); // bepaal de plaats van de punt in het bedrag
+
+            prijs = prijs.toFixed(2); // rond de decimale waarde af op twee cijfers achter de komma
+            var str = prijs.toString(); // converteer naar string
+            var numarray = str.split('.'); // split de waarde waar de punt staat (dit mag een komma zijn in de tabel!)
+            var a = new Array(); // declareer een array
+            a = numarray; // zet de waarden voor en na de punt in de array
+
+            if (index > 0) { // indien er een punt in het bedrag zit
+                res = a[0] + "," + a[1]; // vervang die door een komma
+            }
+            else {
+                res = a[0] + ",-"; // indien de prijs een geheel getal is, voeg ,- toe
+            }
+            return res;
+        }
+
+        function getValues(k) {
+            if (k == undefined) {
+                return false;
+            }
+            var v = sessionStorage.getItem(k);
+            if (v != null) {
+                return JSON.parse(v);
+            } else {
+                return -1;
+            }
+        }
+
+        function setValues(k, v) {
+            if (k == undefined || v == undefined) {
+                return false;
+            }
+            sessionStorage.setItem(k, JSON.stringify(v));
+        }
+
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+            else return null;
+        }
+
+        function getData() {
+            $.ajax({
+                type: 'POST',
+                url: '/ProduktService.asmx/getProducts',
+                data: JSON.stringify({ sql: finalSQL }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    console.clear();
+                    console.log(data.d);
+
+                    $('#produkten').empty();
+
+                    var data = JSON.parse(data.d);
+                    $.each(data, function (i) {
+                        var id = data[i].Id;
+                        var afb = data[i].Produktafbeelding;
+                        var naam = data[i].Produktnaam;
+                        var prijs = data[i].Prijs;
+
+                        var feat1 = data[i].Feature1;
+                        var feat2 = data[i].Feature2;
+                        var feat3 = data[i].Feature3;
+                        var feat4 = data[i].Feature4;
+                        var feat5 = data[i].Feature5;
+
+                        var loc = getLocation(location);
+                        var pathanddoc = loc.pathname;
+                        var path = pathanddoc.substring(0, pathanddoc.lastIndexOf('/') + 1);
+
+                        $('#produkten').append("<div class='prodcont'><a class='nounderline' href='" + path + "details.html?table=" + table +
+                            "&pid=" + id + "&prodname=" + naam + "&catid=" + catid + "'><div class='product image'><img class='picture' src='" + afb +
+                            "'/></div></a><div class='product name'><a class='nounderline' href='" + path + "details.html?table=" + table +
+                            "&pid=" + id + "&prodname=" + naam + "&catid=" + catid + "'>" + naam + "</a><div class='features' id='" + id +
+                            "'></div></div><div class='product price'><div class='europrice'>&euro; " + formatcomma(prijs) +
+                            "</div><div class='butt'><img class='winkelm' Id=" + id + " Naam='" + naam + "' src='/images/plaatsinwinkelmandje.jpg' /></div></div></div>");
+
+                        if ((feat1 !== "") || (feat2 !== "") || (feat3 !== "") || (feat4 !== "") || (feat5 !== "")) {
+                            $("#" + id).append("<ul>");
+                        }
+                        if (feat1 !== "") {
+                            $("#" + id).append("<li>" + feat1 + "</li>");
+                        }
+                        if (feat2 !== "") {
+                            $("#" + id).append("<li>" + feat2 + "</li>");
+                        }
+                        if (feat3 !== "") {
+                            $("#" + id).append("<li>" + feat3 + "</li>");
+                        }
+                        if (feat4 !== "") {
+                            $("#" + id).append("<li>" + feat4 + "</li>");
+                        }
+                        if (feat5 !== "") {
+                            $("#" + id).append("<li>" + feat5 + "</li>");
+                        }
+                        if ((feat1 !== "") || (feat2 !== "") || (feat3 !== "") || (feat4 !== "") || (feat5 !== "")) {
+                            $("#" + id).append("</ul>");
+                        }
+                    });
+                    addPagination();
+                },
+
+                //error: function (response) {
+                //    alert("getData error");
+                //}
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        function GetCrumbFromDB() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: '/BreadcrumbService.asmx/ReadBCfromDB',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (response.d.Crumb == null) {
+                        // doe niets
+                    }
+                    else {
+                        var crumb = response.d.Crumb;
+                        $("#bccontainer").empty();
+                        $("#bccontainer").append(crumb);
+
+                        var links = document.querySelectorAll('#bccontainer .crumb'); // alle crumb's
+                        var crumbtext = links[links.length - 1].textContent; // pak de laatste crumb
+
+                        /* append to categorie en title */
+                        $("#categorie").append(crumbtext);
+                        $(document).prop('title', crumbtext);
+                        /* einde */
+                    }
+                },
+
+                error: function (response) {
+                    alert("ReadBCfromDB error");
+                }
+            });
+        }
+
+        function getLocation(href) {
+            var l = document.createElement("a");
+            l.href = href;
+            return l;
+        };
+
+        function getHeaderimage() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: '/ImageService.asmx/getHeaderImage',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var imagepath = response.d.ImagePath;
+                    if (imagepath !== null) {
+                        $("#imagecontainer").css('background-image', 'url(' + imagepath + ')');
+                    }
+                },
+
+                error: function (response) {
+                    alert("getHeaderImage error");
+                }
+            });
+        }
+
+        function addPagination() {
+            $("#produkten").append("<div id='pagin'></div>");
+            $("#produkten").append("<br/>");
+            $("#produkten").append("<br/>");
+
+            prev = $("<li/>").addClass("prev").html("Prev").click(function () {
+                startPage -= 5;
+                incremSlide -= 5;
+                numberPage--;
+                slide();
+            });
+
+            prev.hide();
+
+            next = $("<li/>").addClass("next").html("Next").click(function () {
+                startPage += 5;
+                incremSlide += 5;
+                numberPage++;
+                slide();
+            });
+
+            pageCount = $(".prodcont").length / pageSize;
+            totalSlidepPage = Math.floor(pageCount / incremSlide);
+
+            for (var i = 0; i < pageCount; i++) {
+                $("#pagin").append('<li><a href="#">' + (i + 1) + '</a></li> ');
+                if (i > pageSize) {
+                    $("#pagin li").eq(i).hide();
+                }
+            }
+
+            $("#pagin").prepend(prev).append(next);
+
+            $("#pagin li").first().find("a").addClass("current");
+
+            showPage(1);
+
+            $("#pagin li a").eq(0).addClass("current");
+        }
+
+        $(document).on('click', '#pagin li a', function (e) {
+            e.preventDefault();
+            $("#pagin li a").removeClass("current");
+            $(this).addClass("current");
+            showPage(parseInt($(this).text()));
+        });
+
+        $(document).on('click', '.winkelm', function (e) {
+            e.preventDefault();
+
+            itemCount++;
+            var time = 3600 * 1000 * 24 * 14; // 2 weken vanaf nu
+            document.cookie = 'itemcount=' + itemCount + '; max-age=' + time;
+            $('#itemCount').html(itemCount).css('display', 'block');
+
+            var pid = $(this).attr('Id');
+            var naam = $(this).attr('Naam');
+            var loc = getLocation(location);
+            var pathanddoc = loc.href;
+
+            var path = pathanddoc.substring(0, pathanddoc.lastIndexOf("/"));
+            var location_href = path + "/details.html?table=" + table + "&pid=" + pid + "&prodname=" + naam + "&catid=" + catid;
+            //alert(location_href);
+            //location.href = location_href;
+        });
+
+        function slide() {
+            $("#pagin li").hide();
+
+            for (t = startPage; t < incremSlide; t++) {
+                $("#pagin li").eq(t + 1).show();
+            }
+            if (startPage == 0) {
+                next.show();
+                prev.hide();
+            } else if (numberPage == totalSlidepPage) {
+                next.hide();
+                prev.show();
+            } else {
+                next.show();
+                prev.show();
+            }
+        }
+
+        function showPage(page) {
+            $(".prodcont").hide();
+            $(".prodcont").each(function (n) {
+                if (n >= pageSize * (page - 1) && n < pageSize * page)
+                    $(this).show();
+            });
+        }
+
+        $(document).on('click', '.cb', function (e) {
+            checkboxes.length = 0;
+            rangecheckboxes.length = 0;
+            $(".parentdiv").each(function () {
+                var cat = $(this).children('.cbcat').first().text();
+                if (cat.split(' ').length == 2) { // indien de kolomnaam uit twee woorden bestaat
+                    cat = "[" + cat + "]"; // zet er dan vierkante haken omheen
+                }
+                var type = $(this).children('.type').attr('type');
+                var cbs = $(this).children('.cbs').first();
+                cbs.find("input:checked").each(function () {
+                    if (type == 'cb') {
+                        var concat;
+                        var value = $(this).attr('id');
+                        a = $.isNumeric(value); // test of de checkboxwaarden numeriek zijn
+                        if (a) { // zo ja, laat de aanhalingstekens om de waarde weg
+                            concat = "(" + cat + "=" + value + ")";
+                        }
+                        else { // zo nee, plaats aanhalingstekens om de waarden
+                            concat = "(" + cat + "=" + "'" + value + "')";
+                        }
+                        checkboxes.push(concat);
+                    }
+                    if (type == 'rangecb') {
+                        var low = $(this).attr('low');
+                        var high = $(this).attr('high');
+                        var concat = "(" + cat + " BETWEEN " + low + " AND " + high + ")"; // range checkboxwaarden zijn altijd numeriek
+                        rangecheckboxes.push(concat);
+                    }
+                });
+                assembleOR(cat);
+            });
+            assembleAND();
+        });
+
+        function cb() {
+            checkboxes.length = 0;
+            rangecheckboxes.length = 0;
+            $(".parentdiv").each(function () {
+                var cat = $(this).children('.cbcat').first().text();
+                if (cat.split(' ').length == 2) { // indien de kolomnaam uit twee woorden bestaat
+                    cat = "[" + cat + "]"; // zet er dan vierkante haken omheen
+                }
+                var type = $(this).children('.type').attr('type');
+                var cbs = $(this).children('.cbs').first();
+                cbs.find("input:checked").each(function () {
+                    if (type == 'cb') {
+                        var concat;
+                        var value = $(this).attr('id');
+                        a = $.isNumeric(value); // test of de checkboxwaarden numeriek zijn
+                        if (a) { // zo ja, laat de aanhalingstekens om de waarde weg
+                            concat = "(" + cat + "=" + value + ")";
+                        }
+                        else { // zo nee, plaats aanhalingstekens om de waarden
+                            concat = "(" + cat + "=" + "'" + value + "')";
+                        }
+                        checkboxes.push(concat);
+                    }
+                    if (type == 'rangecb') {
+                        var low = $(this).attr('low');
+                        var high = $(this).attr('high');
+                        var concat = "(" + cat + " BETWEEN " + low + " AND " + high + ")"; // range checkboxwaarden zijn altijd numeriek
+                        rangecheckboxes.push(concat);
+                    }
+                });
+                assembleOR(cat);
+            });
+            assembleAND();
+        }
+    </script>
+</head>
+<body>
+    <div id="left"></div>
+    <div id="right"></div>
+    <div id="container">
+        <div id="cart-container">
+            <div id="cart">
+                <img src="/images/winkelwagentje.jpg" />
+            </div>
+            <span id="itemCount"></span>
+        </div>
+        <div id="imagecontainer">
+        </div>
+        <div id="bccontainer">
+        </div>
+        <div id="filtercontainer">
+            ##HTML##
+        </div>
+        <div id="produktcontainer">
+            <div id="catensorteren">
+                <div id="categorie">
+
+                </div>
+                <div id="sorteren">
+                    <select style="outline:none" name="sorteer" id="sorteer">
+                        <option value="prijsoplopend">Prijs (oplopend)</option>
+                        <option value="prijsaflopend">Prijs (aflopend)</option>
+                    </select>
+                </div>
+            </div>
+            <div id="produkten"></div>
+        </div>
+    </div>
+</body>
+</html>

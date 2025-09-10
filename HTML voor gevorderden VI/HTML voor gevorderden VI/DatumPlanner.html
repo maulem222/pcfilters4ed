@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>DatumPlanner</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="Scripts/jquery-ui.js"></script>
+    <link href="Content/jquery-ui.css" rel="stylesheet" />
+    <script src="Scripts/datepicker-nl.js"></script>
+    <script src="Scripts/moment-with-locales.min.js"></script>
+    <script>
+        var datum;
+        var amdatum;
+        var avond = false;
+
+        $(document).ready(function () {
+
+            $("#calculeer").click(function () {
+                var levertijd = parseInt($('#levertijd').val());
+                
+                if (levertijd && amdatum) {
+                    //levertijd = levertijd;
+
+                    var leverdatum = addWeekdays(amdatum, levertijd);
+                    //leverdatum.add(1, 'day');
+
+                    var d = leverdatum.toString().split(" ");
+                    var amdagnaam = d[0];
+                    var ammaandnaam = d[1];
+                    var amdagnummer = d[2];
+
+                    var dagnaam, maandnaam, dagnummer;
+
+                    if (amdagnaam == 'Mon') {
+                        dagnaam = 'maandag';
+                    }
+                    if (amdagnaam == 'Tue') {
+                        dagnaam = 'dinsdag';
+                    }
+                    if (amdagnaam == 'Wed') {
+                        dagnaam = 'woensdag';
+                    }
+                    if (amdagnaam == 'Thu') {
+                        dagnaam = 'donderdag';
+                    }
+                    if (amdagnaam == 'Fri') {
+                        dagnaam = 'vrijdag';
+                    }
+                    if (amdagnaam == 'Sat') {
+                        dagnaam = 'zaterdag';
+                    }
+                    if (amdagnaam == 'Sun') {
+                        dagnaam = 'zondag';
+                    }
+
+                    if (ammaandnaam == 'Jan') {
+                        maandnaam = 'januari';
+                    }
+                    if (ammaandnaam == 'Feb') {
+                        maandnaam = 'februari';
+                    }
+                    if (ammaandnaam == 'Mar') {
+                        maandnaam = 'maart';
+                    }
+                    if (ammaandnaam == 'Apr') {
+                        maandnaam = 'april';
+                    }
+                    if (ammaandnaam == 'May') {
+                        maandnaam = 'mei';
+                    }
+                    if (ammaandnaam == 'Jun') {
+                        maandnaam = 'juni';
+                    }
+                    if (ammaandnaam == 'Jul') {
+                        maandnaam = 'juli';
+                    }
+                    if (ammaandnaam == 'Aug') {
+                        maandnaam = 'augustus';
+                    }
+                    if (ammaandnaam == 'Sep') {
+                        maandnaam = 'september';
+                    }
+                    if (ammaandnaam == 'Oct') {
+                        maandnaam = 'oktober';
+                    }
+                    if (ammaandnaam == 'Nov') {
+                        maandnaam = 'november';
+                    }
+                    if (ammaandnaam == 'Dec') {
+                        maandnaam = 'december';
+                    }
+                    dagnummer = amdagnummer;
+
+                    var nedbezorgdag = dagnaam + ' ' + dagnummer + ' ' + maandnaam;
+                    alert(nedbezorgdag.toString());
+                }
+            });
+
+            $.datepicker.setDefaults($.datepicker.regional["nl"]);
+            $("#datepicker").datepicker();
+
+            $("#datepicker").change(function () {
+                datum = $('#datepicker').val();
+                var dateAr = datum.split('-');
+                amdatum = dateAr[2] + '-' + dateAr[1] + '-' + dateAr[0];
+                //alert(amdatum);
+            });
+
+            $("#avondselector").change(function () {
+                avond = $('#avondselector').val();
+                //alert(avond);
+            });
+        });
+
+        function addWeekdays(amdatum, numberOfWeekdays) {
+            var originalDate = amdatum;
+            var futureDate = moment(originalDate);
+            if (avond == true) {
+                futureDate.add(1, 'day'); // avond
+            }
+            var currentDayOfWeek = futureDate.day();            // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+            if (currentDayOfWeek == 0) {
+                futureDate.add(1, 'day');
+            }
+            var numberOfWeekends = Math.floor((currentDayOfWeek + numberOfWeekdays - 1) / 6);   // calculate the number of weekends to skip over
+
+            futureDate.add(numberOfWeekdays + numberOfWeekends * 1, 'days');    // account for the 2 days per weekend
+
+            return futureDate;
+        }
+
+    </script>
+    <style>
+        #container {
+            width: 75%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 50px;
+            height: auto;
+            border: 0px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <input id="datepicker" type="text" placeholder="datum" />
+        <select id="avondselector">
+            <option value="false">false</option>
+            <option value="true">true</option>
+        </select>
+        <input id="levertijd" type="text" placeholder="levertijd" />
+        <button id="calculeer">calculeer</button>
+    </div>
+</body>
+</html>

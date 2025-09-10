@@ -1,0 +1,33 @@
+beschikt over een menu met categorieën
+waar kan worden doorheen geklikt
+bovenin wordt een breadcrumb bijgehouden
+is er op een categorie geklikt
+dan wordt daar het id van genomen
+en dan wordt er een lijstje gegenereerd van eigenschappen
+met dat categorie-id en DISTINCT eigenschap
+je kunt een eigenschap toevoegen met dat categorie-id, via een knop onderaan
+je krijgt dan een formulier eigenschap toevoegen
+je kunt kiezen tussen checkbox en slider
+kies je voor checkbox dan wordt bij het toevoegen van de eigenschap
+de waarde checkbox opgenomen in de tabel eigenschappen
+kies je voor slider
+dan krijg je de mogelijkheid om waarden voor min max en step in te voeren
+en wordt de waarde slider opgenomen in de tabel
+verder is er de keuze om de eigenschap op static of niet static in te stellen
+dit geldt ook voor de prijs, maar daarvoor kan de eigenschap prijsveld
+worden aangevinkt, dit kenmerk wordt dan opgenomen in de tabel eigenschappen
+in plaats van static of niet static
+zodra prijsveld wordt gevinkt, kunnen er waarden worden ingevoerd voor
+min max en step
+nadat op toevoegen is geklikt, verschijnt de eigenschap in het lijstje
+en een link om de eigenschap weer te verwijderen
+plus een link om de eigenschap te bewerken
+de eigenschappen zijn hyperlinks
+met daarin het categorie-id en de naam van de eigenschap
+klik je op zo'n eigenschap
+dan wordt a.d.h.v. het categorie-id en de naam van de eigenschap
+een lijstje van waarden van die eigenschap gegenereerd
+mits het geen slider is
+je kunt een waarde toevoegen met dat categorie-id en de naam van de eigenschap
+daarna wordt het formulier vernieuwd en verschijnt de waarde in het lijstje
+inclusief een link om de waarde weer te verwijderen

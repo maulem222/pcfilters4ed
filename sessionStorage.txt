@@ -1,0 +1,56 @@
+sessionStorage.clear();
+
+
+            // (1)
+            if (sessionStorage.getItem('numberPage') !== null) {
+                var nmbrpage = sessionStorage.getItem('numberPage');
+                console.log('nmbrpage: ' + nmbrpage + " totalSlidepPage: " + totalSlidepPage);
+                if (nmbrpage > totalSlidepPage) { // indien de actieve slide (numberPage) ineens groter is dan het totaal aan slides met produkten, bijv. na filteren
+                    console.log('Clearing session data...');
+                    sessionStorage.clear(); // clear de sessie variabelen zodat de opgeslagen slide niet meer kan worden teruggezet in (2), want die slide toont
+                                            // geen produkten meer
+                }
+                else if (nmbrpage == totalSlidepPage) {
+                    if (totalSlidepPage == 0) {
+                        sessionStorage.clear();
+                    }
+                    else {
+                        // doe niets
+                    }
+                }
+            }
+
+
+
+            // (2)
+            if (sessionStorage.getItem('pagenumber') !== null) {
+                var pg = sessionStorage.getItem('pagenumber');
+                // zet opgeslagen paginanummer inhoud terug want anders gaat die verloren na page reload
+                showPage(pg);
+
+                // zet opgeslagen slidepage terug want anders gaat die verloren na page reload
+                var slidenmb = sessionStorage.getItem('numberPage'); // haal numberPage (slidenummer) op dat eerder door wel of niet Prev/Next klikken is bereikt
+                for (let i = 0; i < slidenmb; i++) {
+                    $("#pagin li.next").click(); // hoog programmatisch de slidepage op door op Next te klikken
+                }
+            } else {
+                showPage(1);
+            }
+
+
+                console.log('numberPage: ' + numberPage);
+                sessionStorage.setItem('numberPage', numberPage);
+
+
+
+Max. temperatuurslider instelling voor lege pagina: 274-1351
+Hoogte instelling: 90cm
+
+laatste stukje code:
+
+            const allli = document.querySelectorAll("#pagin li"); // neem alle li's binnen de div #pagin
+            var allpages = allli.length - 2; // aantal list items exclusief Prev en Next
+            console.log('there are ' + allpages + ' pages');
+            if (pg > allpages) { // als pg (een eerder geklikt pagenumber) uit sessie afkomstig is kan het het aantal pages van een nieuwe filterselectie (allpages) overtreffen!
+                $(".current").click(); // klik dan het eerste element van de li's (eerste pagina) zodat er produkten getoond worden, anders blijven die onzichtbaar
+            }

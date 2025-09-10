@@ -1,0 +1,60 @@
+           <div id="leftbox">
+                <div id="leftupperbox">
+                    <div id="main-carousel" class="splide">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/1/1200/600">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/2/1200/600">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/3/1200/600">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/4/1200/600">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/5/1200/600">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/6/1200/600">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/7/1200/600">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="leftlowerbox">
+                    <div id="thumbnail-carousel" class="splide">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/1/64/64">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/2/64/64">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/3/64/64">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/4/64/64">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/5/64/64">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/6/64/64">
+                                </li>
+                                <li class="splide__slide">
+                                    <img class="hundred" src="https://picsum.photos/id/7/64/64">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>

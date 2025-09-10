@@ -1,0 +1,30 @@
+                string con_str = ConfigurationManager.ConnectionStrings["Fysiocare"].ConnectionString;
+                SqlConnection con = new SqlConnection(con_str);
+                con.Open();
+                SqlCommand command = new SqlCommand("INSERT_Behandeling2_with_outputparameter_ID", con);
+                command.CommandType = CommandType.StoredProcedure;
+                //SqlCommand command = new SqlCommand(insertquery, con);
+                command.Parameters.AddWithValue("@beh", Behandeling);
+                command.Parameters.AddWithValue("@altn", Altnaam);
+                command.Parameters.AddWithValue("@dataanv", Datumaanv);
+                command.Parameters.AddWithValue("@bijz", Textarea);
+                command.Parameters.AddWithValue("@behgepl", Behgepland);
+                command.Parameters.AddWithValue("@aantk", Aantalkerenbeh);
+                command.Parameters.AddWithValue("@uid", UserId);
+                command.Parameters.AddWithValue("@ther", Therapeut);
+                command.Parameters.Add("@ID", SqlDbType.Int);
+                command.Parameters["@ID"].Direction = ParameterDirection.Output;
+                try
+                {
+                    command.ExecuteNonQuery();
+                    InsertedID = command.Parameters["@ID"].Value != DBNull.Value ? (int)command.Parameters["@ID"].Value : 0;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }

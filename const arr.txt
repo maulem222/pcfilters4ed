@@ -1,0 +1,73 @@
+                    const arr = [{ Id: 5, ParentId: 0, Catnaam: "Movie" },
+                        { Id: 20, ParentId: 5, Catnaam: "Action" },
+                        { Id: 15, ParentId: 43, Catnaam: "J.K Rowling" },
+                        { Id: 43, ParentId: 0, Catnaam: "Book" },
+                        { Id: 20, ParentId: 2, Catnaam: "James Bond Series" },
+                        { Id: 3, ParentId: 0, Catnaam: "Music" },
+                        { Id: 39, ParentId: 15, Catnaam: "Harry Potter Series" }];
+
+
+
+                    const arr = [
+                        {
+                            Id: "1",
+                            Catnaam: "wonen",
+                            ParentId: "0",
+                            Overzichtsafb: null
+                        },
+                        {
+                            Id: "2",
+                            Catnaam: "banken",
+                            ParentId: "1",
+                            Overzichtsafb: null
+                        },
+                        {
+                            Id: "3",
+                            Catnaam: "zitbanken",
+                            ParentId: "2",
+                            Overzichtsafb: null
+                        },
+                        {
+                            Id: "4",
+                            Catnaam: "2-zits banken",
+                            ParentId: "3",
+                            Overzichtsafb: null
+                        },
+                        {
+                            Id: "5",
+                            Catnaam: "3-zits banken",
+                            ParentId: "3",
+                            Overzichtsafb: null
+                        },
+                        {
+                            Id: "6",
+                            Catnaam: "4-zits banken",
+                            ParentId: "3",
+                            Overzichtsafb: null
+                        }
+                        ]
+
+-- onnodige code --
+
+                    //arr = arr.replaceAll("\"([A-Za-z]*)\":", "$1:");
+
+                    //arr = arr.replaceAll(":\\s*(\\d+)", ": \"$1\"");  
+
+                    //var arr2 = arr.replace(/\"(\\w+)\"\:/g, "$1:");
+                    let pattern = /\"Id\"/g;
+                    let replacement = "Id";
+                    //arr = arr.replaceAll(pattern, replacement);
+
+                    pattern = /\"Catnaam\"/g;
+                    replacement = "Catnaam";
+                    //arr = arr.replaceAll(pattern, replacement);
+
+                    pattern = /\"ParentId\"/g;
+                    replacement = "ParentId";
+                    //arr = arr.replaceAll(pattern, replacement);
+
+                    pattern = /\"Overzichtsafb\"/g;
+                    replacement = "Overzichtsafb";
+                    //arr = arr.replaceAll(pattern, replacement);
+ 
+                    //arr = arr.replace(/[\"]*(\d+)([\-]*[A-Za-z]*)(\s*)([A-Za-z]*)[\"]*/g, "\"$1$2$3$4\""); 

@@ -1,0 +1,15 @@
+var d = bezorgdag.split(' ');
+var amdagnaam = d[0];
+var ammaandnaam = d[1];
+var amdagnummer = d[2];
+var dagnaam, maandnaam, dagnummer;
+if (amdagnaam == 'Mon') {
+dagnaam = 'maandag';
+}
+etc.
+if (ammaandnaam == 'Jan') {
+maandnaam = 'januari';
+}
+etc.
+dagnummer = amdagnummer;
+var nedbezorgdag = dagnaam + ' ' + dagnummer + ' ' + maandnaam;

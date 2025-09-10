@@ -1,0 +1,86 @@
+er dient geklikt te worden op een categorie of subcategorie
+waarna daarvan het categorie-id wordt vastgelegd
+eerst worden inputs voor de statische eigenschappen gelist
+daarna checkboxjes voor de dynamische eigenschappen
+deze checkboxjes hebben allen een clickclass, en een data-attribute met het eigenschap-id 
+zodra een checkbox gevinkt wordt wordt de clickclass handler aangeroepen
+
+dan wordt nagegaan of de checkbox is gevinkt of niet
+is de checkbox gevinkt, dan wordt het eigenschappenid samen met het produktid
+geinsert in de tabel produkteigenschappen
+is de checkbox niet gevinkt
+dan wordt het eigenschappenid samen met het produktid
+gebruikt om het betreffende record uit de tabel produkteigenschappen te wissen
+
+OK - eerst wordt gecontroleerd of er een produktid beschikbaar is
+OK - is dit niet het geval, dan volgt een foutmelding:
+OK - gelieve eerst de statische eigenschappen invullen
+OK - prijs is een extra veld in de eigenschappentabel
+OK - voor de prijs geldt dat min max en symbool worden vastgelegd in de eigenschappentabel
+OK - bij de eigenschap prijs
+OK - de prijs krijgt overigens geen slider doch een inputboxje voor de waarde
+
+wordt er een waarde ingevuld en op vernieuwen geklikt
+
+dan wordt eerst via een webmethod gekeken of voor dat catid en de eigenschap
+een record bestaat waar waarde is niet leeg
+hierbij wordt, indien dit record bestaat, het eigenschappenid opgehaald
+
+zo nee
+dan wordt de waarde eerst aangenomen en ook de eigenschap
+de waarde wordt samen met het catid en de eigenschap ingevoerd in de tabel eigenschappen
+via een stored procedure
+deze retourneert het id van het nieuwe record
+dit id wordt ingevuld samen met het produktid in de tabel produkteigenschappen
+
+zo ja
+dan wordt a.d.h.v. het eigenschappenid een update uitgevoerd van de waarde
+
+OK - als de statische eigenschappen zijn ingevuld
+OK - worden deze ingevoerd in de produkttabel m.b.v. een storedprocedure
+OK - die het produktid retourneert
+OK - dit produktid dient te worden ingevoerd in de tabel produkteigenschappen
+OK - samen met het id van de gevinkte eigenschap
+OK - bij het terughalen van de eigenschappen
+OK - worden twee each() loops gebruikt om de eigenschap en de waarde op te halen
+OK - waar waarde is niet leeg 
+
+OK - en I) waar filterelement=checkbox
+OK - in de binnenste loop wordt van de verschillende id's van de waarden een array gemaakt
+OK - deze wordt samen met het produktid meegegeven aan een webmethod
+OK - deze webmethod loopt door de array van eigenschappenid's en kijkt voor
+OK - elk eigenschappenid of dit voorkomt in de tabel produkteigenschappen
+OK - samen met het meegegeven produktid
+OK - zodra dit voorkomt wordt a.d.h.v. het eigenschappenid de waarde opgehaald
+OK - van deze eigenschap en dit wordt in een object gezet dat wordt geretourneerd
+OK - incl. de waarde ja voor voorkomen
+OK - komt het eigenschappenid niet voor in de tabel produkteigenschappen
+OK - dan wordt toch a.d.h.v het eigenschappenid de waarde opgehaald
+OK - van deze eigenschap
+OK - en dit wordt in een object gezet, samen met de waarde nee voor voorkomen
+OK - met een derde each() wordt er door de checkboxobjecten geloopt
+OK - indien de array van objecten niet leeg is
+OK - is de waarde van voorkomen ja dan wordt er een checkbox gegenereerd
+OK - met de property checked, indien voorkomen nee, dan property niet checked
+
+en II) waar filterelement=slider
+indien er een waarde is aangetroffen
+dan is daarvan het eigenschapsid automatisch opgenomen in de tabel produkteigenschappen (a)
+behalve wanneer er geen waarde ingevoerd is (b)
+
+(a) indien er een waarde is aangetroffen
+dan wordt de eigenschapswaarde in het inputboxje geplaatst
+
+(b) indien er geen waarde is aangetroffen
+dan wordt er een vierde ajax call gedaan om het id van het record op te halen
+waar waarde=leeg en categorie-id=* en eigenschap=*
+en wordt er een inputboxje gegenereerd met dit eigenschappenid
+
+en III)
+OK - indien het om de eigenschap prijs gaat
+OK - wordt eerst getracht om het waarderecord op te halen (incl. waarde)
+OK - bestaat dit, dan wordt de eigenschapswaarde in het inputboxje geplaatst
+OK - bestaat het waarderecord niet
+OK - dan wordt er een ajax call gedaan om het id van het record op te halen
+OK - waar waarde=leeg en categorie-id=* en eigenschap=*
+OK - en wordt er een inputboxje gegenereerd met dit eigenschappenid

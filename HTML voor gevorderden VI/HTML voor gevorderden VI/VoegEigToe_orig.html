@@ -1,0 +1,2588 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Voeg eigenschappen toe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <!--jQuery-ui for range slider-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <style>
+        #linkswindow {
+            width: 25%;
+            min-height: 90vh;
+            height: auto;
+            float: left;
+            padding: 20px;
+            border: 1px solid;
+        }
+
+        #breadcrumb {
+            height: 70px;
+            margin: 20px auto 10px auto;
+            border: 1px solid;
+        }
+
+        #links {
+            position: relative;
+            height: auto;
+            overflow: auto;
+            margin: 10px auto 10px auto;
+            padding-bottom: 2px;
+            padding-left: 2px;
+            padding-top: 2px;
+            border: 1px solid;
+        }
+
+        #eigleft {
+            float: left;
+            width: 48%;
+            border: 1px solid;
+            margin-right: 3%;
+            height: 420px;
+            margin-bottom: 10px;
+        }
+
+        #waardenright {
+            float: left;
+            width: 48%;
+            border: 1px solid;
+            height: 420px;
+            margin-bottom: 10px;
+        }
+
+        #buttoncontainer {
+            display: flex;
+            align-items: center;
+            clear: both;
+            min-height: 30px;
+            height: auto;
+            overflow: auto;
+            margin: 0px auto 10px auto;
+            padding-left: 5px;
+            padding-right: 5px;
+            border: 1px solid;
+        }
+
+        #eigverwijderen {
+            float: left;
+        }
+
+        #eigtoevoegen {
+            float: left;
+        }
+
+        #waardetoevoegen {
+            float: left;
+        }
+
+        #editwindow {
+            width: 65%;
+            height: 90vh;
+            float: left;
+            padding: 20px;
+            border: 1px solid;
+            overflow: scroll;
+        }
+
+        #editor {
+            width: 95%;
+            height: 90%;
+            margin: 20px auto;
+            border: 1px solid;
+            padding: 20px;
+        }
+
+        #editeig, #editwaarde {
+            width: 200px;
+            clear: both;
+        }
+
+        .editwaardefloater {
+            float: left;
+        }
+
+        .check {
+            float: left;
+        }
+
+        #edittekst, label {
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            clear: both;
+        }
+
+        #edittekst2, #edittekst3 {
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            float: left;
+            margin-left: 10px;
+            padding-top: 3px;
+        }
+
+        .slidervalues {
+            float: left;
+            width: 50px;
+        }
+
+        .invulerror, .invulerror2, .duplicaaterror, .invulerror3, .duplicaaterror3 {
+            font-size: 12px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: red;
+            clear: both;
+        }
+
+        .invoersucces, .invoersucces3 {
+            font-size: 12px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: green;
+            clear: both;
+        }
+
+        .uitleg {
+            font-size: 12px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: mediumblue;
+        }
+
+        .childcont .childlink a {
+            text-decoration: none;
+            color: black;
+            font-family: Arial;
+            font-size: 12px;
+        }
+
+        .eigcont .eiglink a, .waardecont .waardelink a {
+            text-decoration: none;
+            color: black;
+            font-family: Arial;
+            font-size: 12px;
+        }
+
+        .eiglink, .waardelink {
+            border: 1px solid white;
+        }
+
+        .menulink {
+            background-color: lightgray;
+            padding: 4px 10px 4px 10px;
+        }
+
+        .childlink {
+            float: left;
+            width: auto;
+            margin-right: 2px;
+            border: 1px solid white;
+        }
+
+        .delchild, .edit {
+            color: green;
+        }
+
+        .crumb {
+            float: left;
+            width: auto;
+            overflow: auto;
+        }
+
+        .separator {
+            float: left;
+            width: 5px;
+            padding-left: 5px;
+            padding-right: 10px;
+        }
+
+        .smallspacer {
+            height: 20px;
+        }
+
+        #Filters {
+            width: 250px;
+        }
+
+        .content {
+            display: none;
+            overflow: hidden;
+        }
+
+        .plus {
+            cursor: pointer;
+        }
+
+        .minus {
+            cursor: pointer;
+        }
+
+        .chooser > h5 > a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .floater > h5 > a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .amountcont {
+            margin-left: 0px;
+        }
+
+        .slidercont {
+            margin-left: 10px;
+            margin-bottom: 35px;
+        }
+
+        .floater {
+            float: left;
+        }
+
+        .floater2 {
+            padding-top: 8px;
+            float: left;
+        }
+
+        .smallspacer5 {
+            height: 5px;
+            clear: both;
+        }
+
+        .mediumspacer {
+            height: 15px;
+            clear: both;
+        }
+
+        .filtertype {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+            /* Style the buttons inside the tab */
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
+                font-size: 17px;
+            }
+
+                /* Change background color of buttons on hover */
+                .tab button:hover {
+                    background-color: #ddd;
+                }
+
+                /* Create an active/current tablink class */
+                .tab button.active {
+                    background-color: #ddd;
+                }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+
+        /* GetFullPath CSS */
+        .myInput {
+            width: 100%;
+            height: 40px;
+            border-radius: 5px;
+            border: 1px solid;
+        }
+
+        .myInputshort {
+            width: 200px;
+            height: 40px;
+            border-radius: 5px;
+            border: 1px solid;
+        }
+
+        .topspacer {
+            height: 10px;
+        }
+
+        .text {
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .button {
+            margin-top: 10px;
+            margin-left: 40px;
+        }
+
+        .buttoncont {
+            width: 100px;
+            border: 0px solid;
+            float: left;
+        }
+
+        .message {
+            width: 100%;
+            height: 50px;
+            border: 0px solid;
+            margin-top: 10px;
+        }
+
+        .changeColorred {
+            color: red;
+        }
+
+        .changeColorgreen {
+            color: green;
+        }
+
+        .noaction {
+            text-decoration: none;
+            color: black;
+            pointer-events: none; /* voorkomt page reload bij het klikken op de lege link */
+            cursor: default;
+        }
+
+        .action {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .inputbox {
+            width: 700px;
+        }
+
+        /* CSS */
+        .button-7 {
+            background-color: #0095ff;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            display: inline-block;
+            font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.15385;
+            margin: 0;
+            outline: none;
+            padding: 8px .8em;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            vertical-align: baseline;
+            white-space: nowrap;
+        }
+
+            .button-7:hover,
+            .button-7:focus {
+                background-color: #07c;
+            }
+
+            .button-7:focus {
+                box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+            }
+
+            .button-7:active {
+                background-color: #0064bd;
+                box-shadow: none;
+            }
+
+        /* slider&checkbox CSS */
+
+        .cbcat, .slcat {
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        label {
+            font-family: sans-serif;
+            color: dimgray;
+        }
+
+        .spacer {
+            height: 10px;
+        }
+
+        .slider {
+            width: 180px;
+            margin-bottom: 5px;
+        }
+
+        .slvalcont {
+            width: 180px;
+            height: 25px;
+        }
+
+        .slidervalues {
+            width: 125px;
+            float: left;
+        }
+
+        .ibbutt {
+            float: right;
+        }
+
+        @media only screen and (min-width: 0px) and (max-width: 1030px) {
+            #eigleft {
+                margin-right: 2.2%;
+            }
+        }
+
+        @media only screen and (min-width: 1030px) and (max-width: 1155px) {
+            #eigleft {
+                margin-right: 2.4%;
+            }
+        }
+
+        @media only screen and (min-width: 1155px) and (max-width: 1355px) {
+            #eigleft {
+                margin-right: 2.6%;
+            }
+        }
+
+        @media only screen and (min-width: 1355px) and (max-width: 1630px) {
+            #eigleft {
+                margin-right: 2.8%;
+            }
+        }
+    </style>
+    <script>
+        var parentid;
+        var childid;
+        var catid;
+        var eigid;
+        var bcarray = [];
+        var crumbpatharray = [];
+        var injectablecrumb;
+        var nieuweeigenschap;
+        var gewijzigdeeigenschap;
+        var afbeelding = null;
+        var slider = false;
+        var prijsveld = false;
+        var statdyn = "dynamic";
+        var eigenschap;
+        var filterelement;
+        var eig;
+        var min;
+        var max;
+        var step;
+        var symbool;
+        var waarde;
+        var waardeid;
+        var saturated;
+
+        var bronbestand;
+        var doelpad;
+
+        var ids = [];
+        var hrefs = [];
+        var editors = [];
+
+        var htmlsliders = [];
+        var finalhtml = [];
+
+        var jqsliders = [];
+        var finaljq = [];
+
+        var htmlcheckboxes = [];
+
+        var my_path;
+
+        var formcomplete = false;
+        var output1;
+        var output2;
+
+        $(document).ready(function () {
+
+            cookie = getCookie('bronbestand');
+
+            if (cookie == null) {
+                // do cookie doesn't exist stuff;
+            }
+            else {
+                // do cookie exists stuff
+                bronbestand = getCookie('bronbestand');
+                doelpad = getCookie('doelpad');
+                $("#sourcePath").val(bronbestand);
+                $("#destinationPath").val(doelpad);
+            }
+
+            function splitLast(str, substring) {
+                const index = str.lastIndexOf(substring);
+                return str.slice(0, index);
+            }
+
+            function SetCookie(sourcefile, destpath) {
+                var time = 3600 * 1000 * 24 * 365 * 10; // 10 jaar vanaf nu
+                document.cookie = 'bronbestand=' + sourcefile + '; max-age=' + time;
+                document.cookie = 'doelpad=' + destpath + '; max-age=' + time;
+            }
+
+            function getCookie(name) {
+                var value = "; " + document.cookie;
+                var parts = value.split("; " + name + "=");
+                if (parts.length == 2) return parts.pop().split(";").shift();
+                else return null;
+            }
+
+            $("#generatebutton").click(function () {
+                var sourcefile = $("#sourcePath").val();
+
+                var sourcefile = $("#sourcePath").val();
+                var parts = sourcefile.split('\\');
+                output1 = parts.join('\\\\');
+
+                var destfile = $("#destinationPath").val();
+                //var destpath = splitLast(destfile, "\\");
+
+                SetCookie(sourcefile, destfile); // remember the values
+
+                var parts = destfile.split('\\');
+                output2 = parts.join('\\\\');
+                //alert(output2);
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'FileService.asmx/Check',
+                    data: "{'sourcefile':'" + output1 + "','destfile':'" + output2 + "'}",
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    async: false,
+                    success: function (response) {
+                        var sourceexists = response.d.sourceexists;
+                        var destexists = response.d.destexists;
+
+                        if ((sourceexists == "true") && (destexists == "true")) {
+                            $("#message").text("Bronbestand en doelbestand bestaan beide.");
+                            $("#message").removeClass('changeColorred');
+                            $("#message").addClass('changeColorgreen');
+                            formcomplete = true;
+                        }
+                        if ((sourceexists == "false") && (destexists == "true")) {
+                            $("#message").text("Bronbestand bestaat niet. Voer een geldig bronbestand/pad in.");
+                            $("#message").removeClass('changeColorgreen');
+                            $("#message").addClass('changeColorred');
+                            formcomplete = false;
+                        }
+                        if ((sourceexists == "true") && (destexists == "false")) {
+                            $("#message").text("Doelbestand bestaat niet. Voer een geldig doelbestand/pad in.");
+                            $("#message").removeClass('changeColorgreen');
+                            $("#message").addClass('changeColorred');
+                            formcomplete = false;
+                        }
+                        if ((sourceexists == "false") && (destexists == "false")) {
+                            $("#message").text("Bronbestand/pad en doelbestand/pad bestaan niet. Voer geldige waarden in.");
+                            $("#message").removeClass('changeColorgreen');
+                            $("#message").addClass('changeColorred');
+                            formcomplete = false;
+                        }
+                        validateInput();
+                    },
+                    error: function (response) {
+                        alert("Check error");
+                    }
+                });
+            });
+
+            function validateInput() {
+                $("#message3").text('');
+
+                var tablename = $("#tablenameinp").val();
+                if (tablename == "") {
+                    formcomplete = false;
+                    $("#message2").text("Tabelnaam niet ingevoerd.");
+                    $("#message2").removeClass('changeColorgreen');
+                    $("#message2").addClass('changeColorred');
+                }
+                else {
+                    formcomplete = true;
+                    $("#message2").text("Tabelnaam ingevoerd.");
+                    $("#message2").removeClass('changeColorred');
+                    $("#message2").addClass('changeColorgreen');
+                }
+                if (formcomplete == true) {
+                    Copy(tablename);
+                }
+            }
+
+            function Copy(tablename) {
+
+                console.log(output1);
+                console.log(output2);
+                console.log(catid);
+                console.log(finalhtml);
+                console.log(finaljq);
+                console.log(tablename);
+
+                $.ajax({
+
+                    type: 'POST',
+                    url: 'FileService.asmx/Copy',
+                    data: "{'sourcefile':'" + output1 + "','destfile':'" + output2 + "','catid':'" + catid + "','html':'" + finalhtml.replace(/'/g, '"') + "','slidercode':'" + finaljq.replace(/'/g, '"') + "','tablename':'" + tablename + "'}",
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    async: false,
+                    success: function (response) {
+                        $("#message3").text("Filterdocument succesvol gegenereerd. Om de jquery en de html netjes te formatteren, open het filterdocument in Visual Studio en toets Ctrl-K-D in het geopende filterdocument.");
+                        $("#message3").removeClass('changeColorred');
+                        $("#message3").addClass('changeColorgreen');
+                    },
+
+                    //error: function (response) {
+                    //    alert("Copy error");
+                    //}
+                    error: function (xhr) {
+                        var err = eval("(" + xhr.responseText + ")");
+                        alert(err.Message);
+                    }
+                });
+            }
+
+            $("#eigtoevoegen").hide();
+            $("#eigverwijderen").hide();
+            $("#waardetoevoegen").hide();
+            $("#waardeverwijderen").hide();
+            $("#editcont").hide();
+            $("#waardecont").hide();
+            $("#Filters").hide();
+            $("#wijzigeigenschap").hide();
+            $("#voegeigenschaptoe").hide();
+            $(".invulerror").hide();
+            $(".invulerror2").hide();
+            $(".duplicaaterror").hide();
+            $(".invoersucces").hide();
+
+            parentid = 0;
+            if (bcarray.length == 0) {
+                //alert("bcarray leeg");
+                bcarray.push(parentid);
+            }
+            BuildCrumb();
+            getChildren();
+
+            $("#eigtoevoegen").click(function () {
+                prijsveld = false;
+                $("#editcont").show();
+                $("#waardecont").hide();
+                ResetForm();
+                $("#wijzigeigenschap").hide();
+                $("#voegeigenschaptoe").show();
+            });
+
+            $("#waardetoevoegen").click(function () {
+
+                $("#editcont").hide();
+                $(".invoersucces3").empty();
+                $(".invoersucces3").hide();
+                $(".duplicaaterror3").empty();
+                $(".duplicaaterror3").hide();
+
+                editor_waarde = true;
+                $("#waardecont").show();
+                ResetForm2();
+                $("#wijzigwaarde").hide();
+                $("#voegwaardetoe").show();
+            });
+
+            $("#eigverwijderen").click(function () {
+
+                // dialog: weet u zeker dat u categorie .. wilt verwijderen? Ja/Nee
+                var r = confirm("De eigenschap " + eigenschap + " en alle bijbehorende waarden zullen worden verwijderd. Dit kan niet ongedaan worden gemaakt. Wilt u doorgaan?");
+                if (r == true) {
+                    DELETEEig();
+                    listEigenschappen();
+                } else {
+                    // doe niets
+                }
+            });
+
+            $("#waardeverwijderen").click(function () {
+
+                // dialog: weet u zeker dat u waarde .. wilt verwijderen? Ja/Nee
+                var r = confirm("De waarde " + waarde + " zal worden verwijderd. Dit kan niet ongedaan worden gemaakt. Wilt u doorgaan?");
+                if (r == true) {
+                    DELETEWaarde();
+                    listWaarden();
+                } else {
+                    // doe niets
+                }
+            });
+
+            $("#voegeigenschaptoe").click(function (e) {
+                eig = null;
+                e.preventDefault();
+                $(".invulerror").empty();
+                $(".invulerror2").empty();
+                $(".duplicaaterror").empty();
+                $(".invoersucces").empty();
+
+                if ($("#editeig").val().length == 0) {
+                    $(".invulerror").append("Eigenschap invullen s.v.p.");
+                    $(".invulerror").show();
+                }
+                else {
+                    eig = $("#editeig").val();
+                }
+                if (slider == true) {
+                    if (($("#min").val().length == 0) || ($("#max").val().length == 0) || ($("#step").val().length == 0) || ($("#symbool").val().length == 0)) {
+                        $(".invulerror2").append("Waarden invullen s.v.p.");
+                        $(".invulerror2").show();
+                    }
+                    else {
+                        min = $("#min").val();
+                        max = $("#max").val();
+                        step = $("#step").val();
+                        symbool = $("#symbool").val();
+                    }
+                }
+                else {
+                    min = "";
+                    max = "";
+                    step = "";
+                    symbool = "";
+                }
+                if (prijsveld == true) {
+                    statdyn = "prijsveld";
+                    if ($("#editeig").val() == "Prijs") {
+                        // doe niets, waarde is al "Prijs"
+                    }
+                    else {
+                        // De waarde is niet "Prijs", wijzig dit
+                        $("#editeig").val("Prijs");
+                        $(".invulerror").empty();
+                        $(".invulerror").hide();
+                    }
+                }
+                if ((slider == true) && (eig && min && max && step && symbool && statdyn)) {
+                    //alert("Eigenschap:" + eig + " Min.:" + min + " Max.:" + max + " Step:" + step + " Statdyn:" + statdyn);
+                    filterelement = "slider";
+                    INSERTEig();
+                }
+                if ((slider == false) && (eig && statdyn)) {
+                    if ($('input:radio[id=checkbox]:checked').val()) {
+                        filterelement = "checkbox";
+                    }
+                    if ($('input:radio[id=rangecheckbox]:checked').val()) {
+                        filterelement = "rangecheckbox";
+                    }
+                    if ($('input:radio[id=valuecheckbox]:checked').val()) {
+                        filterelement = "valuecheckbox";
+                    }
+                    INSERTEig();
+                }
+            });
+
+            $("#voegwaardetoe").click(function (e) {
+                waarde = null;
+                e.preventDefault();
+                $(".invulerror3").empty();
+                $(".duplicaaterror3").empty();
+                $(".invoersucces3").empty();
+
+                if ($("#editwaarde").val().length == 0) {
+                    $(".invulerror3").append("Waarde invullen s.v.p.");
+                    $(".invulerror3").show();
+                }
+                else {
+                    waarde = $("#editwaarde").val();
+                }
+                if (waarde) {
+                    INSERTWaarde();
+                }
+            });
+
+            $("#wijzigeigenschap").click(function (e) {
+                eig = null;
+                e.preventDefault();
+                $(".invulerror").empty();
+                $(".invulerror2").empty();
+                $(".duplicaaterror").empty();
+                $(".invoersucces").empty();
+
+                if ($("#editeig").val().length == 0) {
+                    $(".invulerror").append("Eigenschap invullen s.v.p.");
+                    $(".invulerror").show();
+                }
+                else {
+                    eig = $("#editeig").val();
+                }
+                if (slider == true) {
+                    if (($("#min").val().length == 0) || ($("#max").val().length == 0) || ($("#step").val().length == 0) || ($("#symbool").val().length == 0)) {
+                        $(".invulerror2").append("Waarden invullen s.v.p.");
+                        $(".invulerror2").show();
+                    }
+                    else {
+                        min = $("#min").val();
+                        max = $("#max").val();
+                        step = $("#step").val();
+                        symbool = $("#symbool").val();
+                    }
+                }
+                else {
+                    min = "";
+                    max = "";
+                    step = "";
+                    symbool = "";
+                }
+                if (prijsveld == true) {
+                    statdyn = "prijsveld";
+                    if ($("#editeig").val() == "Prijs") {
+                        // doe niets, waarde is al "Prijs"
+                    }
+                    else {
+                        // De waarde is niet "Prijs", wijzig dit
+                        $("#editeig").val("Prijs");
+                        $(".invulerror").empty();
+                        $(".invulerror").hide();
+                    }
+                }
+                if ((slider == true) && (eig && min && max && step && symbool && statdyn)) {
+                    //alert("Eigenschap:" + eig + " Min.:" + min + " Max.:" + max + " Step:" + step + " Statdyn:" + statdyn);
+                    filterelement = "slider";
+                    UPDATEEig();
+                }
+                if ((slider == false) && (eig && statdyn)) {
+                    if ($('input:radio[id=checkbox]:checked').val()) {
+                        filterelement = "checkbox";
+                    }
+                    if ($('input:radio[id=rangecheckbox]:checked').val()) {
+                        filterelement = "rangecheckbox";
+                    }
+                    if ($('input:radio[id=valuecheckbox]:checked').val()) {
+                        filterelement = "valuecheckbox";
+                    }
+                    UPDATEEig();
+                }
+            });
+
+            $("#wijzigwaarde").click(function (e) {
+                waarde = null;
+                e.preventDefault();
+                $(".invulerror3").empty();
+                $(".duplicaaterror3").empty();
+                $(".invoersucces3").empty();
+
+                if ($("#editwaarde").val().length == 0) {
+                    $(".invulerror3").append("Waarde invullen s.v.p.");
+                    $(".invulerror3").show();
+                }
+                else {
+                    waarde = $("#editwaarde").val();
+                }
+                if (waarde) {
+                    UPDATEWaarde();
+                }
+            });
+
+            var chkbox = $('#cb');
+
+            //prijsveld
+            $('input[name="cb"]').on('click', function () {
+                if (chkbox.is(':checked')) {
+                    // checked
+                    prijsveld = true;
+                    $("#slider").prop("checked", true);
+                    slider = true;
+                    // toon div met min max en step invulvelden
+                    $("#minmaxsymb").show();
+                    // vul waarde Prijs in in editbox
+                    $("#editeig").val("Prijs");
+                } else {
+                    // unchecked
+                    prijsveld = false;
+                    // verwijder waarde Prijs uit editbox
+                    $("#editeig").val("");
+                }
+            });
+
+            // radiobuttons checkboxes of slider
+            $('input:radio[name="check"]').change(
+                function () {
+                    if (this.checked && (this.value == 'checkbox' || this.value == 'rangecheckbox' || this.value == 'valuecheckbox')) {
+                        if (prijsveld != true) {
+                            slider = false;
+                            $("#minmaxsymb").hide();
+                            // doe niets
+                        }
+                        else {
+                            $("#slider").prop("checked", true);
+                        }
+                    }
+                    if (this.checked && this.value == 'slider') {
+                        slider = true;
+                        // toon div met min max en step invulvelden
+                        $("#minmaxsymb").show();
+                    }
+                });
+
+        });
+
+        function openEigenschappen(event) {
+            var i, tabcontent, tablinks;
+
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById("Filters").style.display = "none";
+            document.getElementById("editor").style.display = "block";
+            document.getElementById("bcgenerator").style.display = "none";
+            document.getElementById("Headerimage").style.display = "none";
+            document.getElementById("Generator").style.display = "none";
+            event.currentTarget.className += " active";
+        }
+
+        function openFilters(event) {
+            var i, tabcontent, tablinks;
+
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById("Filters").style.display = "block";
+            document.getElementById("editor").style.display = "none";
+            document.getElementById("bcgenerator").style.display = "none";
+            document.getElementById("Headerimage").style.display = "none";
+            document.getElementById("Generator").style.display = "none";
+            event.currentTarget.className += " active";
+
+            if (saturated == true) {
+                //generateFilters();
+            }
+        }
+
+        function openBreadcrumb(event) {
+            var i, tabcontent, tablinks;
+
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById("Filters").style.display = "none";
+            document.getElementById("editor").style.display = "none";
+            document.getElementById("bcgenerator").style.display = "block";
+            document.getElementById("Headerimage").style.display = "none";
+            document.getElementById("Generator").style.display = "none";
+            event.currentTarget.className += " active";
+
+            //BuildInjectableCrumb();
+        }
+
+        function openHeaderimage(event) {
+            var i, tabcontent, tablinks;
+
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById("Filters").style.display = "none";
+            document.getElementById("editor").style.display = "none";
+            document.getElementById("bcgenerator").style.display = "none";
+            document.getElementById("Headerimage").style.display = "block";
+            document.getElementById("Generator").style.display = "none";
+            event.currentTarget.className += " active";
+
+            if (saturated == false) {
+                document.getElementById("Headerimage").style.display = "none";
+            }
+            else {
+                getHeaderimage();
+            }
+        }
+
+        function openGenerator(event) {
+            var i, tabcontent, tablinks;
+
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById("Filters").style.display = "none";
+            document.getElementById("editor").style.display = "none";
+            document.getElementById("bcgenerator").style.display = "none";
+            document.getElementById("Headerimage").style.display = "none";
+            document.getElementById("Generator").style.display = "block";
+            event.currentTarget.className += " active";
+
+            if (saturated == false) {
+                document.getElementById("Generator").style.display = "none";
+            }
+            else {
+                // doe niets
+            }
+        }
+
+        function getHeaderimage() {
+            $("#HeaderOpslaan").empty(); // verberg knop Opslaan aanvankelijk
+
+            $.ajax({
+
+                type: 'POST',
+                url: 'ImageService.asmx/getHeaderImage',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var imagepath = response.d.ImagePath;
+                    if (imagepath !== null) {
+                        my_path = imagepath;
+                        document.getElementById("url").src = my_path;
+                        document.getElementById("uploadurl").innerHTML = my_path;
+                    }
+                    else {
+                        my_path = "";
+                        document.getElementById("url").src = my_path;
+                        document.getElementById("uploadurl").innerHTML = my_path;
+                    }
+                    $("#headeropgeslagen").text('');
+                },
+
+                error: function (response) {
+                    alert("getHeaderImage error");
+                }
+            });
+        }
+
+        $(document).on('click', '#opslaanheaderimg', function (e) {
+            setHeaderimage();
+        });
+
+        function setHeaderimage() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'ImageService.asmx/InsORUpdHeaderImage',
+                data: "{'Catid':'" + catid + "','HeaderImage':'" + my_path + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    $("#headeropgeslagen").text('De header is opgeslagen in de database.');
+                    $("#headeropgeslagen").css('color', 'green');
+                },
+
+                error: function (response) {
+                    alert("InsORUpdHeaderImage error");
+                }
+            });
+        }
+
+        function ResetForm() {
+            $("#cb").prop("checked", false);
+            $("#checkbox").prop("checked", true);
+            $("#minmaxsymb").hide();
+            //$("#dynamic").prop("checked", true).change();
+            $("#editeig").val("");
+        }
+
+        function ResetForm2() {
+            $("#editwaarde").val("");
+        }
+
+        function INSERTEig() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: 'EigenschappenService.asmx/INSERTEig',
+                data: "{'Eigenschap':'" + eig + "','Catid':'" + catid + "','FilterElement':'" + filterelement + "','Min':'" + min + "','Max':'" + max + "','Step':'" + step + "','Symbool':'" + symbool + "','StatDyn':'" + statdyn + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    var resultaat = response.d.Bericht;
+                    if (resultaat == "eig_bestaat") {
+                        $(".invoersucces").empty();
+                        $(".invoersucces").hide();
+                        $(".duplicaaterror").append("Invoerfout: Eigenschap bestaat al");
+                        $(".duplicaaterror").show();
+                    }
+                    else {
+                        $(".duplicaaterror").empty();
+                        $(".duplicaaterror").hide();
+                        $(".invoersucces").append("Eigenschap invoeren succesvol");
+                        $(".invoersucces").show();
+
+                        $("#eigverwijderen").hide();
+                        $("#waardetoevoegen").hide();
+
+                        listEigenschappen();
+                    }
+                },
+
+                error: function (response) {
+                    alert("INSERTEig error");
+                }
+            });
+        }
+
+        function INSERTWaarde() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: 'WaardenService.asmx/INSERTWaarde',
+                data: "{'Eigenschap':'" + eigenschap + "','Catid':'" + catid + "','FilterElement':'" + filterelement + "','Waarde':'" + waarde + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    var resultaat = response.d.Bericht;
+                    if (resultaat == "waarde_bestaat") {
+                        $(".invoersucces3").empty();
+                        $(".invoersucces3").hide();
+                        $(".duplicaaterror3").append("Invoerfout: Waarde bestaat al");
+                        $(".duplicaaterror3").show();
+                    }
+                    else {
+                        $(".duplicaaterror3").empty();
+                        $(".duplicaaterror3").hide();
+                        $(".invoersucces3").append("Waarde invoeren succesvol");
+                        $(".invoersucces3").show();
+
+                        $("#eigverwijderen").hide();
+                        $("#waardetoevoegen").hide();
+                        $("#waardeverwijderen").show();
+
+                        listWaarden();
+                    }
+                },
+
+                error: function (response) {
+                    alert("INSERTWaarde error");
+                }
+            });
+        }
+
+        function UPDATEEig() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: 'EigenschappenService.asmx/UPDATEEig',
+                data: "{'Id':'" + eigid + "','Eigenschap':'" + eig + "','Catid':'" + catid + "','FilterElement':'" + filterelement + "','Min':'" + min + "','Max':'" + max + "','Step':'" + step + "','Symbool':'" + symbool + "','StatDyn':'" + statdyn + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (response.d.Bericht == "upd_succes") {
+                        $(".duplicaaterror").empty();
+                        $(".duplicaaterror").hide();
+                        $(".invoersucces").empty();
+                        $(".invoersucces").append("Eigenschap wijzigen succesvol");
+                        $(".invoersucces").show();
+
+                        $("#eigverwijderen").hide();
+                        $("#waardetoevoegen").hide();
+
+                        listEigenschappen();
+                        if (filterelement == "slider") {
+                            RemoveSiblings();
+                        }
+                    }
+                },
+                //error: function (response) {
+                //    alert("UPDATEEig error");
+                //}
+                error: function (xhr) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                }
+            });
+        }
+
+        function RemoveSiblings() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'WaardenService.asmx/REMOVESiblings',
+                data: "{'Eigenschap':'" + eigenschap + "','Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (response.d.Bericht == "rem_succes") {
+                        listWaarden();
+                    }
+                },
+
+                error: function (response) {
+                    alert("REMOVESiblings error");
+                }
+            });
+        }
+
+        function UPDATEWaarde() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'WaardenService.asmx/UPDATEWaarde',
+                data: "{'Id':'" + waardeid + "','Waarde':'" + waarde + "','Eigenschap':'" + eigenschap + "','Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (response.d.Bericht == "upd_succes") {
+                        $(".duplicaaterror3").empty();
+                        $(".duplicaaterror3").hide();
+
+                        $(".invoersucces3").empty();
+                        $(".invoersucces3").append("Waarde wijzigen succesvol");
+                        $(".invoersucces3").show();
+                        listWaarden();
+                    }
+                    else {
+                        $(".invoersucces3").empty();
+                        $(".invoersucces3").hide();
+
+                        $(".duplicaaterror3").empty();
+                        $(".duplicaaterror3").append("Waarde bestaat al");
+                        $(".duplicaaterror3").show();
+                    }
+                    //$("#eigverwijderen").hide();
+                    //$("#waardetoevoegen").hide();
+
+                },
+
+                error: function (response) {
+                    alert("UPDATEWaarde error");
+                }
+            });
+        }
+
+        function DELETEEig() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'EigenschappenService.asmx/DELETEEig',
+                data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    $("#eigverwijderen").hide();
+                    $("#waardetoevoegen").hide();
+                    $("#waardenright").empty();
+                    listEigenschappen();
+                },
+
+                error: function (response) {
+                    alert("DELETEEig error");
+                }
+            });
+        }
+
+        function DELETEWaarde() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'WaardenService.asmx/DELETEWaarde',
+                data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "','Waarde':'" + waarde + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                },
+
+                error: function (response) {
+                    alert("DELETEWaarde error");
+                }
+            });
+        }
+
+        $(document).on('click', '.chooser h5', function (e) {
+            //Inner
+            var content = $(this).next(); // kies de op <h5></h5> volgende tag, dat is dus <div class="content"> waarbinnen zich de checkboxlijst bevindt
+
+            if (content.is(":visible")) //indien <div class="content"> zichtbaar is, dus expanded
+            {
+                content.slideUp(); // collapse <div class="content">
+                $(this).find('span').html('+'); // zoek de span en zet er een + teken neer
+            }
+            else //indien <div class="content"> onzichtbaar is, dus collapsed
+            {
+                content.slideDown(); // expandeer <div class="content">
+                $(this).find('span').html('-'); // zoek de span en zet er een - teken neer
+            }
+        });
+
+        $(document).on('click', 'a.child', function (e) {
+
+            $("#Filters").empty();
+            var id = $(this).attr("Id");
+            var action = $(this).attr("Action");
+            if (action == "Childclicked") {
+                // knoppen onderlangs verwijderen
+                $("#eigtoevoegen").hide();
+                $("#eigverwijderen").hide();
+                $("#waardetoevoegen").hide();
+                $("#eigleft").empty();
+                $("#waardenright").empty();
+                // reset het eigenschappeninvoerformulier
+                ResetForm();
+                // verberg het eigenschappeninvoerformulier
+                $("#editcont").hide();
+                // verberg het waardeninvoerformulier
+                $("#waardecont").hide();
+                if (saturated == false) {
+                    bcarray.push(id); // child id wordt nu parent id
+                }
+                else {
+                    bcarray.pop();
+                    bcarray.push(id);
+                }
+                parentid = id;
+                catid = id;
+                getChildren($(this), id);
+            }
+        });
+
+        $(document).on('click', 'a.eig', function (e) {
+
+            // vorige succesmelding verbergen
+            $(".invoersucces").empty();
+            $(".invoersucces").hide();
+            // knop Voeg waarde toe aanvankelijk verbergen
+            // wordt verderop weer getoond indien checkbox
+            $("#waardetoevoegen").hide();
+            $("#editcont").show();
+            $("#voegeigenschaptoe").hide();
+            // verberg het waardeinvoerformuliertje
+            $("#waardecont").hide();
+            // haal alle gekleurde borders weg
+            $(".eiglink").css('background-color', 'white');
+            // vul het aangeklikte child met kleur
+            $(this).parent().css('background-color', 'lightgreen');
+            $("#eigverwijderen").show();
+            // Verberg knop Verwijder waarde
+            $("#waardeverwijderen").hide();
+            eigid = $(this).attr("Id");
+            // zet eigenschap en filterelement om in te voeren samen met waarde indien nodig
+            eigenschap = $(this).attr("Eigenschap");
+            filterelement = $(this).attr("FilterElement");
+            // toon knop Voeg waarde toe indien checkbox
+            if (filterelement == "checkbox" || filterelement == 'rangecheckbox' || filterelement == 'valuecheckbox') {
+                $("#waardetoevoegen").show();
+            }
+            // stel het formulier in op waarden behorend bij deze eigenschap
+            getEigGegevens();
+            listWaarden();
+        });
+
+        $(document).on('click', 'a.waarde', function (e) {
+
+            // Eigenschap knoppen verbergen
+            $("#eigtoevoegen").hide();
+            $("#eigverwijderen").hide();
+            // Toon knopppen waarde toevoegen en verwijderen
+            $("#waardetoevoegen").show();
+            $("#waardeverwijderen").show();
+            // verberg het eigenschappeninvoerformulier
+            $("#editcont").hide();
+            // verberg de knop Waarde toevoegen
+            $("#voegwaardetoe").hide();
+
+            // en toon de waarde editor
+            $("#waardecont").show();
+            // met de wijzigknop
+            $("#wijzigwaarde").show();
+            // haal alle gekleurde borders weg
+            $(".waardelink").css('background-color', 'white');
+            // vul het aangeklikte child met kleur
+            $(this).parent().css('background-color', 'lightblue');
+            waardeid = $(this).attr("Id");
+            waarde = $(this).attr("Waarde");
+            // stel het formulier in op deze waarde
+            getWaardeGegevens();
+        });
+
+        $(document).on('click', 'a.parent', function (e) {
+
+            $("#Filters").empty();
+            parentid = $(this).attr("Id");
+            catid = parentid;
+            var action = $(this).attr("Action");
+            var clickedlevel = $(this).attr("Level");
+            if (action == "Parentclicked") {
+                // knoppen onderlangs verwijderen
+                $("#eigtoevoegen").hide();
+                $("#eigverwijderen").hide();
+                $("#waardetoevoegen").hide();
+                $("#eigleft").empty();
+                $("#waardenright").empty();
+                // reset het eigenschappeninvoerformulier
+                ResetForm();
+                // verberg het eigenschappeninvoerformulier
+                $("#editcont").hide();
+                // verberg het waardeninvoerformulier
+                $("#waardecont").hide();
+                CleanArray(clickedlevel);
+                BuildCrumb();
+                getChildren();
+            }
+        });
+
+        $(document).on('click', '#opslaanbc', function (e) {
+            //alert('hi from button');
+            editors.length = 0;
+            var inputs = document.querySelectorAll('.inputbox'); // neem alle inputs met deze class
+
+            for (var i = 0; i < inputs.length; i++) {
+
+                var id = ids[i];
+                var id_ed = "#" + id + "_ed"; // dit is de selector van de input bijv. #wonen_ed
+                var val = $(id_ed).val(); // neem $("#wonen_ed").val() dus het ingevulde
+
+                if (val == '') { // indien niks ingevuld is
+                    editors.push(undefined);
+                }
+                else { // indien er een url is ingevuld
+                    editors.push(val); // push de ingevulde waarde naar de editors array
+                }
+            }
+
+            var links = document.querySelectorAll('#Breadcrumb a'); // loop door de a's
+            for (var i = 0; i < links.length; i++) {
+                var input = editors[i];
+
+                if (input == null) {
+                    links[i].setAttribute('class', 'noaction'); // wijzig de class van de link in NOaction
+                    links[i].setAttribute('href', ''); // wijzig de href waarde naar leeg
+                }
+                else {
+                    links[i].setAttribute('class', 'action'); // wijzig de class van de link in action
+                    links[i].setAttribute('href', input); // wijzig de href waarde naar de url die in de input staat
+                }
+            }
+            var html = $("#Breadcrumb").html();
+            $("#BChtml").empty();
+            $("#BChtml").text(html);
+            // breadcrumb InsORUpd
+            BreadcrumbInsertORUpdate(html);
+        });
+
+        function BreadcrumbInsertORUpdate(html) {
+
+            $.ajax({
+
+                type: 'POST',
+                url: 'BreadcrumbService.asmx/InsORUpdBreadcrumb',
+                data: "{'Catid':'" + catid + "','Breadcrumb':'" + html + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                },
+
+                error: function (response) {
+                    alert("InsORUpdBreadcrumb error");
+                }
+            });
+        }
+
+        function BuildCrumb() {
+
+            $("#breadcrumb").empty();
+
+            $("#breadcrumb").append("<div class='crumb'><a class='parent' href='#' Id='0'" +
+                " Action='Parentclicked' Level='0'>Home</a></div>");
+
+            var i;
+            var level = 1;
+            for (i = 1; i < bcarray.length; ++i) {
+                if (i == bcarray.length - 1) {
+                    var id = bcarray[i];
+                    getFlatlink(id);
+                }
+                else {
+                    var id = bcarray[i];
+                    getCrumb(id, level);
+                }
+                level++;
+            }
+        }
+
+        function BuildInjectableCrumb() {
+            crumbpatharray.length = 0;
+
+            crumbpatharray.push("<div class='crumb'><a href='' id='home' class='noaction'>Home</a></div>");
+
+            var i;
+            var level = 1;
+            for (i = 1; i < bcarray.length; ++i) {
+                if (i == bcarray.length - 1) {
+                    var id = bcarray[i];
+                    getFlatlinkInjectable(id);
+                }
+                else {
+                    var id = bcarray[i];
+                    getInjectableCrumb(id, level);
+                }
+                level++;
+            }
+
+            // test hier of er een crumb uit de database komt en zo ja, vervang injectablecrumb door die waarde
+            // zet het volgende in ajax success
+
+            GetCrumbFromDB();
+        }
+
+        function GetCrumbFromDB() {
+
+            $.ajax({
+
+                type: 'POST',
+                url: 'BreadcrumbService.asmx/ReadBCfromDB',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    if (response.d.Crumb == null) {
+                        injectablecrumb = crumbpatharray.join('');
+                        $("#Breadcrumb").empty();
+                        $("#Breadcrumb").append(injectablecrumb);
+
+                        var html = $("#Breadcrumb").html();
+                        $("#BChtml").empty();
+                        $("#BChtml").text(html);
+
+                        MakeInputs();
+                    }
+                    else {
+                        injectablecrumb = response.d.Crumb;
+                        $("#Breadcrumb").empty();
+                        $("#Breadcrumb").append(injectablecrumb);
+
+                        var html = $("#Breadcrumb").html();
+                        $("#BChtml").empty();
+                        $("#BChtml").text(html);
+
+                        MakeInputs();
+                    }
+                },
+
+                error: function (response) {
+                    //alert("InsORUpdBreadcrumb error");
+                }
+            });
+        }
+
+        function MakeInputs() {
+
+            var links = document.querySelectorAll('#Breadcrumb a');
+
+            ids.length = 0;
+            hrefs.length = 0;
+
+            for (var i = 0; i < links.length; i++) {
+
+                ids.push(links[i].getAttribute('id'));
+
+                if (links[i].getAttribute('href') == '') {
+                    hrefs.push(undefined);
+                }
+                else {
+                    hrefs.push(links[i].getAttribute('href'));
+                }
+            }
+
+            if (ids.length != 0) {
+                $("#Editors").empty();
+                $("#Editors").append("<div class='uitleg'>" + "In onderstaande input boxes kunt u de volledige url opgeven van uw overzichtsdocumenten. " +
+                    "Onder Home typt u bijvoorbeeld: https://www.mijndomein.nl/Home.html, onder Wonen typt u " +
+                    "https://www.mijndomein.nl/wonen/Wonen.html en onder Stoelen typt u " +
+                    "https://www.mijndomein.nl/wonen/stoelen/Stoelen.html. U kunt ook bijvoorbeeld alleen de Home link verstrekken. " +
+                    "De link(s) zullen in de breadcrumb worden geplaatst en de crumbnamen van een actieve klikbare stijl worden voorzien. " +
+                    "Klikt u daarvoor op Opslaan." + "</div>");
+                $("#Editors").append("</br>");
+
+                // - door de ids array lopen en editors maken met een kop id:, id_ed als id en een classname, en als inhoud (value?) de hrefs
+                for (var i = 0; i < ids.length; i++) {
+
+                    $("#Editors").append(Hoofdletter(ids[i]) + ":"); // bijv. Wonen:
+                    $("#Editors").append("</br>");
+                    if (hrefs[i] == null) {
+                        var input = "<input id='" + ids[i] + "_ed' class='inputbox' value=''></br>";
+                    }
+                    else {
+                        var input = "<input id='" + ids[i] + "_ed' class='inputbox' value='" + hrefs[i] + "'></br>";
+                    }
+                    $("#Editors").append(input);
+                    $("#Editors").append("</br>");
+                }
+                $("#Editors").append("</br>");
+                $("#Editors").append("<button class='button-7' id='opslaanbc' role='button'>Opslaan</button>");
+
+            //alert(JSON.stringify(ids));
+            //alert(JSON.stringify(hrefs));
+            }
+
+        }
+
+        function CleanArray(clickedlevel) {
+            var end = bcarray.length; // zeg 5
+            var start = clickedlevel; // zeg 2, dus element 3
+            // times moet uitkomen op 2 zodat er 2x gepopt wordt
+            var times = end - start - 1;
+            for (i = 0; i < times; ++i) {
+                bcarray.pop(); // verwijder het laatste element van de array, doe dit 2x
+            }
+        }
+
+        function listEigenschappen() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'EigenschappenService.asmx/getEigenschappen',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var eigenschappenlijst = response.d
+
+                    if (eigenschappenlijst.length > 0) {
+                        $("#eigleft").empty();
+                        $.each(eigenschappenlijst, function (index, eig) {
+                            $("#eigleft").append("<div class='eigcont'><div class='eiglink'><a href='#' class='eig' Id='" +
+                                eig.Id + "' Action='Eigclicked' Eigenschap='" + eig.Eigenschap + "' FilterElement='" + eig.FilterElement + "'><div>" + eig.Eigenschap + "</div></a></div>" +
+                                "</div>");
+                        });
+                    }
+                    else {
+                        $("#eigleft").empty();
+                    }
+                },
+
+                error: function (response) {
+                    alert("getEigenschappen error");
+                }
+            });
+        }
+
+        function listWaarden() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'WaardenService.asmx/getWaarden',
+                data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var waardenlijst = response.d
+
+                    if (waardenlijst.length > 0) {
+                        $("#waardenright").empty();
+                        $.each(waardenlijst, function (index, waarde) {
+                            $("#waardenright").append("<div class='waardecont'><div class='waardelink'><a href='#' class='waarde' Id='" +
+                                waarde.Id + "' Action='Waardeclicked' Waarde='" + waarde.Waarde + "'><div>" + waarde.Waarde + "</div></a></div>" +
+                                "</div>");
+                        });
+                    }
+                    else {
+                        $("#waardenright").empty();
+                    }
+                },
+
+                error: function (response) {
+                    alert("getWaarden error");
+                }
+            });
+        }
+
+        function getChildren(thisObj, id) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/GetCategories',
+                data: "{'parentid':'" + parentid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    var childrenlijst = response.d
+
+                    if (childrenlijst.length > 0) {
+                        saturated = false;
+
+                        $("#links").empty();
+                        $.each(childrenlijst, function (index, child) {
+                            $("#links").append("<div class='childcont'><div class='childlink'><a href='#' class='child' Id='" +
+                                child.Id + "' Action='Childclicked'><div class='menulink'>" + child.Categorienaam + "</div></a></div>" +
+                                "</div>");
+                        });
+                        BuildCrumb();
+                        BuildInjectableCrumb();
+                    }
+                    else {
+                        saturated = true;
+                        //bcarray.pop(); // haal nieuwe parent weer weg
+                        BuildCrumb();
+                        // haal alle gekleurde borders weg
+                        $(".childlink").css('border-color', 'white');
+                        // omlijn het aangeklikte child
+                        thisObj.parent().css('border', '1px solid blue');
+                        // Toon knop eigenschap toevoegen
+                        $("#eigtoevoegen").show();
+                        // list de eigenschappen behorende bij dit id
+                        listEigenschappen();
+                        generateFilters();
+                        BuildInjectableCrumb();
+                        getHeaderimage();
+                    }
+                },
+
+                error: function (response) {
+                    alert("GetCategories error");
+                }
+            });
+
+        }
+
+        function getCrumb(id, level) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/GetCrumb',
+                data: "{'id':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    $("#breadcrumb").append("<div class='separator'>/</div>");
+
+                    var crumb = response.d;
+                    $("#breadcrumb").append("<div class='crumb'><a href='#' class='parent' Id='" +
+                        crumb.Id + "' Action='Parentclicked' Level='" + level + "'>" + Hoofdletter(crumb.Categorienaam) + "</a></div>");
+                },
+
+                error: function (response) {
+                    alert("GetCrumb error");
+                }
+            });
+
+        }
+
+        function getInjectableCrumb(id) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/GetCrumb',
+                data: "{'id':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    crumbpatharray.push("<div class='separator'>/</div>");
+
+                    var crumb = response.d;
+                    crumbpatharray.push("<div class='crumb'><a href='' id='" + crumb.Categorienaam + "' class='noaction'>" + Hoofdletter(crumb.Categorienaam) + "</a></div>");
+                },
+
+                error: function (response) {
+                    alert("getInjectableCrumb error");
+                }
+            });
+        }
+
+        function getFlatlink(id) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/GetCrumb',
+                data: "{'id':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    $("#breadcrumb").append("<div class='separator'>/</div>");
+
+                    var crumb = response.d;
+                    $("#breadcrumb").append("<div class='crumb'>" + Hoofdletter(crumb.Categorienaam) + "</div>");
+                },
+
+                error: function (response) {
+                    alert("GetFlatlink error");
+                }
+            });
+
+        }
+
+        function getFlatlinkInjectable(id) {
+            $.ajax({
+
+                type: 'POST',
+                url: 'CategorieService.asmx/GetCrumb',
+                data: "{'id':'" + id + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+
+                    crumbpatharray.push("<div class='separator'>/</div>")
+
+                    var crumb = response.d;
+                    crumbpatharray.push("<div class='crumb'>" + Hoofdletter(crumb.Categorienaam) + "</div>");
+                },
+
+                error: function (response) {
+                    alert("GetFlatlink error");
+                }
+            });
+
+        }
+
+        function Hoofdletter(str) {
+
+            str = str.charAt(0).toUpperCase() + str.slice(1);
+
+            // Join the words back into a string
+            return str;
+        }
+
+        function Kleineletter(str) {
+
+            str = str.charAt(0).toLowerCase() + str.slice(1);
+
+            // Join the words back into a string
+            return str;
+        }
+
+
+        function onFileChange(e) {
+
+            const file = e.target.files[0];
+            document.getElementById("url").src = URL.createObjectURL(file);
+            Upload(file);
+        }
+
+        function Upload(file) {
+            var formData = new FormData();
+            formData.append('file', file);
+
+            $.ajax({
+                type: 'POST',
+                url: 'imageUploader.ashx',
+                data: formData,
+                success: function (uploadedfile) {
+                    my_path = "/headerimages/" + uploadedfile;
+                    document.getElementById("uploadurl").innerHTML = my_path;
+                    $("#HeaderOpslaan").empty();
+                    $("#HeaderOpslaan").append("<button class='button-7' id='opslaanheaderimg' role='button'>Opslaan</button>");
+                },
+                processData: false,
+                contentType: false,
+                error: function () {
+                    alert("Whoops - er is iets verkeerd gegaan!");
+                }
+            });
+        }
+
+        function generateFilters() {
+            $.ajax({
+
+                type: 'POST',
+                url: 'FilterService.asmx/GetEigenschappen',
+                data: "{'Catid':'" + catid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    var eigenschappenlijst = response.d;
+                    var sortarray1 = [];
+                    var sortarray2 = [];
+
+                    // sorteer zodat de prijsslider bovenaan komt
+                    $.each(eigenschappenlijst, function (index, eig) {
+                        var eigenschap = eig.Eigenschap;
+                        if (eigenschap === "Prijs") {
+                            sortarray1.push(eigenschap);
+                        }
+                        else {
+                            sortarray2.push(eigenschap);
+                        }
+                    });
+
+                    const sorted = sortarray1.concat(sortarray2);
+
+                    $("#Filters").empty();
+
+                    finaljq = [];
+                    finalhtml = [];
+
+                    if (sorted.length > 0) {
+
+                        $.each(sorted, function (index, eig) {
+                            eigenschap = eig;
+                            $.ajax({
+
+                                type: 'POST',
+                                url: 'FilterService.asmx/GetFilterElement',
+                                data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "'}",
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                async: false,
+                                success: function (response) {
+                                    var filterelement = response.d.FilterElement;
+
+                                    if (filterelement == "checkbox") {
+
+                                        $.ajax({
+
+                                            type: 'POST',
+                                            url: 'FilterService.asmx/GetWaarden',
+                                            data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "'}",
+                                            contentType: 'application/json; charset=utf-8',
+                                            dataType: 'json',
+                                            async: false,
+                                            success: function (response) {
+
+                                                var waardenlijst = response.d;
+
+                                                htmlcheckboxes.push("<div class='spacer'></div>");
+                                                htmlcheckboxes.push("<div class='parentdiv'>");
+                                                htmlcheckboxes.push("<div class='type' type='cb'></div>");
+                                                htmlcheckboxes.push("<div class='cbcat'>" + eig + "</div>");
+                                                htmlcheckboxes.push("<div class='cbs'>");
+
+                                                $.each(waardenlijst, function (index, waarde) {
+                                                    htmlcheckboxes.push("<label for='" + waarde.Waarde + "'><input type='checkbox' id='" + waarde.Waarde + "' class='cb'> " + waarde.Waarde + "</label><br/>");
+                                                });
+                                                htmlcheckboxes.push("</div>");
+                                                htmlcheckboxes.push("</div>");
+                                                htmlcheckboxes.push("<div class='spacer'></div>");
+                                                htmlcheckboxes.push("");
+
+                                                $("#Filters").append(htmlcheckboxes.join(''));
+
+                                                // htmlcheckboxes bewaren in een andere array
+                                                finalhtml += htmlcheckboxes.join('\n');
+
+                                                htmlcheckboxes.length = 0;
+                                            },
+
+                                            error: function (response) {
+                                                alert("GetWaarden error");
+                                            }
+                                        });
+                                    }
+                                    if (filterelement == "valuecheckbox") {
+
+                                        $.ajax({
+
+                                            type: 'POST',
+                                            url: 'FilterService.asmx/GetWaarden',
+                                            data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "'}",
+                                            contentType: 'application/json; charset=utf-8',
+                                            dataType: 'json',
+                                            async: false,
+                                            success: function (response) {
+
+                                                var waardenlijst = response.d;
+
+                                                htmlcheckboxes.push("<div class='spacer'></div>");
+                                                htmlcheckboxes.push("<div class='parentdiv'>");
+                                                htmlcheckboxes.push("<div class='type' type='cb'></div>");
+                                                htmlcheckboxes.push("<div class='cbcat'>" + eig + "</div>");
+                                                htmlcheckboxes.push("<div class='cbs'>");
+
+                                                $.each(waardenlijst, function (index, waarde) {
+                                                    var valueandsymb = waarde.Waarde;
+                                                    let arr = valueandsymb.split(' ');
+                                                    var value = arr[0];
+
+                                                    htmlcheckboxes.push("<label for='" + value + "'><input type='checkbox' id='" + value + "' class='cb'> " + waarde.Waarde + "</label><br/>");
+                                                });
+                                                htmlcheckboxes.push("</div>");
+                                                htmlcheckboxes.push("</div>");
+                                                htmlcheckboxes.push("<div class='spacer'></div>");
+                                                htmlcheckboxes.push("");
+
+                                                $("#Filters").append(htmlcheckboxes.join(''));
+
+                                                // htmlcheckboxes bewaren in een andere array
+                                                finalhtml += htmlcheckboxes.join('\n');
+
+                                                htmlcheckboxes.length = 0;
+                                            },
+
+                                            error: function (response) {
+                                                alert("GetWaarden error");
+                                            }
+                                        });
+                                    }
+                                    if (filterelement == "rangecheckbox") {
+
+                                        $.ajax({
+
+                                            type: 'POST',
+                                            url: 'FilterService.asmx/GetWaarden',
+                                            data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "'}",
+                                            contentType: 'application/json; charset=utf-8',
+                                            dataType: 'json',
+                                            async: false,
+                                            success: function (response) {
+
+                                                var waardenlijst = response.d;
+
+                                                htmlcheckboxes.push("<div class='spacer'></div>");
+                                                htmlcheckboxes.push("<div class='parentdiv'>");
+                                                htmlcheckboxes.push("<div class='type' type='rangecb'></div>");
+                                                htmlcheckboxes.push("<div class='cbcat'>" + eig + "</div>");
+                                                htmlcheckboxes.push("<div class='cbs'>");
+
+                                                $.each(waardenlijst, function (index, waarde) {
+                                                    var range = waarde.Waarde;
+                                                    let arr1 = range.split(' ');
+                                                    var rangenumbers = arr1[0];
+                                                    let arr2 = rangenumbers.split('-');
+                                                    var low = arr2[0];
+                                                    var high = arr2[1];
+
+                                                    htmlcheckboxes.push("<label for='" + rangenumbers + "'><input type='checkbox' id='" + rangenumbers + "' low='" + low + "' high='" + high + "' class='cb'> " + waarde.Waarde + "</label><br/>");
+                                                });
+                                                htmlcheckboxes.push("</div>");
+                                                htmlcheckboxes.push("</div>");
+                                                htmlcheckboxes.push("<div class='spacer'></div>");
+                                                htmlcheckboxes.push("");
+
+                                                $("#Filters").append(htmlcheckboxes.join(''));
+
+                                                // htmlcheckboxes bewaren in een andere array
+                                                finalhtml += htmlcheckboxes.join('\n');
+
+                                                htmlcheckboxes.length = 0;
+                                            },
+
+                                            error: function (response) {
+                                                alert("GetWaarden error");
+                                            }
+                                        });
+                                    }
+                                    if (filterelement == "slider") {
+                                        // GetSlider ajax call om de slidergegevens op te halen (min en max) en het id
+                                        $.ajax({
+
+                                            type: 'POST',
+                                            url: 'FilterService.asmx/GetSlider',
+                                            data: "{'Catid':'" + catid + "','Eigenschap':'" + eigenschap + "','FilterElement':'" + filterelement + "'}",
+                                            contentType: 'application/json; charset=utf-8',
+                                            dataType: 'json',
+                                            async: false,
+                                            success: function (response) {
+                                                var id = response.d.Id;
+                                                var min = response.d.Min;
+                                                var max = response.d.Max;
+                                                var step = response.d.Step;
+                                                var symb = response.d.Symbool;
+                                                var statdyn = response.d.StatDyn;
+                                                var eig = eigenschap;
+                                                var naam = Kleineletter(eig);
+                                                if (naam.split(' ').length === 2) { // indien de kolomnaam uit twee woorden bestaat
+                                                    var naamarray = naam.split(' ');
+                                                    var a = new Array();
+                                                    a = naamarray;
+                                                    var cnaam = a[0] + a[1]; // maak een concatenatie
+                                                }
+
+                                                htmlsliders.push("<div class='spacer'></div>");
+                                                htmlsliders.push("<div class='sliderdiv'>");
+                                                htmlsliders.push("<div class='slcat'>" + eig + "</div>");
+                                                if (naam.split(' ').length === 2) {
+                                                    htmlsliders.push("<div id='" + cnaam + "slider' class='slider'></div>");
+                                                    htmlsliders.push("<div class='slvalcont'><div class='slidervalues' id='" + cnaam + "slidervalues'></div><button class='ibbutt' id='" + cnaam + "sliderbutton'>Wijzig</button></div>");
+
+                                                }
+                                                else {
+                                                    htmlsliders.push("<div id='" + naam + "slider' class='slider'></div>");
+                                                    htmlsliders.push("<div class='slvalcont'><div class='slidervalues' id='" + naam + "slidervalues'></div><button class='ibbutt' id='" + naam + "sliderbutton'>Wijzig</button></div>");
+
+                                                }
+                                                htmlsliders.push("</div>");
+                                                htmlsliders.push("<div class='spacer'></div>");
+                                                htmlsliders.push("");
+
+                                                $("#Filters").append(htmlsliders.join(''));
+
+                                                // htmlsliders bewaren in een andere array
+                                                finalhtml += htmlsliders.join('\n');
+
+                                                htmlsliders.length = 0;
+                                                // buildSlider() om de range slider op te zetten
+                                                if (statdyn == 'prijsveld') {
+                                                    buildprijsSlider(naam, min, max, step, eig, symb);
+                                                }
+                                                else {
+                                                    buildgenericSlider(naam, min, max, step, eig, symb);
+                                                }
+                                            },
+
+                                            error: function (response) {
+                                                alert("GetSlider error");
+                                            }
+                                        });
+                                    }
+                                },
+
+                                error: function (response) {
+                                    alert("GetFilterElement error");
+                                }
+                            });
+                        });
+                        //alert(finalhtml);
+                        console.log(finalhtml);
+                        console.log(finaljq);
+                    }
+                },
+
+                error: function (response) {
+                    alert("GetEigenschappen error");
+                }
+            });
+        }
+
+        function buildprijsSlider(naam, min, max, step, eig, symb) {
+            $("#"+ naam + "slider").slider({
+                range: true,
+                min: parseInt(min),
+                max: parseInt(max),
+                step: step,
+                values: [parseInt(min), parseInt(max)],
+                slide: function (event, ui) {
+                    $("#" + naam + "slidervalues").empty();
+                    $("#" + naam + "slidervalues").append("<div>" + "&nbsp;" + "&euro;" + ui.values[0] + " - " + ui.values[1] + " " + "</div>");
+                }
+            });
+
+            jqsliders.push("$('#" + naam + "slider').slider({");
+            jqsliders.push("range: true,");
+            jqsliders.push("min: " + min + ",");
+            jqsliders.push("max: " + max + ",");
+            jqsliders.push("values: [" + min + ", " + max + "],");
+            jqsliders.push("slide: function (event, ui) {");
+            jqsliders.push("$('#" + naam + "slidervalues').empty();");
+            jqsliders.push("$('#" + naam + "slidervalues').append('<div>' + '&nbsp;' + '&euro;' + ui.values[0] + ' - ' + ui.values[1] + ' ' + '</div>');");
+            jqsliders.push("},");
+            jqsliders.push("stop: function (e, ui) {");
+            jqsliders.push("setValues(" + "'" + naam + "slider" + catid + "', ui.values);");
+            jqsliders.push("}");
+            jqsliders.push("});");
+
+            jqsliders.push("");
+
+            jqsliders.push("$('#" + naam + "sliderbutton').click(function () {");
+            jqsliders.push("sessionStorage.setItem('filtering', 1);");
+            jqsliders.push("var min = $('#" + naam + "slider').slider('option', 'values')[0],");
+            jqsliders.push("max = $('#" + naam + "slider').slider('option', 'values')[1];");
+            jqsliders.push("var query = '(' + '" + Hoofdletter(naam) + " BETWEEN ' + min + ' AND ' + max + ')';");
+            jqsliders.push("if (sliders.length == 0) {");
+            jqsliders.push("sliders.push(query);");
+            jqsliders.push("}");
+            jqsliders.push("else {");
+            jqsliders.push("var i, string, len = sliders.length;");
+            jqsliders.push("for (i = 0; i < len; ++i) {");
+            jqsliders.push("string = sliders[i];");
+            jqsliders.push("if (string?.includes('(" + Hoofdletter(naam) + " BETWEEN')) {");
+            jqsliders.push("sliders.splice(i, 1);");
+            jqsliders.push("}");
+            jqsliders.push("}");
+            jqsliders.push("sliders.push(query);");
+            jqsliders.push("}");
+            jqsliders.push("assembleAND();");
+            jqsliders.push("});");
+            jqsliders.push("");
+            jqsliders.push("");
+
+            jqsliders.push("var cVal = getValues(" + "'" + naam + "slider" + catid + "');");
+            jqsliders.push("if (cVal != -1) {");
+            jqsliders.push("$('#" + naam + "slider').slider('values', cVal);");
+            jqsliders.push("$('#" + naam + "slidervalues').empty();");
+            jqsliders.push("$('#" + naam + "slidervalues').append('<div>' + '&nbsp;' + '&euro;' + cVal[0] + ' - ' + cVal[1] + ' ' + '</div>');");
+            jqsliders.push("$('#" + naam + "sliderbutton').click();");
+            jqsliders.push("}");
+            jqsliders.push("");
+            jqsliders.push("");
+
+            finaljq += jqsliders.join('\n');
+
+            jqsliders.length = 0;
+        }
+
+        function buildgenericSlider(naam, min, max, step, eig, symb) {
+            var concat = false;
+            if (naam.split(' ').length === 2) { // indien de kolomnaam uit twee woorden bestaat
+                var naamarray = naam.split(' ');
+                var a = new Array();
+                a = naamarray;
+                var cnaam = a[0] + a[1]; // maak een concatenatie
+                naam = cnaam;
+                concat = true;
+            }
+
+            $("#" + naam + "slider").slider({
+                range: true,
+                min: parseInt(min),
+                max: parseInt(max),
+                step: step,
+                values: [parseInt(min), parseInt(max)],
+                slide: function (event, ui) {
+                    $("#" + naam + "slidervalues").empty();
+                    $("#" + naam + "slidervalues").append("<div>" + "&nbsp;" + ui.values[0] + " - " + ui.values[1] + " " + symb + "</div>");
+                }
+            });
+
+            jqsliders.push("$('#" + naam + "slider').slider({");
+            jqsliders.push("range: true,");
+            jqsliders.push("min: " + min + ",");
+            jqsliders.push("max: " + max + ",");
+            jqsliders.push("values: [" + min + ", " + max + "],");
+            jqsliders.push("slide: function (event, ui) {");
+            jqsliders.push("$('#" + naam + "slidervalues').empty();");
+            jqsliders.push("$('#" + naam + "slidervalues').append('<div>' + '&nbsp;' + ui.values[0] + ' - ' + ui.values[1] + ' " + symb + "' + '</div>');");
+            jqsliders.push("},");
+            jqsliders.push("stop: function (e, ui) {");
+            jqsliders.push("setValues(" + "'" + naam + "slider" + catid + "', ui.values);");
+            jqsliders.push("}");
+            jqsliders.push("});");
+
+            jqsliders.push("");
+
+            jqsliders.push("$('#" + naam + "sliderbutton').click(function () {");
+            jqsliders.push("sessionStorage.setItem('filtering', 1);");
+            jqsliders.push("var min = $('#" + naam + "slider').slider('option', 'values')[0],");
+            jqsliders.push("max = $('#" + naam + "slider').slider('option', 'values')[1];");
+            if (concat === true) {
+                jqsliders.push("var query = '(' + '[" + eig + "] BETWEEN ' + min + ' AND ' + max + ')';");
+            }
+            else {
+                jqsliders.push("var query = '(' + '" + eig + " BETWEEN ' + min + ' AND ' + max + ')';");
+            }
+            jqsliders.push("if (sliders.length == 0) {");
+            jqsliders.push("sliders.push(query);");
+            jqsliders.push("}");
+            jqsliders.push("else {");
+            jqsliders.push("var i, string, len = sliders.length;");
+            jqsliders.push("for (i = 0; i < len; ++i) {");
+            jqsliders.push("string = sliders[i];");
+            if (concat === true) {
+                jqsliders.push("if (string?.includes('([" + eig + "] BETWEEN')) {");
+            }
+            else {
+                jqsliders.push("if (string?.includes('(" + eig + " BETWEEN')) {");
+            }
+            jqsliders.push("sliders.splice(i, 1);");
+            jqsliders.push("}");
+            jqsliders.push("}");
+            jqsliders.push("sliders.push(query);");
+            jqsliders.push("}");
+            jqsliders.push("assembleAND();");
+            jqsliders.push("});");
+            jqsliders.push("");
+            jqsliders.push("");
+
+            jqsliders.push("var cVal = getValues(" + "'" + naam + "slider" + catid + "');");
+            jqsliders.push("if (cVal != -1) {");
+            jqsliders.push("$('#" + naam + "slider').slider('values', cVal);");
+            jqsliders.push("$('#" + naam + "slidervalues').empty();");
+            jqsliders.push("$('#" + naam + "slidervalues').append('<div>' + '&nbsp;' + cVal[0] + ' - ' + cVal[1] + ' " + symb + "' + '</div>');");
+            jqsliders.push("$('#" + naam + "sliderbutton').click();");
+            jqsliders.push("}");
+            jqsliders.push("");
+            jqsliders.push("");
+
+            finaljq += jqsliders.join('\n');
+
+            jqsliders.length = 0;
+        }
+
+        function getEigGegevens() {
+            $(".invulerror").empty();
+            $(".invulerror").hide();
+            $(".invoersucces").empty();
+            $(".invoersucces").hide();
+            $.ajax({
+
+                type: 'POST',
+                url: 'EigenschappenService.asmx/GetEigGegevens',
+                data: "{'EigId':'" + eigid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    var id = response.d.Id;
+                    var eig = response.d.Eigenschap;
+                    var filterelem = response.d.FilterElement;
+                    var min = response.d.Min;
+                    var max = response.d.Max;
+                    var step = response.d.Step;
+                    var symbool = response.d.Symbool;
+                    var st = response.d.StatDyn;
+                    // indien statdyn = prijsveld vink prijsveld
+                    // indien statdyn = niet prijsveld en filterelem = slider toon ook min max en step
+                    if (st == "prijsveld") {
+                        $("#cb").prop("checked", true);
+                        $("#slider").prop('checked', true).change();
+                        // checked
+                        slider = true;
+                        prijsveld = true;
+                        $("#min").val(min);
+                        $("#max").val(max);
+                        $("#symbool").val(symbool);
+                    }
+                    else if (filterelem == "slider") {
+                        $("#cb").prop("checked", false); // geen prijsveld dus unchecked
+                        $("#slider").prop("checked", true).change();
+                        slider = true;
+                        prijsveld = false;
+                        $("#min").val(min);
+                        $("#max").val(max);
+                        $("#step").val(step);
+                        $("#symbool").val(symbool);
+                    }
+                    else if (filterelem == "checkbox") { // checkboxes
+                        $("#cb").prop("checked", false); // geen prijsveld dus unchecked
+                        $("#checkbox").attr("checked", true); // Let op! prop reageert niet altijd dus hier wordt attr gebruikt
+                        $("#min").val("");
+                        $("#max").val("");
+                        $("#symbool").val("");
+                        $("#minmaxsymb").hide();
+                        slider = false;
+                        prijsveld = false;
+                    }
+                    else if (filterelem == "rangecheckbox") { // range checkboxes
+                        $("#cb").prop("checked", false); // geen prijsveld dus unchecked
+                        $("#rangecheckbox").attr("checked", true); // Let op! prop reageert niet altijd dus hier wordt attr gebruikt
+                        $("#min").val("");
+                        $("#max").val("");
+                        $("#symbool").val("");
+                        $("#minmaxsymb").hide();
+                        slider = false;
+                        prijsveld = false;
+                    }
+                    else if (filterelem == "valuecheckbox") { // value checkboxes
+                        $("#cb").prop("checked", false); // geen prijsveld dus unchecked
+                        $("#valuecheckbox").attr("checked", true); // Let op! prop reageert niet altijd dus hier wordt attr gebruikt
+                        $("#min").val("");
+                        $("#max").val("");
+                        $("#symbool").val("");
+                        $("#minmaxsymb").hide();
+                        slider = false;
+                        prijsveld = false;
+                    }
+                    $("#editeig").val(eig);
+                    // Toon wijzig button
+                    $("#wijzigeigenschap").show();
+                },
+
+                error: function (response) {
+                    alert("GetEigGegevens error");
+                }
+            });
+        }
+
+        function getWaardeGegevens() {
+            $(".invulerror3").empty();
+            $(".invulerror3").hide();
+            $(".invoersucces3").empty();
+            $(".invoersucces3").hide();
+            $.ajax({
+
+                type: 'POST',
+                url: 'WaardenService.asmx/GetWaardeGegevens',
+                data: "{'WaardeId':'" + waardeid + "'}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    var waarde = response.d.Waarde;
+                    $("#editwaarde").val(waarde);
+                    // Toon wijzig button
+                    $("#wijzigwaarde").show();
+                },
+
+                error: function (response) {
+                    alert("GetWaardeGegevens error");
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <div id="linkswindow">
+        <div id="breadcrumb"></div>
+        <div id="links"></div>
+        <div id="eigleft"></div>
+        <div id="waardenright"></div>
+        <div id="buttoncontainer">
+            <div id="buttoncenter">
+                <button id="eigtoevoegen">Voeg eigenschap toe</button>
+                <button id="eigverwijderen">Verwijder eigenschap</button>
+                <button id="waardetoevoegen">Voeg waarde toe</button>
+                <button id="waardeverwijderen">Verwijder waarde</button>
+            </div>
+        </div>
+    </div>
+    <div id="editwindow">
+        <div class="tab">
+            <button class="tablinks active" onclick="openEigenschappen(event)">Eigenschappen</button>
+            <button class="tablinks" onclick="openFilters(event)">Filters</button>
+            <button class="tablinks" onclick="openBreadcrumb(event)">Breadcrumb</button>
+            <button class="tablinks" onclick="openHeaderimage(event)">Headerafbeelding</button>
+            <button class="tablinks" onclick="openGenerator(event)">Generator</button>
+        </div>
+        <div id="editor">
+            <div id="editcont">
+                <div class="uitleg">
+                    In dit formulier kunt u opgeven welk type filterelement u wilt gebruiken voor deze eigenschap (checkboxes, range checkboxes, value
+                    checkboxes, of een slider).
+
+                    U kunt hier ook de naam van de eigenschap wijzigen. Tenslotte is het belangrijk om de eigenschap het kenmerk 'prijsveld' toe te kennen,
+                    als het de eigenschap 'Prijs' betreft. Dit in verband met de correcte rendering van de prijsslider.
+                </div>
+                <div class="smallspacer"></div>
+                <form id="editform">
+                    <div id="edittekst">Eigenschap:</div>
+                    <input id="editeig" type="text" />
+                    <div class="invulerror"></div>
+                    <div class="smallspacer"></div>
+                    <div id="prijsveld">
+                        <input type="checkbox" id="cb" name="cb" value="prijsveld" />
+                        <label for="cb"> Prijsveld</label>
+                    </div>
+                    <div class="smallspacer"></div>
+                    <div id="edittekst">Kies het soort element:</div>
+                    <div class="smallspacer"></div>
+                    <div class="filtertype"><label><input type="radio" name="check" id="checkbox" value="checkbox">Checkboxes</label></div>
+                    <div class="filtertype"><label><input type="radio" name="check" id="rangecheckbox" value="rangecheckbox">Range checkboxes</label></div>
+                    <div class="filtertype"><label><input type="radio" name="check" id="valuecheckbox" value="valuecheckbox">Value checkboxes</label></div>
+                    <div class="filtertype"><label><input type="radio" name="check" id="slider" value="slider">Slider</label></div>
+                    <div class="smallspacer"></div>
+                    <div id="minmaxsymb">
+                        <div id="edittekst2">Min:</div><input class="slidervalues" id="min" type="text" />
+                        <div id="edittekst2">Max:</div><input class="slidervalues" id="max" type="text" />
+                        <div id="edittekst3">Step:</div><input class="slidervalues" id="step" type="text" />
+                        <div id="edittekst2">Symbool:</div><input class="slidervalues" id="symbool" type="text" />
+                        <div class="smallspacer"></div>
+                        <div class="smallspacer"></div>
+                        <div class="invulerror2"></div>
+                    </div>
+                    <div class="smallspacer"></div>
+                    <button id="wijzigeigenschap">Wijzig</button>
+                    <button id="voegeigenschaptoe">Toevoegen</button>
+                    <div class="smallspacer"></div>
+                    <div class="duplicaaterror"></div>
+                    <div class="invoersucces"></div>
+                </form>
+            </div>
+            <div id="waardecont">
+                <div class="uitleg">
+                    Met dit formulier kunt u de waarden toevoegen voor eigenschappen met checkboxes. Per checkbox dient u een waarde toe te voegen.
+                </div>
+                <div class="smallspacer"></div>
+                <form id="waardeform">
+                    <div id="edittekst">Waarde:</div>
+                    <input id="editwaarde" class="editwaardefloater" type="text" /><div id="edittekst3"> ² = ALT 253, ³ = ALT 252</div>
+                    <div class="smallspacer"></div>
+                    <div class="invulerror3"></div>
+                    <div class="smallspacer"></div>
+                    <button id="wijzigwaarde">Wijzig</button>
+                    <button id="voegwaardetoe">Toevoegen</button>
+                    <div class="smallspacer"></div>
+                    <div class="duplicaaterror3"></div>
+                    <div class="invoersucces3"></div>
+                </form>
+            </div>
+        </div>
+        <div id="Filters"></div>
+        <div id="bcgenerator">
+            <div class="mediumspacer"></div>
+            <div id="Breadcrumb"></div>
+            <div class="mediumspacer"></div>
+            <div id="BChtml"></div>
+            <div class="mediumspacer"></div>
+            <div id="Editors"></div>
+        </div>
+        <div id="Headerimage">
+            <div class="mediumspacer"></div>
+            <div>
+                <input type="file" name="imgfile" required onchange="onFileChange(event)" />
+                <div class="smallspacer"></div>
+                <img id="url" width=600 />
+            </div>
+            <div class="smallspacer"></div>
+            <div>
+                <div class="uitleg">
+                    Na het klikken van Bestand kiezen... en het kiezen van een afbeelding, kijk hieronder of de url van de ge-uploade afbeelding wordt weergegeven:
+                </div>
+                <div class="smallspacer"></div>
+                <div id="uploadurl"></div>
+                <div class="smallspacer"></div>
+                <div class="uitleg">
+                    Als hierboven geen url staat, klik Bestand kiezen... overnieuw en kies een afbeelding!
+                </div>
+            </div>
+            <div class="smallspacer"></div>
+            <div id="HeaderOpslaan"></div>
+            <div class="smallspacer"></div>
+            <div id="headeropgeslagen"></div>
+        </div>
+        <div id="Generator">
+            <div class="topspacer"></div>
+            <div id="pathbox">
+                <div class="text">
+                    Geef het volledige pad op van het bronbestand, bijv. Sjabloon.html:
+                </div>
+                <div>
+                    <input type="text" id="sourcePath" class="myInput" />
+                </div>
+                <div class="text">
+                    Geef het volledige pad op van het doelbestand, incl. de gewenste bestandsnaam:
+                </div>
+                <div>
+                    <input type="text" id="destinationPath" class="myInput" />
+                </div>
+                <div id="message" class="message"></div>
+                <div class="text">
+                    Geef de naam van de produkttabel op die gebruikt dient te worden in het filterdocument:
+                </div>
+                <div>
+                    <input type="text" id="tablenameinp" class="myInputshort" />
+                </div>
+                <div id="message2" class="message"></div>
+                <div class="buttoncont">
+                    <button class="button-7" id="generatebutton">Generate</button>
+                </div>
+                <div id="message3" class="message"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

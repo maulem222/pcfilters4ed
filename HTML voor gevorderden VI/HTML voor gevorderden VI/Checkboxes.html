@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkboxes</title>
+    <link href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            overflow: visible;
+        }
+
+        #left {
+            width: 20%;
+            float: left;
+        }
+
+        #right {
+            width: 20%;
+            float: right;
+        }
+
+        #container {
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 50px;
+            height: auto;
+            border: 0px solid black;
+        }
+
+        .cbcat, .slcat {
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .spacer {
+            height: 10px;
+        }
+
+        .slider {
+            width: 150px;
+            margin-bottom: 5px;
+        }
+
+        .slvalcont {
+            width: 155px;
+            height: 25px;
+        }
+
+        .slidervalues {
+            width: 100px;
+            float: left;
+        }
+
+        .ibbutt {
+            float: right;
+        }
+
+        @media only screen and (min-width: 0px) and (max-width: 730px) {
+            #left {
+                width: 0;
+            }
+
+            #right {
+                width: 0;
+            }
+
+            #container {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        const checkboxes = [];
+        const rangecheckboxes = [];
+        const sliders = [];
+        var checkOR;
+        var rangecheckOR;
+        const checkjoinedarr = [];
+        const rangecheckjoinedarr = [];
+        var slidersAND;
+        var checkjoinedAND;
+        var rangecheckjoinedAND;
+        var finalSQLarr = [];
+
+        $(document).ready(function () {
+            $("#prijsslider").slider({
+                range: true,
+                min: 0,
+                max: 1750,
+                values: [0, 1750],
+                slide: function (event, ui) {
+                    $("#prijsslidervalues").empty();
+                    $("#prijsslidervalues").append("<div>" + "&nbsp;" + "&euro;" + ui.values[0] + " - " + ui.values[1] + " " + "</div>");
+                }
+            });
+
+            $("#prijssliderbutton").click(function () {
+                var prijs = "Prijs";
+                var min = $("#prijsslider").slider("option", "values")[0],
+                    max = $("#prijsslider").slider("option", "values")[1]
+                var query = "(" + prijs + " BETWEEN " + min + " AND " + max + ")";
+                if (sliders.length == 0) { // is de array sliders nog leeg
+                    sliders.push(query); // zet dan meteen de query in de array
+                }
+                else { // indien er al elementen in de array sliders zitten
+                    var i, string, len = sliders.length;
+                    for (i = 0; i < len; ++i) { // loop de hele array sliders af
+                        string = sliders[i];
+                        if (string?.includes("(" + prijs + " BETWEEN ")) { // indien het array element begint met "(Prijs BETWEEN"
+                            sliders.splice(i, 1); // verwijder dan dit array element
+                        }
+                    }
+                    sliders.push(query); // en vervang het door de query met de nieuwe sliderwaarden
+                }
+                assembleAND();
+            });
+
+            $("#breedteslider").slider({
+                range: true,
+                min: 100,
+                max: 500,
+                values: [100, 500],
+                slide: function (event, ui) {
+                    $("#breedteslidervalues").empty();
+                    $("#breedteslidervalues").append("<div>" + "&nbsp;" + ui.values[0] + " - " + ui.values[1] + " cm"  + "</div>");
+                }
+            });
+
+            $("#breedtesliderbutton").click(function () {
+                var breedte = "Breedte";
+                var min = $("#breedteslider").slider("option", "values")[0],
+                    max = $("#breedteslider").slider("option", "values")[1]
+                var query = "(" + breedte + " BETWEEN " + min + " AND " + max + ")";
+                if (sliders.length == 0) {
+                    sliders.push(query);
+                }
+                else {
+                    var i, string, len = sliders.length;
+                    for (i = 0; i < len; ++i) {
+                        string = sliders[i];
+                        if (string?.includes("(" + breedte + " BETWEEN ")) {
+                            sliders.splice(i, 1);
+                        }
+                    }
+                    sliders.push(query);
+                }
+                assembleAND();
+            });
+
+        });
+
+        function assembleOR(cat) { // 1x voor 1 parentdiv
+
+            checkOR = checkboxes?.join(' OR ');
+            if (checkOR) {
+                checkOR = "(" + checkOR + ")";
+                var i, string, len = checkjoinedarr.length;
+                for (i = 0; i < len; ++i) { // loop de hele array checkjoinedarr af
+                    string = checkjoinedarr[i];
+                    if (string?.includes("(" + cat + "=")) { // indien een of meerdere array elementen beginnen met (cat=
+                        checkjoinedarr.splice(i, 1); // verwijder dan deze array elementen
+                    }
+                }
+                checkjoinedarr.push(checkOR); // en push de elementen overnieuw
+            }
+            else { // geen checkOR, dus geen gegevens in checkboxes array, dus laatst aanwezige element moet weg uit checkjoinedarr
+                var i, string, len = checkjoinedarr.length;
+                for (i = 0; i < len; ++i) { // loop de hele array checkjoinedarr af
+                    string = checkjoinedarr[i];
+                    if (string?.includes("(" + cat + "=")) { // indien 1 array element begint met (cat=
+                        checkjoinedarr.splice(i, 1); // verwijder dan dit array element
+                    }
+                }
+            }
+            checkboxes.length = 0; // wis de checkboxes array na gebruik
+
+            rangecheckOR = rangecheckboxes?.join(' OR ');
+            if (rangecheckOR) {
+                rangecheckOR = "(" + rangecheckOR + ")";
+                var i, string, len = rangecheckjoinedarr.length;
+                for (i = 0; i < len; ++i) { // loop de hele array rangecheckjoinedarr af
+                    string = rangecheckjoinedarr[i];
+                    if (string?.includes("(" + cat + " BETWEEN")) { // indien een of meerdere array elementen beginnen met (cat BETWEEN
+                        rangecheckjoinedarr.splice(i, 1); // verwijder dan deze array elementen
+                    }
+                }
+                rangecheckjoinedarr.push(rangecheckOR); // en push de elementen overnieuw
+            }
+            else { // geen rangecheckOR, dus geen gegevens in rangecheckboxes array, dus laatst aanwezige element moet weg uit rangecheckjoinedarr
+                var i, string, len = rangecheckjoinedarr.length;
+                for (i = 0; i < len; ++i) { // loop de hele array rangecheckjoinedarr af
+                    string = rangecheckjoinedarr[i];
+                    if (string?.includes("(" + cat + " BETWEEN")) { // indien 1 array element begint met (cat BETWEEN
+                        rangecheckjoinedarr.splice(i, 1); // verwijder dan dit array element
+                    }
+                }
+            }
+            rangecheckboxes.length = 0; // wis de rangecheckboxes array na gebruik
+        }
+
+        function assembleAND() { // 1x voor alle parentdivs samen en voor elke sliderupdate
+
+            finalSQLarr.length = 0; // wis de final SQL array
+
+            if (sliders.length > 1) {
+                slidersAND = sliders.join(" AND ");
+                finalSQLarr.push(slidersAND);
+            }
+            if (sliders.length == 1) {
+                finalSQLarr.push(sliders.toString());
+            }
+            //
+            if (checkjoinedarr.length > 1) {
+                checkjoinedAND = checkjoinedarr.join(" AND ");
+                finalSQLarr.push(checkjoinedAND);
+            }
+            if (checkjoinedarr.length == 1) {
+                finalSQLarr.push(checkjoinedarr.toString());
+            }
+            //
+            if (rangecheckjoinedarr.length > 1) {
+                rangecheckjoinedAND = rangecheckjoinedarr.join(" AND ");
+                finalSQLarr.push(rangecheckjoinedAND);
+            }
+            if (rangecheckjoinedarr.length == 1) {
+                finalSQLarr.push(rangecheckjoinedarr.toString());
+            }
+
+            var finalSQL = finalSQLarr.join(" AND ");
+            console.log(finalSQL);
+        }
+
+        $(document).on('click', '.cb', function (e) {
+            checkboxes.length = 0;
+            rangecheckboxes.length = 0;
+            $(".parentdiv").each(function () {
+                var cat = $(this).children('.cbcat').first().text();
+                var type = $(this).children('.type').attr('type');
+                var cbs = $(this).children('.cbs').first();
+                cbs.find("input:checked").each(function () {
+                    if (type == 'cb') {
+                        var concat;
+                        var value = $(this).attr('id');
+                        a = $.isNumeric(value); // test of de checkboxwaarden numeriek zijn
+                        if (a) { // zo ja, laat de aanhalingstekens om de waarde weg
+                            concat = "(" + cat + "=" + value + ")";
+                        }
+                        else { // zo nee, plaats aanhalingstekens om de waarden
+                            concat = "(" + cat + "=" + "'" + value + "')";
+                        }
+                        checkboxes.push(concat);
+                    }
+                    if (type == 'rangecb') {
+                        var low = $(this).attr('low');
+                        var high = $(this).attr('high');
+                        var concat = "(" + cat + " BETWEEN " + low + " AND " + high + ")"; // range checkboxwaarden zijn altijd numeriek
+                        rangecheckboxes.push(concat);
+                    }
+                });
+                assembleOR(cat);
+            });
+            assembleAND();
+        });
+    </script>
+</head>
+<body>
+    <div id="left"></div>
+    <div id="right"></div>
+    <div id="container">
+        <div class="parentdiv">
+            <div class="type" type="cb"></div>
+            <div class="cbcat">Materiaal</div>
+            <div class="cbs">
+                <label for="Hout"><input type="checkbox" id="Hout" class="cb"> Hout</label><br>
+
+                <label for="Plastic"><input type="checkbox" id="Plastic" class="cb"> Plastic</label><br>
+
+                <label for="Metaal"><input type="checkbox" id="Metaal" class="cb"> Metaal</label><br>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="parentdiv">
+            <div class="type" type="cb"></div>
+            <div class="cbcat">Kleur</div>
+            <div class="cbs">
+                <label for="Wit"><input type="checkbox" id="Wit" class="cb"> Wit</label><br>
+
+                <label for="Bruin"><input type="checkbox" id="Bruin" class="cb"> Bruin</label><br>
+
+                <label for="Zwart"><input type="checkbox" id="Zwart" class="cb"> Zwart</label><br>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="parentdiv">
+            <div class="type" type="cb"></div>
+            <div class="cbcat">Gewicht</div>
+            <div class="cbs">
+                <label for="10"><input type="checkbox" id="10" class="cb"> 10 kg</label><br>
+
+                <label for="20"><input type="checkbox" id="20" class="cb"> 20 kg</label><br>
+
+                <label for="50"><input type="checkbox" id="50" class="cb"> 50 kg</label><br>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="parentdiv">
+            <div class="type" type="rangecb"></div>
+            <div class="cbcat">Hoogte</div>
+            <div class="cbs">
+                <label for="50-100"><input type="checkbox" id="50-100" low="50" high="100" class="cb"> 50-100 cm</label><br>
+
+                <label for="101-150"><input type="checkbox" id="101-150" low="101" high="150" class="cb"> 101-150 cm</label><br>
+
+                <label for="151-200"><input type="checkbox" id="151-200" low="151" high="200" class="cb"> 151-200 cm</label><br>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="sliderdiv">
+            <div class="slcat">Prijs</div>
+            <div id="prijsslider" class="slider"></div>
+            <div class="slvalcont"></div><div class="slidervalues" id="prijsslidervalues"></div><button class="ibbutt" id="prijssliderbutton">Wijzig</button>
+        </div>
+        <div class="spacer"></div>
+        <div class="sliderdiv">
+            <div class="slcat">Breedte</div>
+            <div id="breedteslider" class="slider"></div>
+            <div class="slvalcont"><div class="slidervalues" id="breedteslidervalues"></div><button class="ibbutt" id="breedtesliderbutton">Wijzig</button></div>
+        </div>
+    </div>
+</body>
+</html>

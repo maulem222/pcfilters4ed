@@ -1,0 +1,86 @@
+OK - Visual Studio project aanmaken genaamd HTML voor gevorderden VI
+OK - nieuw html document aanmaken genaamd voegcattoe
+OK - twee kolommen: linkswindow en editwindow
+OK - in de linkerkolom een div breadcrumb
+OK - daaronder een div links
+OK - in de rechterkolom een div editor
+OK - database maken genaamd pcfilters
+OK - tabel maken genaamd crosscat
+OK - velden: Id Catnaam ParentId Overzichtsafb
+OK - overzichtsafb mag evt. leeg zijn
+OK - meubelcatalogus zoeken en gedeeltelijk de boomstructuur noteren
+OK - in deze tabel enkele data invoeren met parent id
+OK - variabele parent-id aanvankelijk op 0 instellen
+OK - bc-array aanmaken
+OK - list bcarray in breadcrumb div:
+OK --het ligt aan de herkomst. Is geklikt op een child-link, 
+OK -- dan wordt het id van het child toegevoegd aan bcarray
+OK --daarna moet de hele bcarray doorlopen worden, dus loop tot array.length
+OK --Is er geklikt op een parent-link, dan wordt er geloopt tot int level
+OK --De bcarray moet eerst worden ontdaan van de id's die na dit level komen
+OK --In het begin, als er dus nog niet geklikt is, worden de categorieën
+OK --met parent id = 0 weergegeven in de links div
+OK --ook wordt als breadcrumb weergegeven: zerolevel
+OK - categorie toevoegen
+OK - recursief verwijderen categorie
+OK - bewerken links
+OK - na klikken op de link bewerken worden de naam en de overzichtsafbeelding getoond
+OK - in het rechtervenster,
+OK - is er geen overzichtsafbeelding, dan wordt een default afbeelding getoond
+OK - ook wordt bij het kiezen van een afbeelding meteen ge-upload
+OK - en de variabele afbeelding gezet
+OK - de edit pagina heeft een knop waarmee de wijzigingen kunnen worden bevestigd
+OK - daarna wijzigingen doorvoeren in de tabel Crosscat
+--
+-- VoegEigToe --
+OK - veld Waarde toevoegen aan tabel Eigenschappen
+OK - bij vinken prijsveld dient in de edit voor de eigenschap de waarde Prijs te worden ingevuld
+OK - bij klikken op Toevoegen wordt dit alsnog gecorrigeerd
+OK - ook dient de inhoud van de editbox te worden ge-uppercased
+OK - na klikken op Toevoegen wordt de eigenschap geINSERT in de tabel Eigenschappen
+OK - dat zijn de velden Eigenschap, Catid, FilterElement, Min, Max, Step, StatDyn
+OK - bestaat de Eigenschap al, dan verschijnt een foutmelding
+OK - is de insert succesvol, dan verschijnt een succesmelding
+OK - listing opzetten met hyperlink voor de Eigenschap incl. Id
+OK - daarna worden de eigenschappen gelist
+OK - in de query hiervoor dient het veld Waarde leeg te zijn
+OK - na het klikken op een eigenschap in de lijst wordt het formulier getoond
+OK - indien tenminste niet editor_eig = true
+OK - en voorzien van de waarden van de eigenschap
+OK - o.a. eigenschap en min max en step indien nodig
+OK - radiobutton change event bekijken en evt. toepassen
+OK - ook id variabele zetten --> eigid
+OK - na klikken op de knop Wijzig worden alle gegevens weer gecontroleerd
+OK - en wordt een functie UPDATEEig() aangeroepen
+OK - op static of dynamic zetten wordt niet zichtbaar op formulier
+OK - al is het wel aangepast in de tabel --> dubbele is: == vergeten!
+OK - controle op eig ook toevoegen aan voegeigenschaptoe handler
+OK - indien geklikt is op een parent in de crumb eigenschappen empty()
+OK - de border rond de actieve eigenschap wijzigen in een neutrale achtergrondkleur
+OK - eigenschap verwijderen knop wordt pas zichtbaar als op een eigenschap geklikt is
+OK - static/dynamic moet worden omgewisseld en default moet dynamic gevinkt zijn
+OK - na het aanklikken van een andere categorie moet het hele formulier worden gereset
+OK - de eigenschappenlinks moeten ook beschikken over een kenmerk Eigenschap
+OK - tevens moeten ze beschikken over een kenmerk FilterElement
+OK - daarvoor webmethod getEigenschappen aanpassen voor FilterElement
+OK - en functie listEigenschappen uitbreiden voor FilterElement
+OK - zodat deze kan worden ingevoerd tegelijk met de waarde van een eigenschap
+OK - knop Verwijdereigenschap binnen event aanroep functie VerwijderEigenschap()
+OK - op voorwaarde dat in een dialog OK is geklikt voor Eigenschap verwijderen Ja/Nee
+OK - VerwijderEigenschap webmethod
+OK - webmethod heeft als parameters Catid, Eigenschap
+OK - waarde toevoegen formulier
+OK - klikken op een eigenschap zorgt voor de waarden Eigenschap, FilterElem
+OK - functie en webmethod INSERTWaarde met parameters Eigenschap, Waarde, Catid en Filterelem
+OK - klikken op een waarde geeft de waardeeditor met de waarde reeds ingevuld
+OK - en tevens verdwijnen de knoppen Voeg eigenschap toe/Verwijder eigenschap en verschijnt de knop Verwijder waarde
+OK - bij het klikken op Wijzig wordt gecontroleerd of de waarde is ingevuld
+OK - daarna wordt de nieuwe waarde via een functie UPDATEWaarde vernieuwd
+OK - en de waarden overnieuw gelist
+OK - bij het wijzigen van een Eigenschap dient gecontroleerd te worden op duplicaten
+OK - klikken op de knop Verwijder waarde geeft een dialog
+OK - indien deze is goedgekeurd wordt de functie DELETEWaarde uitgevoerd
+OK - en de webmethod DELETEWaarde
+OK - deze webmethod heeft als parameters Catid, Eigenschap, Waarde
+OZ - daarna Eigenschap verwijderen uitwerken, zodat ook de bijbehorende waarden worden verwijderd
+OK - indien gewisseld wordt van checkboxes naar slider dienen de checkboxwaarden te worden gewist

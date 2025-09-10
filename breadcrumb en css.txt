@@ -1,0 +1,28 @@
+        .noaction {
+            text-decoration: none;
+            color: black;
+            pointer-events: none; /* voorkomt page reload bij het klikken op de lege link */
+            cursor: default;
+        }
+
+        .action {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .crumb {
+            float: left;
+            width: auto;
+            overflow: auto;
+        }
+
+        .separator {
+            float: left;
+            width: 5px;
+            padding-left: 5px;
+            padding-right: 10px;
+        }
+
+
+
+<div class="crumb"><a href="https://www.mijndomein.nl/Home.html" id="home" class="action">Home</a></div><div class="separator">/</div><div class="crumb"><a href="https://www.mijndomein.nl/wonen/Wonen.html" id="wonen" class="action">Wonen</a></div><div class="separator">/</div><div class="crumb"><a href="https://www.mijndomein.nl/wonen/stoelen/Stoelen.html" id="stoelen" class="action">Stoelen</a></div><div class="separator">/</div><div class="crumb">Poefs</div>
